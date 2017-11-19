@@ -68,7 +68,12 @@ $strings = array(
     // Tracing
     'Complete'	=>	'Completado',
     'No complete'	=>	'No completado',
-
+	
+    //Inscriptions
+	'registeredSportsmen'	=> 'Deportistas registrados',
+    'registeredActivities'	=>	'Actividades inscritas',
+    'nonRegisteredActivities'	=>	'Actividades no inscritas',
+    'Consult inscription' =>	'Consultar inscripciones',
 
     // -------------- PLACEHOLDERS --------------
 	// User
