@@ -37,7 +37,7 @@ class ActivityAdd
 
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <form class="form-horizontal" action='../controllers/activity_controller.php' method='post'>
+                                <form class="form-horizontal" action='../controllers/activity_controller.php' onsubmit="return checkMaxParticipants() && checkActivityTimes() " method='post'>
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="nombre"> <?php echo $strings['nombre']; ?>* </label>
                                         <div class="col-md-10">
@@ -86,12 +86,12 @@ class ActivityAdd
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="horaInicio"> <?php echo $strings['horaInicio']; ?>* </label>
                                         <div class="col-md-2">
-                                            <input type="time" class="form-control" name="horaInicio" id="horaInicio" placeholder=" <?php echo $strings['Enter start time']; ?> " required>
+                                            <input type="time" class="form-control" name="horaInicio" id="horaInicio" placeholder=" <?php echo $strings['Enter start time']; ?> " onchange="checkActivityTimes(this)" required>
                                         </div>
 
                                         <label class="control-label col-md-2" for="horaFin"> <?php echo $strings['horaFin']; ?>* </label>
                                         <div class="col-md-2">
-                                            <input type="time" class="form-control" name="horaFin" id="horaFin" placeholder=" <?php echo $strings['Enter end time']; ?> " required>
+                                            <input type="time" class="form-control" name="horaFin" id="horaFin" placeholder=" <?php echo $strings['Enter end time']; ?> " onchange="checkActivityTimes(this)" required>
                                         </div>
                                     </div>
 
@@ -109,14 +109,14 @@ class ActivityAdd
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="numMaxParticipantes"> <?php echo $strings['numMaxParticipantes']; ?>* </label>
                                         <div class="col-md-10">
-                                            <input type="text"  class="form-control" name="numMaxParticipantes" id="numMaxParticipantes" placeholder=" <?php echo $strings['Enter maximum number of participants']; ?> ">
+                                            <input type="number"  class="form-control-number" name="numMaxParticipantes" id="numMaxParticipantes" placeholder=" <?php echo $strings['Enter maximum number of participants']; ?>" onchange="checkMaxParticipants(this)">
                                         </div>
                                     </div>
 
                                     <?php
                                     if(isset($_REQUEST['tipo']) == $strings['individual'] && $_REQUEST['numMaxParticipantes'] == '1')
                                     {
-                                        //echo  'error';
+                                        echo  'error';
                                     }
 
                                     ?>
