@@ -80,3 +80,36 @@ function comprobarValidaciones(){
 	alert('Bien');
 	return true;
 }	
+
+// Validates if the participants are more than one for individual activities.
+function checkMaxParticipants(){
+    if(document.getElementById('tipo').value == 'Individual' && document.getElementById('numMaxParticipantes').value > '1'){
+        document.getElementById('numMaxParticipantes').style.borderColor = 'red';
+        alert("Participantes para actividad individual debe ser 1");
+        return false;
+    }else{
+        document.getElementById('numMaxParticipantes').style.borderColor = 'green';
+        return true;
+    }
+}
+
+// Validates that start time is sooner than end time
+function checkActivityTimes(){
+    var time1 = new Date();
+    var time2 = new Date();
+    var parts = document.getElementById('horaInicio').value.split(":");
+    time1.setHours(parts[0],parts[1]);
+    parts = document.getElementById('horaFin').value.split(":");
+    time2.setHours(parts[0],parts[1]);
+
+    if(time1.getTime() > time2.getTime() ){
+        document.getElementById('horaInicio').style.borderColor = 'red';
+        document.getElementById('horaFin').style.borderColor = 'red';
+        alert("Hora de inicio menor que hora de fin");
+        return false;
+    }else{
+        document.getElementById('horaInicio').style.borderColor = 'green';
+        document.getElementById('horaFin').style.borderColor = 'green';
+        return true;
+    }
+}
