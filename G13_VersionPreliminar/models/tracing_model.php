@@ -21,7 +21,7 @@ class TracingModel
 
         if ($this->id <> '' )
         {
-
+			//die("id: ". $this->id);
             $sql = "SELECT * FROM sesiones WHERE usuarios_id = '" . $this->id . "' AND completado = '0'";
 
             if (!$result = $this->mysqli->query($sql))
@@ -44,14 +44,17 @@ class TracingModel
                 INNER JOIN sesiones
                 ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0'
                 	INNER JOIN usuarios
-                	ON usuarios.id = sesiones.usuarios_id
+                	ON usuarios.id = sesiones.usuarios_id AND usuarios.id = $this->id
                 ";
 
-				$result2 = $this->mysqli->query($sql);
-				
-				$toret=[];
-				$row = $result2->fetch_array();
-				$toret[0] = $row;
+				if (!$result2 = $this->mysqli->query($sql))
+				{
+					$toret = $strings['ConnectionDBError'];
+				}else {
+					$toret=[];
+					$row = $result2->fetch_array();
+					$toret[0] = $row;
+				}
 
 			}
         }else {
@@ -90,11 +93,16 @@ class TracingModel
                 ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0'
                 ";
 
-				$result2 = $this->mysqli->query($sql);
 				
-				$toret=[];
+				if (!$result2 = $this->mysqli->query($sql))
+				{
+					$toret = $strings['ConnectionDBError'];
+				}else {
+					$toret=[];
 				$row = $result2->fetch_array();
 				$toret[0] = $row;
+				}
+				
 
 			}
         }else {
