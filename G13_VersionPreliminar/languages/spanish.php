@@ -215,6 +215,21 @@ $strings = array(
 
 
 	// ----------------------------------------------------------------
+	
+	// ------------------------- ALEX -------------------------------
+	
+	'sesiones' => 'Sesiones',
+	'sesion' => 'Sesion',
+	'tabla' => 'Tabla',
+	'orden_sesion' => 'Orden Sesion',
+	'DeleteTable'	=>	'EliminarTabla',
+	'Enter number of sesions' => 'Introduzca el numero de sesiones',
+	'InsertTables' => 'InsertarTablas',
+	'InsertAnother' => 'InsertarOtra',
+	'AssignTraining' => 'Agisnar Entrenamiento',
+	'InsertMaxError' => 'No se pueden introducir mas sesiones de entrenamiento',
+	
+	
 
 );
 ?>

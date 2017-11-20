@@ -845,7 +845,7 @@ function generateListCoach ($list, $page_name, $titles)
             echo        '<td>
                             <div class="pull-right action-buttons">';
 
-            echo                '<a id="assignButton" href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['Assign'] . '" class="btn btn-md btn-default">' . $strings['Assign'] . '  <span class="glyphicon glyphicon-scale" aria-hidden="true"></span> </a>';
+            echo                '<a id="assignButton" href="' . $name . '_controller.php?user_id=' . $list[$i]['id'] . '&action=' . $strings['Assign'] . '" class="btn btn-md btn-default">' . $strings['Assign'] . '  <span class="glyphicon glyphicon-scale" aria-hidden="true"></span> </a>';
 
             echo            '</div>
                          </td>';
@@ -1175,6 +1175,84 @@ function generateViewTracingTitle($list,$coach)
         echo "<p style='font-size: medium; font-style: normal;'><b>" . $strings['State'] . ":</b> " . $strings['No complete2'] . "</p>";
     }else{
          echo "<p style='font-size: medium; font-style: normal;'><b>".  $strings['State'] . ":</b> " . $strings['Complete2'] . "</p>";
+    }
+}
+
+function generateListTrainingTables ($list, $page_name, $titles)
+{
+    include '../languages/spanish.php';
+
+    $name = strtolower($page_name);
+
+    // Select the images directory
+    if ($page_name == 'user')
+    {
+        $directory = '../images/profiles/';
+
+    } else {
+        $directory = '../images/exercises/';
+    }
+
+    // Print the table if data aren't a string
+    if (!is_string($list))
+    {
+        // Table
+        echo '<div class="table-responsive">
+                <table class="table table-hover">';
+
+        // Attribute's titles
+        echo '<thead>
+                            <tr>';
+
+        foreach ($titles as $title)
+        {
+            echo '<th>' . $strings[$title] . '</th>';
+        }
+
+        echo     '</tr>
+                        </thead>';
+
+        // Attribute's values
+        echo '<tbody>';
+
+        for ($i = 0; $i < count($list); $i++)
+        {
+            echo '<tr>';
+
+            for ($j = 0; $j < count($titles); $j++)
+            {
+                // Check if the attribute is an image
+                if ($titles[$j] == 'imagen')
+                {
+                    if ($list[$i]["$titles[$j]"] <> '')
+                    {
+                        echo '<td> <img src="' . $directory . $list[$i]["$titles[$j]"] . '" alt="' . $list[$i]["$titles[$j]"] . '" height="150" width="150"> </td>';
+
+                    } else {
+                        echo '<td> <img src="' . $directory . 'default.png" alt="default.png" height="150" width="150"> </td>';
+                    }
+
+                } else {
+                    echo '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+                }
+            }
+
+            // Print the buttons for each element
+            echo '<td>
+                                <div class="pull-right action-buttons">';
+
+            echo        '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['See'] . '" class="btn btn-sm btn-info"> <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> </a>';
+            echo        '&nbsp';
+			echo        '<a href="training_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['DeleteTable'] . '" class="btn btn-sm btn-danger"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a>';
+            
+            echo    '</div>
+                             </td>';
+            echo '</tr>';
+        }
+
+        echo '</tbody>
+                </table>
+             </div>';
     }
 }
 
