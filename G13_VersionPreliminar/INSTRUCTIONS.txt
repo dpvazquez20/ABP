@@ -1,0 +1,24 @@
+---------------------------------------- ESPAÑOL ----------------------------------------
+Pasos a seguir en sistemas Linux:
+
+	1. Ejecutar "install.sh" como root
+	2. Importar BD (carpeta "db") en gestor de base de datos (usuario: admin, 
+	   contraseña: admin)
+	3. Si no va a usar este usuario, ir al fichero "connectDB.php" y cambiar el
+	   usuario y contraseña
+	4. Introducir en el navegador: direccion_IP/G13_VersionPreliminar
+
+
+
+
+
+---------------------------------------- ENGLISH ----------------------------------------
+Steps to follow in Linux systems:
+
+	1. Run "install.sh" as root
+	2. Import the DB (directory "db") in a database manager (user: admin, 
+	   password: admin)
+	3. If you aren't going to use this user, you have to go to the file 
+	  "connectDB.php"
+	   and change the user and password 
+	4. Enter in the browser: IP_address/G13_VersionPreliminar
