@@ -114,9 +114,11 @@ function end_elem(idTabla)
             // Do nothing
         }
     );
-	
-	function end_elem2(entrenamiento_id)
-	{
+}	
+
+// Function for ending the adding of tables
+function end_elem2(entrenamiento_id)
+{
     var redirect = '../controllers/training_controller.php?entrenamiento_id=' + entrenamiento_id + '&action=Ver';
     
     // Using alertify
