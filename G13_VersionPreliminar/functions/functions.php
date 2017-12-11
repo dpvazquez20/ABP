@@ -15,17 +15,17 @@ function generateNavbar ($user_type)
 
     if (strcmp($user_type, 'Secretario') == 0)
     {
-        $funcionalities = array('Activity', 'Inscription', 'Notification', 'Reservation', 'Resource', 'User');
+        $funcionalities = array('Activity', 'Inscription', 'Notification', 'Resource', 'Statistics', 'User');
     }
 
     if (strcmp($user_type, 'Entrenador') == 0)
     {
-        $funcionalities = array('Assistance', 'Exercise', 'Notification', 'Table', 'Tracing', 'Training', 'User');
+        $funcionalities = array('Assistance', 'Exercise', 'Notification', 'Table', 'Statistics', 'Tracing', 'Training', 'User');
     }
 
     if (strcmp($user_type, 'Deportista') == 0)
     {
-        $funcionalities = array('Inscription', 'Reservation', 'Tracing');
+        $funcionalities = array('Inscription', 'Statistics', 'Tracing');
     }
 
 
