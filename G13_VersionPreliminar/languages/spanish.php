@@ -14,6 +14,7 @@ $strings = array(
 	'Or create'	=>	'O cree',
     'success'	=>	'éxito',
 	'Welcome'	=>	'Bienvenido',
+	'log in'	=>	'Entrar',
 
 
 	// -------------- FORMS --------------
@@ -118,6 +119,7 @@ $strings = array(
 	// -------------- NAVBAR --------------
 	'Activity'	=>	'Actividades',
 	'Assistance'	=>	'Asistencia',
+    'Event'	=>	'Eventos',
 	'Exercise'	=>	'Ejercicios',
 	'Home'	=>	'Inicio',
 	'Inscription'	=>	'Inscripciones',
@@ -125,6 +127,7 @@ $strings = array(
 	'Profile'	=>	'Perfil',
 	'Reservation'	=>	'Reservas',
 	'Resource'	=>	'Recursos',
+	'Statistics'	=>	'Estadísticas',
 	'Table'	=>	'Tablas',
 	'Tracing'	=>	'Seguimiento',
 	'Training'	=>	'Entrenamientos',
