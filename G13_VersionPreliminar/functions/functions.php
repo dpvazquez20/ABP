@@ -15,7 +15,7 @@ function generateNavbar ($user_type)
 
     if (strcmp($user_type, 'Secretario') == 0)
     {
-        $funcionalities = array('Activity', 'Inscription', 'Notification', 'Resource', 'Statistics', 'User');
+        $funcionalities = array('Activity', 'Event', 'Inscription', 'Notification', 'Resource', 'Statistics', 'User');
     }
 
     if (strcmp($user_type, 'Entrenador') == 0)
@@ -26,6 +26,11 @@ function generateNavbar ($user_type)
     if (strcmp($user_type, 'Deportista') == 0)
     {
         $funcionalities = array('Inscription', 'Statistics', 'Tracing');
+    }
+
+    if (strcmp($user_type, 'unregistered') == 0)
+    {
+        $funcionalities = array();
     }
 
 
@@ -53,9 +58,28 @@ function generateNavbar ($user_type)
 
     echo                '</ul>
 
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="../controllers/profile_controller.php"> <span class="glyphicon glyphicon-user" aria-hidden="true" id="offButton"></span> </a></li>
-                            <li><a href="../functions/logout_functions.php"> <span class="glyphicon glyphicon-off" aria-hidden="true" id="offButton"></span> </a></li>
+                        <ul class="nav navbar-nav navbar-right">';
+
+                        if (isset($_SESSION['userLogin']))
+                        {
+                            $word = $_SESSION['userLogin'];
+                            echo '<li><a href="../controllers/profile_controller.php"> ' . $word .  ' <span class="glyphicon glyphicon-user" aria-hidden="true" id="offButton"></span> </a></li>';
+                        }
+                        else
+                        {
+                            /*if(isset($_SESSION['show']))
+                            {
+                                $word = $_SESSION['userLogin'];
+                                echo '<li><a href="../controllers/profile_controller.php"> ' . $word .  ' <span class="glyphicon glyphicon-user" aria-hidden="true" id="offButton"></span> </a></li>';
+                            }
+                            else
+                            {*/
+                                $word = $strings['log in'];
+                                echo '<li><a href="../views/index.php?redirect=true"> ' . $word .  ' <span class="glyphicon glyphicon-log-in" aria-hidden="true" id="offButton"></span></a></li>';
+                            //}
+                        }
+
+    echo                    '<li><a href="../functions/logout_functions.php"> <span class="glyphicon glyphicon-off" aria-hidden="true" id="offButton"></span> </a></li>
                         </ul>
                     </div>
                 </div>

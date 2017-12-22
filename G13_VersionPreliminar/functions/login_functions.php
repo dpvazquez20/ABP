@@ -110,6 +110,8 @@ function getData($username)
                     session_start();
                     $_SESSION['userId'] = $user[0]['id'];
                     $_SESSION['userType'] = $user[0]['tipo'];
+                    $_SESSION['userLogin'] = $user[0]['login'];
+                    $_SESSION['show'] = true;
 
                     header('Location:../views/home.php');
 
