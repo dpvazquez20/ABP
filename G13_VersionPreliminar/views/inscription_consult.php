@@ -68,7 +68,7 @@ class InscriptionConsult
                         </div>
                         <!-- End of the squares -->
 
-                        <div class="col-md-12">
+                        <div class="col-md-12" id="def">
                             <label class="control-label col-md-8"> <?php echo $strings['registeredActivities']; ?> </label>
 
                             <?php
@@ -78,7 +78,7 @@ class InscriptionConsult
                         </div>
 
 
-                        <div class="col-md-12">
+                        <div class="col-md-12" id="def">
                             <label class="control-label col-md-8"> <?php echo $strings['nonRegisteredActivities']; ?> </label>
 
                             <?php

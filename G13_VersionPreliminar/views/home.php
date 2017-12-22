@@ -15,7 +15,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- Menu -->
-                    <?php generateNavbar($_SESSION['userType']); ?>
+                    <?php
+                        if (isset($_SESSION['userType'])){
+                            generateNavbar($_SESSION['userType']);
+                        }
+                        else {
+                            generateNavbar('unregistered');
+                        }
+                    ?>
                     <!-- End of the menu -->
 
                     <!-- Jumbotron -->

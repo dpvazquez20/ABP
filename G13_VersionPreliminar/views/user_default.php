@@ -44,9 +44,18 @@ class UserDefault
 
                         <div class="row">
                             <!-- Insert button -->
-                            <div class="col-md-12" id="new">
-                                <a href='user_controller.php?action=<?php echo $strings['Insert']; ?>' class="btn btn-md btn-warning" id="newButton">  <?php echo $strings['New']; ?> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>
-                            </div>
+                            <?php
+                            if ($_SESSION['userType'] == 'Administrador' || $_SESSION['userType'] == 'Secretario')
+                            {
+                            ?>
+                                <div class="col-md-12" id="new">
+                                    <a href='user_controller.php?action=<?php echo $strings['Insert']; ?>'
+                                       class="btn btn-md btn-warning" id="newButton">  <?php echo $strings['New']; ?>
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>
+                                </div>
+                            <?php
+                            }
+                            ?>
                             <!-- End of the insert button -->
 
                             <!-- Operation message -->
