@@ -58,21 +58,11 @@ function delete_elem(page_name, id)
     );
 }
 
+
 // Function to allow or not the removal of something in the table management
 function delete_elem2(page_name, id, idTabla)
 {
     var redirect = '../controllers/' + page_name + '_controller.php?id=' + id + '&idTabla=' + idTabla + '&action=Eliminar';
-
-    // Using the default confirm
-    /*var result = window.confirm('¿Está seguro?');
-    if (result)
-    {
-		window.open(redirect, "_self");
-    }
-    else
-    {
-		// Do nothing
-    }*/
 
     // Using alertify
     alertify.confirm('¡ADVERTENCIA!', '¿Está seguro de realizar la eliminación?',
@@ -87,23 +77,12 @@ function delete_elem2(page_name, id, idTabla)
     );
 }
 
+
 // Function for ending the adding of table lines
 function end_elem(idTabla)
 {
     var redirect = '../controllers/table_line_controller.php?idTabla=' + idTabla + '&action=Ver';
 
-    // Using the default confirm
-    /*var result = window.confirm('¿Está seguro de que desea terminar?');
-    if (result)
-    {
-		window.open(redirect, "_self");
-    }
-    else
-    {
-		// Do nothing
-    }*/
-
-    // Using alertify
     alertify.confirm('!ADVERTENCIA!', '¿Está seguro de que desea terminar?',
         function()
         {
@@ -114,7 +93,8 @@ function end_elem(idTabla)
             // Do nothing
         }
     );
-}	
+}
+
 
 // Function for ending the adding of tables
 function end_elem2(entrenamiento_id)
@@ -133,3 +113,4 @@ function end_elem2(entrenamiento_id)
         }
     );
 }
+
