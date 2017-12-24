@@ -37,7 +37,8 @@ class TrainingTableAdd
                         <div class="col-md-12">
                             <h1 id="headname"> <?php echo $strings['New table']; ?> </h1>
                         </div>
-                        <!-- End of the form -->                        <div class="row">
+                        <!-- End of the form -->
+                        <div class="row">
                             <div class="col-md-8 col-md-offset-2">
                                 <form class="form-horizontal" action="../controllers/training_table_controller.php?entrenamiento_id=<?php echo $this->training_id; ?>" method='post' id="addTable">
                                     <?php generateSelect2 ($this->listTables, 'nombre','tabla_id'); ?>
@@ -52,7 +53,6 @@ class TrainingTableAdd
                                         <div class="col-md-offset-2 col-md-8" id="addEditButtons">
                                             <button type="submit" class="btn btn-md btn-success" name="action" value="<?php echo $strings['Insert']; ?>"> <?php echo $strings['Accept']; ?> </button>
                                             <!-- <button id ="cancelNL" class="btn btn-md btn-danger"> <?php //echo $strings['Cancel']; ?> </button>-->
-                                            <button class='btn btn-md btn-danger' onclick="end_elem2(<?php echo $this->training_id; ?>)"> <?php echo $strings['End'] ?></button>
                                             <button type="reset" class="btn btn-md btn-default"> <?php echo $strings['Reset']; ?> </button>
                                         </div>
                                     </div>
@@ -65,6 +65,12 @@ class TrainingTableAdd
                                 </form>
                             </div>
                         </div>
+
+                        <!-- End button -->
+                        <div class="col-md-12" id="addEditButtons">
+                            <button class='btn btn-lg btn-danger' onclick="end_elem2(<?php echo $this->training_id; ?>)"> <?php echo $strings['End'] ?></button>
+                        </div>
+                        <!-- End of the end button -->
                     </div>
                 </div>
             </div>

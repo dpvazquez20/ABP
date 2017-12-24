@@ -43,7 +43,7 @@ class TableLineAdd
 
                         <!-- Table line form -->
                         <div class="col-md-12">
-                            <h1 id="headname"> <?php echo $strings['New table line']; ?> </h1>
+                            <h1 id="headname"> <?php echo $strings['New exercise']; ?> </h1>
                         </div>
                         <!-- End of the form -->
 
@@ -88,7 +88,6 @@ class TableLineAdd
                                         <div class="col-md-offset-2 col-md-8" id="addEditButtons">
                                             <button type="submit" class="btn btn-md btn-success" name="action" value="<?php echo $strings['Insert']; ?>"> <?php echo $strings['Accept']; ?> </button>
                                             <!-- <button id ="cancelNL" class="btn btn-md btn-danger"> <?php //echo $strings['Cancel']; ?> </button>-->
-                                            <button class='btn btn-md btn-danger' onclick="end_elem(<?php echo $this->tableId; ?>)"> <?php echo $strings['End'] ?></button>
                                             <button type="reset" class="btn btn-md btn-default"> <?php echo $strings['Reset']; ?> </button>
                                         </div>
                                     </div>
@@ -104,10 +103,9 @@ class TableLineAdd
                         <!-- End of the form -->
 
                         <!-- End button -->
-                        <!--<div class="col-md-12 col-md-offset-3">
-                            
-                            <!-- <a href="table_line_controller.php?idTabla=<?php echo $this->tableId; ?>&action=<?php echo $strings['See']; ?>" class="btn btn-lg btn-default"> <?php echo $strings['End']; ?> </a> -->
-                        <!-- </div> -->
+                        <div class="col-md-12" id="addEditButtons">
+                            <button class='btn btn-lg btn-danger' onclick="end_elem(<?php echo $this->tableId; ?>)"> <?php echo $strings['End'] ?></button>
+                        </div>
                         <!-- End of the end button -->
                     </div>
                 </div>
