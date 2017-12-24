@@ -51,9 +51,9 @@ class ExerciseAdd
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-2" for="imagen"> <?php echo $strings['imagen']; ?>* </label>
+                                        <label class="control-label col-md-2" for="imagen"> <?php echo $strings['imagen']; ?> </label>
                                         <div class="col-md-10">
-                                            <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*" placeholder=" <?php echo $strings['Nothing selected']; ?> " required>
+                                            <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*" placeholder=" <?php echo $strings['Nothing selected']; ?> ">
                                         </div>
                                     </div>
 
