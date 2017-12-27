@@ -62,6 +62,10 @@ $strings = array(
     'thursday'	=> 'Jueves',
 	'tuesday'	=> 'Martes',
 	'wednesday'	=> 'Miércoles',
+	'fechaInicio' =>'Fecha inicio',
+	'fechaFin' => 'Fecha fin',
+	'resource' => 'Recurso',
+	'act_coach' => 'Entrenador',
 	
 	// Resource
 	'aforo' => 'Aforo',
@@ -75,6 +79,7 @@ $strings = array(
     'registeredActivities'	=>	'Actividades inscritas',
     'nonRegisteredActivities'	=>	'Actividades no inscritas',
     'Consult inscription' =>	'Consultar inscripciones',
+    'FullActivity' => 'Actividad completa, no se admiten más inscripciones',
 
     // -------------- PLACEHOLDERS --------------
 	// User
