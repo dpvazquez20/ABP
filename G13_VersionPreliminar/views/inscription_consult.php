@@ -5,11 +5,12 @@ class InscriptionConsult
 {
     private $data;
 
-    function __construct($data1,$data2,$id_usu)
+    function __construct($data1,$data2,$id_usu,$reply)
     {
         $this->data1 = $data1;
         $this->data2 = $data2;
         $this->id_usu = $id_usu;
+        $this->message = $reply;
         $this->render();
     }
 
@@ -66,13 +67,16 @@ class InscriptionConsult
                                        </form>
                             </div>
                         </div>
+
+                        <?php showMessage($this->message); ?>
+
                         <!-- End of the squares -->
 
                         <div class="col-md-12" id="def">
                             <label class="control-label col-md-8"> <?php echo $strings['registeredActivities']; ?> </label>
 
                             <?php
-                            $titles= array('nombre');
+                            $titles= array('nombre','frecuencia','horaInicio');
                             generateListGroup($this->data1,'inscription',$titles,false,$strings['Delete'],$strings['Delete']);
                             ?>
                         </div>
@@ -82,7 +86,7 @@ class InscriptionConsult
                             <label class="control-label col-md-8"> <?php echo $strings['nonRegisteredActivities']; ?> </label>
 
                             <?php
-                            $titles= array('nombre');
+                            $titles= array('nombre','frecuencia','horaInicio');
                             generateListGroup($this->data2,'inscription',$titles,true,$strings['Insert'],$strings['Insert']);
                             ?>
                         </div>
