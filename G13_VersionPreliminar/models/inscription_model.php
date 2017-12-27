@@ -42,67 +42,75 @@ class InscriptionModel
 
 		// checking form's data
 
+        if(isset($_SESSION['sportmID'])){
+            $this->usuario_id = $_SESSION['sportmID'];
+        }
         if ($this->id_actividad <> '' )
         {
-            $sql = "SELECT * FROM inscripciones WHERE id IN (SELECT inscripciones_id FROM inscripciones_has_actividades WHERE actividades_id = '" .$this->id_actividad. "') AND usuario_id= '". $this->usuario_id ."'";
-
-            // checking DB connection
-            if (!$result = $this->mysqli->query($sql))
+            $sql = "SELECT * FROM inscripciones_has_actividades WHERE inscripciones_id IN (SELECT id FROM inscripciones WHERE borrado = 0 ) AND actividades_id='" .$this->id_actividad. "'";
+            $result = $this->mysqli->query($sql);
+            $ins_num = $result->num_rows;
+            $sql = "SELECT numMaxParticipantes FROM actividades WHERE id = '" .$this->id_actividad. "'";
+            $result = $this->mysqli->query($sql);
+            $max_part  =$result->fetch_assoc();
+            if($ins_num < $max_part['numMaxParticipantes'])
             {
-                $toret = $strings['ConnectionDBError'];
+                $sql = "SELECT * FROM inscripciones WHERE id IN (SELECT inscripciones_id FROM inscripciones_has_actividades WHERE actividades_id = '" . $this->id_actividad . "') AND usuario_id= '" . $this->usuario_id . "'";
 
-            }else {
+                // checking DB connection
+                if (!$result = $this->mysqli->query($sql)) {
+                    $toret = $strings['ConnectionDBError'];
 
-                // checking that the inscription doesn't exist
-                if ($result->num_rows == 0)
-                {
+                } else {
 
-                    $sql = "INSERT INTO inscripciones (fecha,borrado,usuario_id)
+                    // checking that the inscription doesn't exist
+                    if ($result->num_rows == 0) {
+
+                        $sql = "INSERT INTO inscripciones (fecha,borrado,usuario_id)
 							VALUES('" . $this->fecha . "','0','" . $this->usuario_id . "')";
 
-                    // inserting new inscription
-                    if ($result = $this->mysqli->query($sql))
-                    {
-                        $toret = $strings['InsertSuccess'];
-                    }else {
-                        $toret = $strings['InsertError'];
-                    }
+                        // inserting new inscription
+                        if ($result = $this->mysqli->query($sql)) {
+                            $toret = $strings['InsertSuccess'];
+                        } else {
+                            $toret = $strings['InsertError'];
+                        }
 
-                    // inserting new inscription has
-                    $sql = "INSERT INTO inscripciones_has_actividades (inscripciones_id, actividades_id)
+                        // inserting new inscription has
+                        $sql = "INSERT INTO inscripciones_has_actividades (inscripciones_id, actividades_id)
 							VALUES((SELECT MAX(id) FROM inscripciones),'" . $this->id_actividad . "')";
 
-                    if ($result = $this->mysqli->query($sql))
-                    {
-                        $toret = $strings['InsertSuccess'];
-                    }else {
-                        $toret = $strings['InsertError'];
-                    }
-
-                }else {
-
-                    // seeing if the inscription had been created before
-                    $sql = "SELECT * FROM inscripciones WHERE id IN (SELECT inscripciones_id FROM inscripciones_has_actividades WHERE actividades_id = '" .$this->id_actividad. "') 
-                            AND borrado='1' AND usuario_id= '". $this->usuario_id ."'";
-                    $result = $this->mysqli->query($sql);
-
-                    if ($result->num_rows == 1)
-                    {
-                        $sql = "UPDATE inscripciones SET borrado ='0' WHERE id IN (SELECT inscripciones_id FROM inscripciones_has_actividades WHERE actividades_id = '" .$this->id_actividad. "') 
-                            AND usuario_id= '". $this->usuario_id ."'";
-                        if ($result = $this->mysqli->query($sql))
-                        {
+                        if ($result = $this->mysqli->query($sql)) {
                             $toret = $strings['InsertSuccess'];
-                        }else {
+                        } else {
                             $toret = $strings['InsertError'];
                         }
 
                     } else {
-                        $toret = $strings['InsertErrorRepeat'];
+
+                        // seeing if the inscription had been created before
+                        $sql = "SELECT * FROM inscripciones WHERE id IN (SELECT inscripciones_id FROM inscripciones_has_actividades WHERE actividades_id = '" . $this->id_actividad . "') 
+                            AND borrado='1' AND usuario_id= '" . $this->usuario_id . "'";
+                        $result = $this->mysqli->query($sql);
+
+                        if ($result->num_rows == 1) {
+                            $sql = "UPDATE inscripciones SET borrado ='0' WHERE id IN (SELECT inscripciones_id FROM inscripciones_has_actividades WHERE actividades_id = '" . $this->id_actividad . "') 
+                            AND usuario_id= '" . $this->usuario_id . "'";
+                            if ($result = $this->mysqli->query($sql)) {
+                                $toret = $strings['InsertSuccess'];
+                            } else {
+                                $toret = $strings['InsertError'];
+                            }
+
+                        } else {
+                            $toret = $strings['InsertErrorRepeat'];
+                        }
                     }
                 }
+            } else {
+                $toret = $strings['FullActivity'];
             }
-        }else {
+            }else {
             $toret = $strings['InsertErrorForm'];
         }
 
@@ -111,7 +119,9 @@ class InscriptionModel
 
 	// delete inscription
 	function delete(){
-
+        if(isset($_SESSION['sportmID'])){
+            $this->usuario_id = $_SESSION['sportmID'];
+        }
         include '../languages/spanish.php';
 
 		// checking form's data
@@ -161,7 +171,9 @@ class InscriptionModel
 	// consulting inscription
 	function consult()
     {
-
+        if(isset($_SESSION['sportmID'])){
+            $this->usuario_id = $_SESSION['sportmID'];
+        }
         include '../languages/spanish.php';
 
 		// checking form's data
@@ -197,7 +209,9 @@ class InscriptionModel
 	// listing all inscriptions
 	function toList()
     {
-
+        if(isset($_SESSION['sportmID'])){
+            $this->usuario_id = $_SESSION['sportmID'];
+        }
 		include '../languages/spanish.php';
 
         $sql = "SELECT * FROM inscripciones WHERE borrado = '0' ORDER BY fecha";
@@ -235,7 +249,9 @@ class InscriptionModel
 	// search inscriptions
     function search($word,$id_sportsman, $select)
     {
-
+        if(isset($_SESSION['sportmID'])){
+            $this->usuario_id = $_SESSION['sportmID'];
+        }
         include '../languages/spanish.php';
 
         if($select) {
@@ -279,7 +295,9 @@ class InscriptionModel
     // order the element list
     function order($value,$id_sportsman,$select)
     {
-
+        if(isset($_SESSION['sportmID'])){
+            $this->usuario_id = $_SESSION['sportmID'];
+        }
         include '../languages/spanish.php';
         $sql = '';
 
@@ -476,14 +494,12 @@ class InscriptionModel
             $toret = $strings['connectionDBError'];
         }else {
 
-            // checking that at least one user exists
             if ($result->num_rows != 0)
             {
 
                 $toret=[];
                 $i=0;
 
-                // introducing all users into an array
                 while ($row = $result->fetch_array())
                 {
 
