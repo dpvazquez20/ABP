@@ -51,6 +51,7 @@
             Switch ($action) {
                 //once an user is selected
                 case $strings['See']:
+                    $_SESSION['sportmID']=$_REQUEST['id'];
                     $inscription = get_data_form();
                     $data1 = $inscription->getActivities($_REQUEST['id'], true); // inscripted activities
                     $data2 = $inscription->getActivities($_REQUEST['id'], false);
@@ -62,10 +63,9 @@
                 case $strings['Insert']:
                     $inscription = get_data_form();
                     $reply = $inscription->insert(); // trying insert
-                    $data1 = $inscription->getActivities($_REQUEST['id'],true); // inscripted activities
-                    $data2 = $inscription->getActivities($_REQUEST['id'],false);
-                    $reply = '';
-                    new InscriptionConsult($data1,$data2,$reply);
+                    $data1 = $inscription->getActivities($_SESSION['sportmID'],true); // inscripted activities
+                    $data2 = $inscription->getActivities($_SESSION['sportmID'],false);
+                    new InscriptionConsult($data1,$data2,$_REQUEST['id'],$reply);
 
                     break;
 
@@ -76,18 +76,18 @@
                     if (isset($_REQUEST['id'])) { // if exist, we try the deleting
                         $inscription = get_data_form(); // getting data
                         $reply = $inscription->delete(); // trying delete
-                        $data1 = $inscription->getActivities($_REQUEST['id'],true); // inscripted activities
-                        $data2 = $inscription->getActivities($_REQUEST['id'],false);
+                        $data1 = $inscription->getActivities($_SESSION['sportmID'],true); // inscripted activities
+                        $data2 = $inscription->getActivities($_SESSION['sportmID'],false);
                         $reply = '';
-                        new InscriptionConsult($data1,$data2,$reply);
+                        new InscriptionConsult($data1,$data2,$_SESSION['userId'],$reply);
 
                     } else {
                         $inscription = get_data_form();// getting data
                         $reply = $inscription->delete(); // trying delete
-                        $data1 = $inscription->getActivities($_REQUEST['id'],true); // inscripted activities
-                        $data2 = $inscription->getActivities($_REQUEST['id'],false);
+                        $data1 = $inscription->getActivities($_SESSION['sportmID'],true); // inscripted activities
+                        $data2 = $inscription->getActivities($_SESSION['sportmID'],false);
                         $reply = '';
-                        new InscriptionConsult($data1,$data2,$reply);
+                        new InscriptionConsult($data1,$data2,$_SESSION['userId'],$reply);
                     }
 
                     break;
@@ -96,7 +96,7 @@
                 case $strings['Search']:
 
                     // looking for data
-                    if(!isset($_REQUEST['id_u'])) {
+                    if(!isset($_SESSION['sportmID'])) {
                         if (isset($_REQUEST['searchfield'])) {
                             $inscription  = get_data_form();
                             $reply = $inscription->searchUsers($_REQUEST['searchfield']); // getting reply
@@ -113,16 +113,16 @@
                     }else{
                         if (isset($_REQUEST['searchfield'])) {
                             $inscription = get_data_form();
-                            $data1 = $inscription->search($_REQUEST['searchfield'],$_REQUEST['id_u'],true);
-                            $data2 = $inscription->search($_REQUEST['searchfield'],$_REQUEST['id_u'],false);
+                            $data1 = $inscription->search($_REQUEST['searchfield'],$_SESSION['sportmID'],true);
+                            $data2 = $inscription->search($_REQUEST['searchfield'],$_SESSION['sportmID'],false);
                             $reply='';
                             unset($_REQUEST['searchfield']);
 
                             if (is_string($reply)) {
-                                new InscriptionConsult($data1, $data2,$_REQUEST['id_u'], $reply); // showing an error message
+                                new InscriptionConsult($data1, $data2,$_SESSION['sportmID'], $reply); // showing an error message
 
                             } else {
-                                new InscriptionConsult($data1, $data2,$_REQUEST['id_u'], $reply); // showing inscriptions list without a message
+                                new InscriptionConsult($data1, $data2,$_SESSION['sportmID'], $reply); // showing inscriptions list without a message
                             }
                         }
                     }
@@ -131,7 +131,7 @@
                 // selected order by something
                 case $strings['Order']:
 
-                    if(!isset($_REQUEST['id_u'])) {
+                    if(!isset($_SESSION['sportmID'])) {
                         if (isset($_REQUEST['orderfield'])) {
                             $inscription = get_data_form(); // getting data
                             $reply = $inscription->orderUsers($_REQUEST['orderfield']); // getting reply
@@ -148,17 +148,17 @@
                     }else{
                         if (isset($_REQUEST['orderfield'])) {
                             $inscription = get_data_form(); // getting data
-                            $data1 = $inscription->order($_REQUEST['orderfield'],$_REQUEST['id_u'],true);
-                            $data2 = $inscription->order($_REQUEST['orderfield'],$_REQUEST['id_u'],false);// getting reply
+                            $data1 = $inscription->order($_REQUEST['orderfield'],$_SESSION['sportmID'],true);
+                            $data2 = $inscription->order($_REQUEST['orderfield'],$_SESSION['sportmID'],false);// getting reply
                             $reply='';
                             unset($_REQUEST['orderfield']);
 
                             if (is_string($reply)) {
                                 $data = $inscription->toList(); // getting inscriptions list
-                                new InscriptionConsult($data1, $data2,$_REQUEST['id_u'], $reply); // showing an error message
+                                new InscriptionConsult($data1, $data2,$_SESSION['sportmID'], $reply); // showing an error message
 
                             } else {
-                                new InscriptionConsult($data1, $data2,$_REQUEST['id_u'], $reply); // showing inscriptions list without a message
+                                new InscriptionConsult($data1, $data2,$_SESSION['sportmID'], $reply); // showing inscriptions list without a message
                             }
                         }
                     }
@@ -166,6 +166,9 @@
                     break;
 
                 default:
+                    if(isset($_SESSION['sportmID'])){
+                        unset($_SESSION['sportmID']);
+                    }
                     $inscription = get_data_form();
                     $data = $inscription->getAllUsers(); // getting users list
                     $reply = '';
@@ -183,6 +186,10 @@
                 $action = '';
             }
 
+            if(isset($_SESSION['sportmID'])){
+                unset($_SESSION['sportmID']);
+            }
+
             Switch ($action) {
 
                 // selected add an inscription
@@ -191,8 +198,7 @@
                         $reply = $inscription->insert(); // trying insert
                         $data1 = $inscription->getActivities($_SESSION['userId'],true); // inscripted activities
                         $data2 = $inscription->getActivities($_SESSION['userId'],false);
-                        $reply = '';
-                        new InscriptionConsult($data1,$data2,$reply);
+                        new InscriptionConsult($data1,$data2,$_SESSION['userId'],$reply);
 
                     break;
 
@@ -206,7 +212,7 @@
                         $data1 = $inscription->getActivities($_SESSION['userId'],true); // inscripted activities
                         $data2 = $inscription->getActivities($_SESSION['userId'],false);
                         $reply = '';
-                        new InscriptionConsult($data1,$data2,$reply);
+                        new InscriptionConsult($data1,$data2,$_SESSION['userId'],$reply);
 
                     } else {
                         $inscription = get_data_form(); // getting data
@@ -214,7 +220,7 @@
                         $data1 = $inscription->getActivities($_SESSION['userId'],true); // inscripted activities
                         $data2 = $inscription->getActivities($_SESSION['userId'],false);
                         $reply = '';
-                        new InscriptionConsult($data1,$data2,$reply);
+                        new InscriptionConsult($data1,$data2,$_SESSION['userId'],$reply);
                     }
 
                     break;
@@ -231,10 +237,10 @@
                         unset($_REQUEST['searchfield']);
 
                         if (is_string($reply)) {
-                            new InscriptionConsult($data1,$data2, $reply); // showing an error message
+                            new InscriptionConsult($data1,$data2,$_SESSION['userId'], $reply); // showing an error message
 
                         } else {
-                            new InscriptionConsult($data1,$data2, ''); // showing inscriptions list without a message
+                            new InscriptionConsult($data1,$data2,$_SESSION['userId'], ''); // showing inscriptions list without a message
                         }
                     }
 
@@ -252,7 +258,7 @@
                         unset($_REQUEST['orderfield']);
 
                         if (is_string($reply)) {
-                            new InscriptionConsult($data1,$data2, $reply); // showing an error message
+                            new InscriptionConsult($data1,$data2,$_SESSION['userId'], $reply); // showing an error message
 
                         } else {
                             new InscriptionConsult($data1,$data2,''); // showing inscriptions list without a message
@@ -266,7 +272,7 @@
                     $data1 = $inscription->getActivities($_SESSION['userId'],true); // inscripted activities
                     $data2 = $inscription->getActivities($_SESSION['userId'],false);
                     $reply = '';
-                    new InscriptionConsult($data1,$data2,$reply);
+                    new InscriptionConsult($data1,$data2,$_SESSION['userId'],$reply);
 
                     break;
             }
