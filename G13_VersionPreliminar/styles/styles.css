@@ -34,6 +34,12 @@ body {
 	margin-bottom: 0;
 	bottom: 0;
 	background-color: #58C465;
+	height: 30%;
+}
+
+#foot p {
+	font-size: small;
+	text-align: center;
 }
 
 /*Jumbo 1 background (set jumbo1 id on div class jumbotron home.html)*/
