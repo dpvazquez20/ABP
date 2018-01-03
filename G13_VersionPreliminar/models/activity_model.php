@@ -130,7 +130,7 @@ class ActivityModel
                         }
 
                         $exit=false;
-                        while (($correctDay < $fechaFin) && !$exit) {
+                        while (($correctDay <= $fechaFin) && !$exit) {
                             if ($this->checkResource($correctDay)) {
                                 $sql = "SELECT * FROM actividades WHERE id = (SELECT MAX(id) FROM actividades)";
                                 $result = $this->mysqli->query($sql);
@@ -228,7 +228,7 @@ class ActivityModel
     }
 
     function checkDayName($fechaInicio,$fechaFin){
-        while($fechaInicio < $fechaFin){
+        while($fechaInicio <= $fechaFin){
 
             $strFI = date_format($fechaInicio,"l");
 
