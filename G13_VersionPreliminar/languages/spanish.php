@@ -66,6 +66,10 @@ $strings = array(
 	'fechaFin' => 'Fecha fin',
 	'resource' => 'Recurso',
 	'act_coach' => 'Entrenador',
+	'ErrorMaxPart' => 'Número de participantes mayor que aforo',
+    'ErrorIncorrectDay' => 'El día seleccionado no está dentro del rango de fechas',
+    'ErrorResourceNotReady' => 'El recurso no está disponible',
+	'ErrorReservationTime' => 'Hora de reserva ocupada',
 	
 	// Resource
 	'aforo' => 'Aforo',
