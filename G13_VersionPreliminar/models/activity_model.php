@@ -4,14 +4,18 @@ include '../functions/connectDB.php';
 
 class ActivityModel
 {
-	function __construct($id,$nombre,$descripcion,$frecuencia,$horaInicio,$horaFin,$tipo,$numMaxParticipantes)
+	function __construct($id,$nombre,$descripcion,$frecuencia,$resource,$act_coach,$horaInicio,$horaFin,$fechaInicio,$fechaFin,$tipo,$numMaxParticipantes)
     {
 		$this->id = $id;
 		$this->nombre = $nombre;
 		$this->descripcion = $descripcion;
+		$this->resource = $resource;
+        $this->act_coach = $act_coach;
         $this->frecuencia = $frecuencia;
         $this->horaInicio = $horaInicio;
         $this->horaFin = $horaFin;
+        $this->fechaInicio = $fechaInicio;
+        $this->fechaFin = $fechaFin;
 		$this->tipo = $tipo;
 		$this->numMaxParticipantes = $numMaxParticipantes;
 
@@ -33,10 +37,18 @@ class ActivityModel
 		{
 			$toret = "nombre";
 		}
-		if($this->descripcion <> '')
+		if($this->resource <> '')
 		{
-			$toret = "descripcion";
+			$toret = "resource";
 		}
+        if($this->act_coach <> '')
+        {
+            $toret = "act_coach";
+        }
+        if($this->descripcion <> '')
+        {
+            $toret = "descripcion";
+        }
         if($this->frecuencia <> '')
         {
             $toret = "frecuencia";
@@ -48,6 +60,14 @@ class ActivityModel
         if($this->horaFin <> '')
         {
             $toret = "horaFin";
+        }
+        if($this->fechaInicio <> '')
+        {
+            $toret = "fechaInicio";
+        }
+        if($this->fechaFin <> '')
+        {
+            $toret = "fechaFin";
         }
 		if($this->tipo <> '')
 		{
@@ -83,20 +103,85 @@ class ActivityModel
                 if ($result->num_rows == 0)
                 {
 
-                    $sql = "INSERT INTO actividades (nombre,descripcion,frecuencia,horaInicio,horaFin,tipo,numMaxParticipantes,borrado)
-							VALUES('" . $this->nombre . "','" . $this->descripcion . "','" . $this->frecuencia . "','" . $this->horaInicio . "',
-							'" . $this->horaFin . "','"  . $this->tipo . "'," . $this->numMaxParticipantes . ",0)";
+                    $sql = "SELECT aforo FROM recursos WHERE id ='". $this->resource ."'";
+                    $result = $this->mysqli->query($sql);
+                    $resourceLimit = $result->fetch_assoc();
 
-                    // inserting new activity
-                    if ($result = $this->mysqli->query($sql))
-                    {
-                        $toret = $strings['InsertSuccess'];
-                    }else {
-                        $toret = $strings['InsertError'];
+                    // checking that max number of participants is lower than resource's gauging ("aforo")
+                    if($this->numMaxParticipantes <= $resourceLimit["aforo"]){
+
+                    $fechaInicio = new DateTime($this->fechaInicio);
+                    $fechaFin = new DateTime($this->fechaFin);
+
+                    $correctDay = $this->checkDayName($fechaInicio,$fechaFin);
+                    if($correctDay <> ''){
+                        //comprobar que no hay alguna reserva ese dia a esa hora en ese recurso
+
+                        $sql = "INSERT INTO actividades (nombre,descripcion,frecuencia,horaInicio,horaFin,tipo,numMaxParticipantes,borrado,coach_id,fechaInicio,fechaFin)
+							VALUES('" . $this->nombre . "','" . $this->descripcion . "','" . $this->frecuencia . "','" . $this->horaInicio . "',
+							'" . $this->horaFin . "','"  . $this->tipo . "'," . $this->numMaxParticipantes . ",0,'"  . $this->act_coach . "','"  . $this->fechaInicio . "','"  . $this->fechaFin . "')";
+
+                        // inserting new activity
+                        if ($result = $this->mysqli->query($sql))
+                        {
+                            $toret = $strings['InsertSuccess'];
+                        }else {
+                            $toret = $strings['InsertError'];
+                        }
+
+                        $exit=false;
+                        while (($correctDay < $fechaFin) && !$exit) {
+                            if ($this->checkResource($correctDay)) {
+                                $sql = "SELECT * FROM actividades WHERE id = (SELECT MAX(id) FROM actividades)";
+                                $result = $this->mysqli->query($sql);
+                                $lastid = $result->fetch_assoc();
+                                $date = $correctDay->format('Y-m-d');
+
+                                $sql = "SELECT * FROM reservas WHERE fecha = '" . $date . "' AND recurso_id = '". $this->resource ."' AND borrado ='0' AND actividades_id IN (
+                                            SELECT id FROM actividades WHERE (horaInicio >= '" . $this->horaInicio . "' AND horaInicio <= '" . $this->horaFin . "') OR 
+                                                                             (horaInicio <= '" . $this->horaInicio . "' AND horaFin >= '" . $this->horaInicio . "'))";
+                                $result = $this->mysqli->query($sql);
+
+                                if ($result->num_rows != 0)
+                                {
+
+                                    $sql = "DELETE FROM actividades WHERE id = '" . $lastid["id"] . "'";
+                                    $this->mysqli->query($sql);
+                                    $sql = "DELETE FROM RESERVAS WHERE actividades_id = '" . $lastid["id"] . "'";
+                                    $this->mysqli->query($sql);
+
+                                    $exit = true;
+                                    $toret = $strings['ErrorReservationTime'];
+
+                                }else {
+
+                                    $sql = "INSERT INTO reservas (fecha,borrado,actividades_id,recurso_id) VALUES ('" . $date . "', 0,'" . $lastid["id"] . "','" . $this->resource . "')";
+                                    if ($result = $this->mysqli->query($sql))
+                                    {
+                                        $toret = $strings['InsertSuccess'];
+                                    }else {
+                                        $toret = $strings['InsertError'];
+                                    }
+
+                                    $correctDay->add(new DateInterval('P7D'));
+                                }
+
+                            } else {
+                                $exit = true;
+                                $toret = $strings['ErrorResourceNotReady'];
+                            }
+                        }
+
+                    }else{
+                        $toret = $strings['ErrorIncorrectDay'];
+                    }
+
+                    } else {
+                        $toret = $strings['ErrorMaxPart'];
                     }
 
                 }else {
-
+                    /*
                     // seeing if the activity had been created before
                     $sql = "SELECT * FROM actividades WHERE nombre = '".$this->nombre."' AND borrado='1'";
                     $result = $this->mysqli->query($sql);
@@ -114,6 +199,7 @@ class ActivityModel
                     } else {
                         $toret = $strings['InsertErrorRepeat'];
                     }
+                    */
                 }
             }
         }else {
@@ -122,6 +208,70 @@ class ActivityModel
 
 		return $toret;
 	}
+
+	function dayTraductor($day){
+        include '../languages/spanish.php';
+
+	    Switch($day){
+	        case $strings['monday']:
+	            return "Monday";
+            case $strings['tuesday']:
+                return "Tuesday";
+            case $strings['wednesday']:
+                return "Wednesday";
+            case $strings['thursday']:
+                return "Thursday";
+            default:
+                return "Friday";
+        }
+
+    }
+
+    function checkDayName($fechaInicio,$fechaFin){
+        while($fechaInicio < $fechaFin){
+
+            $strFI = date_format($fechaInicio,"l");
+
+            if($strFI == $this->dayTraductor($this->frecuencia)){
+                return $fechaInicio;
+            }else{
+                $fechaInicio->add(new DateInterval('P1D'));
+            }
+        }
+        return '';
+
+    }
+
+    function checkResource($correctDay){
+        include '../languages/spanish.php';
+
+            $sql = "SELECT * FROM reservas WHERE fecha = '".$correctDay->format('Y-m-d')."' AND recurso_id = '".$this->resource."' AND borrado ='0'";
+
+            // checking DB connection
+            if (!$result = $this->mysqli->query($sql))
+            {
+                $toret = $strings['ConnectionDBError'];
+            }else {
+                // checking that at least one resource exists
+                if ($result->num_rows != 0)
+                {
+                    $toret=[];
+                    $i=0;
+
+                    // introducing all resources into an array
+                    while ($row = $result->fetch_array())
+                    {
+                        $toret[$i] = $row;
+                        $i++;
+                    }
+
+                }else {
+                    $toret = true;
+                }
+            }
+        return $toret;
+
+    }
 
 	// delete activity
 	function delete(){
@@ -154,6 +304,18 @@ class ActivityModel
 					}else {
 						$toret = $strings['DeleteError'];
 					}
+
+                    $sql = "UPDATE reservas SET borrado ='1' WHERE actividades_id = '" . $this->id ."'";
+
+                    $this->mysqli->query($sql);
+
+                    // deleting reservation
+                    if ($result = $this->mysqli->query($sql))
+                    {
+                        $toret = $strings['DeleteSuccess'];
+                    }else {
+                        $toret = $strings['DeleteError'];
+                    }
 
 				}else {
 					$toret = $strings['ErrorNotExist'];
@@ -215,61 +377,6 @@ class ActivityModel
 						$sql = $sql . " ";
 						$modify = true;
 					}
-
-                    if($this->frecuencia <> '')
-                    {
-                        $sql = $sql . "frecuencia ='" . $this->frecuencia . "'";
-                        if($lastModify <> "frecuencia")
-                        {
-                            $sql = $sql . ",";
-                        }
-                        $sql = $sql . " ";
-                        $modify = true;
-                    }
-
-                    if($this->horaInicio <> '')
-                    {
-                        $sql = $sql . "horaInicio ='" . $this->horaInicio . "'";
-                        if($lastModify <> "horaInicio")
-                        {
-                            $sql = $sql . ",";
-                        }
-                        $sql = $sql . " ";
-                        $modify = true;
-                    }
-
-                    if($this->horaFin <> '')
-                    {
-                        $sql = $sql . "horaFin ='" . $this->horaFin . "'";
-                        if($lastModify <> "horaFin")
-                        {
-                            $sql = $sql . ",";
-                        }
-                        $sql = $sql . " ";
-                        $modify = true;
-                    }
-
-					if($this->tipo <> '')
-					{
-						$sql = $sql . "tipo ='" . $this->tipo . "'";
-						if($lastModify <> "tipo")
-						{
-							$sql = $sql . ",";
-						}
-						$sql = $sql . " ";
-						$modify = true;
-					}
-
-                    if($this->numMaxParticipantes <> '')
-                    {
-                        $sql = $sql . "numMaxParticipantes ='" . $this->numMaxParticipantes . "'";
-                        if($lastModify <> "numMaxParticipantes")
-                        {
-                            $sql = $sql . ",";
-                        }
-                        $sql = $sql . " ";
-                        $modify = true;
-                    }
 
 					$sql = $sql . "WHERE id ='" . $this->id . "'";
 
@@ -462,7 +569,148 @@ class ActivityModel
 
     }
 
+    // Search resources
+    function getResources()
+    {
+        include '../languages/spanish.php';
 
+        $sql = "SELECT * FROM recursos WHERE borrado = '0'";
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one resource exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all resources into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['ConsultErrorForm'];
+            }
+        }
+
+        return $toret;
+    }
+
+    // Search coaches
+    function getCoaches()
+    {
+        include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND tipo='Entrenador'";
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one resource exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all resources into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['ConsultErrorForm'];
+            }
+        }
+
+        return $toret;
+    }
+
+    //Get actual activity resource
+    function getActualResource($id){
+        include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM recursos WHERE borrado = '0' AND id IN (SELECT recurso_id FROM reservas WHERE actividades_id=". $id ." AND borrado='0')";
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one resource exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all resources into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['ConsultErrorForm'];
+            }
+        }
+
+        return $toret;
+    }
+
+    //Get actual activity coach
+    function getActualCoach($id){
+        include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND id = (SELECT coach_id FROM actividades WHERE id=". $id .")";
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one resource exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all resources into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['ConsultErrorForm'];
+            }
+        }
+
+        return $toret;
+    }
 }
+
 
 ?>
