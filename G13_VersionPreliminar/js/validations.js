@@ -113,3 +113,27 @@ function checkActivityTimes(){
         return true;
     }
 }
+
+// Validates that start date is sooner than end date
+function checkActivityDates(){
+    var date1 = new Date(document.getElementById('fechaInicio').value.toString());
+    var date2 = new Date(document.getElementById('fechaFin').value.toString());
+
+    if(date1.getTime() < Date.now()){
+        document.getElementById('fechaInicio').style.borderColor = 'red';
+        document.getElementById('fechaFin').style.borderColor = 'red';
+        alert("Fecha anterior a la fecha actual");
+        return false;
+    }
+
+    if(date1.getTime() > date2.getTime() ){
+        document.getElementById('fechaInicio').style.borderColor = 'red';
+        document.getElementById('fechaFin').style.borderColor = 'red';
+        alert("Fecha de inicio menor que fecha de fin");
+        return false;
+    }else{
+        document.getElementById('fechaInicio').style.borderColor = 'green';
+        document.getElementById('fechaFin').style.borderColor = 'green';
+        return true;
+    }
+}
