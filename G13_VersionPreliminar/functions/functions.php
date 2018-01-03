@@ -1280,4 +1280,223 @@ function generateListTrainingTables ($list, $page_name, $titles)
     }
 }
 
+/** Function to automatically generate a list of elements
+ *  Example => generateList($lista_usuarios, 'user', $titles);
+ */
+function generateAssistanceUsersList ($list, $page_name, $titles)
+{
+    include '../languages/spanish.php';
+
+    $name = strtolower($page_name);
+
+    // Select the images directory
+    $directory = '../images/profiles/';
+
+
+    // Print the table if data aren't a string
+    if (!is_string($list))
+    {
+        // Table
+        echo '<div class="table-responsive">
+                <table class="table table-hover">';
+
+        // Attribute's titles
+        echo '<thead>
+                            <tr>';
+
+        foreach ($titles as $title)
+        {
+            echo '<th>' . $strings[$title] . '</th>';
+        }
+
+        echo     '</tr>
+                        </thead>';
+
+        // Attribute's values
+        echo '<tbody>';
+
+        for ($i = 0; $i < count($list); $i++)
+        {
+            echo '<tr>';
+
+            for ($j = 0; $j < count($titles); $j++)
+            {
+                // Check if the attribute is an image
+                if ($titles[$j] == 'imagen')
+                {
+                    if ($list[$i]["$titles[$j]"] <> '')
+                    {
+                        echo '<td> <img src="' . $directory . $list[$i]["$titles[$j]"] . '" alt="' . $list[$i]["$titles[$j]"] . '" height="150" width="150"> </td>';
+
+                    } else {
+                        echo '<td> <img src="' . $directory . 'default.png" alt="default.png" height="150" width="150"> </td>';
+                    }
+
+                } else {
+                    echo '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+                }
+            }
+
+
+        }
+
+        echo '</tbody>
+                </table>
+             </div>';
+    }
+}
+
+/** Function to automatically generate a list of elements (list-group)
+ *  Example => generateListGroup($user_list, 'user', $titles, true, $strings['Insert'], $strings['See']);
+ */
+function generateInscriptionList ($list, $page_name, $titles, $make_form, $action_checkBox, $action_href)
+{
+    include '../languages/spanish.php';
+
+    $name = strtolower($page_name);
+
+    // Print the list if data aren't a string
+    if (!is_string($list))
+    {
+        // List-group
+        echo '<div class="list-group">';
+
+        // If $make_form is false, a normal list will be printed
+        if ($make_form == false)
+        {
+            // If the management is 'Inscriptions'
+            if ($page_name == 'inscription')
+            {
+                for ($i = 0; $i < count($list); $i++)
+                {
+                    echo '<a class="list-group-item">';
+                    $text = '';
+
+                    for ($j = 0; $j < count($titles); $j++)
+                    {
+                        $text = $text . ' - ' .  $list[$i]["$titles[$j]"];
+                    }
+
+                    echo    '<strong>'. $text . '</strong>';
+
+                    echo    '<div class="pull-right action-buttons">';
+
+                    echo        "<button class='btn btn-sm btn-danger' onclick=delete_elem('" . $name . "'," . $list[$i]['id'] . ")> <span class='glyphicon glyphicon-trash' aria-hidden='true'></span> </button>";
+
+                    echo    '</div>
+                         </a>';
+                }
+
+            } else {
+                for ($i = 0; $i < count($list); $i++)
+                {
+                    echo '<a href="../controllers/' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $action_href . '" class="list-group-item">';
+                    $text = '';
+
+                    for ($j = 0; $j < count($titles); $j++)
+                    {
+                        $text = $text . ' ' .  $list[$i]["$titles[$j]"];
+                    }
+
+                    echo    '<strong>'. $text . '</strong>';
+                    echo '</a>';
+                }
+            }
+
+            // If not, a list with checboxes will be printed
+        } else {
+            for ($i = 0; $i < count($list); $i++)
+            {
+                echo '<a class="list-group-item">';
+                $text = '';
+
+                for ($j = 0; $j < count($titles); $j++)
+                {
+                    $text = $text . ' - ' .  $list[$i]["$titles[$j]"];
+                }
+
+                // Print the checkbox
+                echo    '<form class="form-horizontal" action="../controllers/' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $action_checkBox . '" method="post">
+                            <div class="form-group">
+                                <div class="checkbox">';
+
+                echo                '<label> <strong>' . $text . '</strong> </label> 
+                                     <div class="pull-right action-buttons">
+                                        <input type="checkbox" name="checkvalue" id="checkButton" value="1" onchange="this.form.submit()">
+                                     </div>';
+
+                echo            '</div>
+                            </div>    
+                        </form>';
+
+                echo '</a>';
+
+            }
+        }
+
+        echo '</div>';
+
+
+    }
+}
+
+/** Function to automatically generate a <select>
+ *  Example => generateSelect ($this->data, 'nombre', 'Recurso');
+ */
+function generateActivitiesSelect ($list, $col, $labelName,$idname,$pred)
+{
+    include '../languages/spanish.php';
+
+    // $list is the exercise list, $col is the column name in the DB, $labelName is the field name in the form
+    echo '<div class="form-group">';
+    echo    '<label for="idChild"class="col-md-2 control-label">' . $labelName . '*</label>';
+    echo        '<div class="col-md-10">
+                    <select class="selectpicker form-control" name="'. $idname .'" id="' . $idname . '" required>';
+    if($pred == ''){
+        echo            '<option data-hidden="true">' . $strings['Nothing selected'] . '</option>';
+    }else{
+        echo            '<option data-hidden="true">' . $pred . '</option>';
+    }
+
+    // Print options
+    for ($i = 0; $i < count($list); $i++)
+    {
+        echo '<option value="' . $list[$i]['id'] . '">' . $list[$i][$col]. '</option>';
+    }
+
+    echo            '</select>';
+    echo        '</div>';
+    echo '</div>';
+}
+
+/** Function to automatically generate a <select>
+ *  Example => generateSelect ($this->data, 'nombre', 'Recurso');
+ */
+function generateActivitiesDisabledSelect ($list, $col, $labelName,$idname,$pred)
+{
+    include '../languages/spanish.php';
+
+    // $list is the exercise list, $col is the column name in the DB, $labelName is the field name in the form
+    echo '<div class="form-group">';
+    echo    '<label for="idChild"class="col-md-2 control-label">' . $labelName . '*</label>';
+    echo        '<div class="col-md-10">
+                    <select class="selectpicker form-control" name="'. $idname .'" id="' . $idname . '" required disabled>';
+    if($pred == ''){
+        echo            '<option data-hidden="true">' . $strings['Nothing selected'] . '</option>';
+    }else{
+        echo            '<option data-hidden="true">' . $pred . '</option>';
+    }
+
+    // Print options
+    for ($i = 0; $i < count($list); $i++)
+    {
+        echo '<option value="' . $list[$i]['id'] . '">' . $list[$i][$col]. '</option>';
+    }
+
+    echo            '</select>';
+    echo        '</div>';
+    echo '</div>';
+}
+
 ?>
+
