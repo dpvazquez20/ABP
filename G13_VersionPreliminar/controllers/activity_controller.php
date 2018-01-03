@@ -16,9 +16,13 @@
 		$id = '';
 		$nombre = '';
 		$descripcion = '';
+        $resource='';
+        $act_coach='';
         $frecuencia = '';
         $horaInicio = '';
         $horaFin = '';
+        $fechaInicio='';
+        $fechaFin='';
         $tipo = '';
 		$numMaxParticipantes = '';
 
@@ -39,17 +43,19 @@
 			$descripcion = $_REQUEST['descripcion'];
 			unset($_REQUEST['descripcion']);
 		}
+        if(isset($_REQUEST['resource']))
+        {
+            $resource = $_REQUEST['resource'];
+            unset($_REQUEST['resource']);
+        }
+        if(isset($_REQUEST['act_coach']))
+        {
+            $act_coach = $_REQUEST['act_coach'];
+            unset($_REQUEST['act_coach']);
+        }
         if(isset($_REQUEST['frecuencia']))
         {
-            $aux = $_REQUEST['frecuencia'];
-
-            foreach ($aux as $day) {
-                if($frecuencia <>''){
-                    $frecuencia = $frecuencia .",". $day;
-                }else{
-                    $frecuencia = $day;
-                }
-            }
+            $frecuencia = $_REQUEST['frecuencia'];
             unset($_REQUEST['frecuencia']);
         }
         if(isset($_REQUEST['horaInicio']))
@@ -62,6 +68,16 @@
             $horaFin = $_REQUEST['horaFin'] . ':00';
             unset($_REQUEST['horaFin']);
         }
+        if(isset($_REQUEST['fechaInicio']))
+        {
+            $fechaInicio = $_REQUEST['fechaInicio'];
+            unset($_REQUEST['fechaInicio']);
+        }
+        if(isset($_REQUEST['fechaFin']))
+        {
+            $fechaFin = $_REQUEST['fechaFin'];
+            unset($_REQUEST['fechaFin']);
+        }
         if(isset($_REQUEST['tipo']))
         {
             $tipo = $_REQUEST['tipo'];
@@ -72,13 +88,8 @@
 			$numMaxParticipantes = $_REQUEST['numMaxParticipantes'];
 			unset($_REQUEST['numMaxParticipantes']);
 		}
-        if(isset($_REQUEST['lugar']))
-        {
-            $numMaxParticipantes = $_REQUEST['lugar'];
-            unset($_REQUEST['lugar']);
-        }
 
-		$activity = new ActivityModel($id,$nombre,$descripcion,$frecuencia,$horaInicio,$horaFin,$tipo,$numMaxParticipantes);
+		$activity = new ActivityModel($id,$nombre,$descripcion,$frecuencia,$resource,$act_coach,$horaInicio,$horaFin,$fechaInicio,$fechaFin,$tipo,$numMaxParticipantes);
 
 		return $activity;
 	}
@@ -107,7 +118,10 @@
 					// looking for form's data
 					if (!isset($_REQUEST['nombre']))
 					{ // if not, the view is called
-						new ActivityAdd();
+                        $activity = get_data_form();
+                        $resources = $activity->getResources();
+                        $coaches = $activity->getCoaches();
+						new ActivityAdd($resources,$coaches,'');
 					
 					}else { // if we have form's data, we insert it
 						$activity = get_data_form(); // getting data
@@ -145,8 +159,12 @@
 					if (!isset($_REQUEST['nombre']))
 					{ // if not, the view is called
                         $activity = get_data_form(); // getting data
+                        $resources = $activity->getResources();
+                        $coaches = $activity->getCoaches();
+                        $res = $activity->getActualResource($_REQUEST["id"]);
+                        $coa = $activity->getActualCoach($_REQUEST["id"]);
                         $data = $activity->consult(); // trying consult
-						new ActivityModify($data);
+						new ActivityModify($data,$resources,$coaches,$res,$coa);
 
 					}else { // if we have form's data, we modify it
 						$activity = get_data_form(); // getting data
@@ -165,7 +183,9 @@
 					{
 						$activity = get_data_form(); // getting data
 						$data = $activity->consult(); // trying consult
-						new ActivityConsult($data); // showing activity data
+                        $data2 = $activity->getActualResource($_REQUEST['id']);
+                        $data3 = $activity->getActualCoach($_REQUEST['id']);
+						new ActivityConsult($data,$data2,$data3); // showing activity data
 					
 					}else { // if not, the view is called
 						$activity = get_data_form(); // getting data
