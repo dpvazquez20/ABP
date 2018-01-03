@@ -77,7 +77,7 @@ class InscriptionConsult
 
                             <?php
                             $titles= array('nombre','frecuencia','horaInicio');
-                            generateListGroup($this->data1,'inscription',$titles,false,$strings['Delete'],$strings['Delete']);
+                            generateInscriptionList($this->data1,'inscription',$titles,false,$strings['Delete'],$strings['Delete']);
                             ?>
                         </div>
 
@@ -87,7 +87,7 @@ class InscriptionConsult
 
                             <?php
                             $titles= array('nombre','frecuencia','horaInicio');
-                            generateListGroup($this->data2,'inscription',$titles,true,$strings['Insert'],$strings['Insert']);
+                            generateInscriptionList($this->data2,'inscription',$titles,true,$strings['Insert'],$strings['Insert']);
                             ?>
                         </div>
 

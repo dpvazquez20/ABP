@@ -5,8 +5,11 @@
 class ActivityAdd
 {
 
-    function __construct()
+    function __construct($resources,$coaches,$reply)
     {
+        $this->resources = $resources;
+        $this->coaches = $coaches;
+        $this->message = $reply;
         $this->render();
     }
 
@@ -35,9 +38,11 @@ class ActivityAdd
                             <h1 id="headname"> <?php echo $strings['New activity']; ?> </h1>
                         </div>
 
+                        <?php showMessage($this->message); ?>
+
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <form class="form-horizontal" action='../controllers/activity_controller.php' onsubmit="return checkMaxParticipants() && checkActivityTimes() " method='post'>
+                                <form class="form-horizontal" action='../controllers/activity_controller.php' onsubmit="return checkMaxParticipants() && checkActivityTimes() &&checkActivityDates() " method='post'>
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="nombre"> <?php echo $strings['nombre']; ?>* </label>
                                         <div class="col-md-10">
@@ -52,52 +57,56 @@ class ActivityAdd
                                         </div>
                                     </div>
 
+                                        <?php
+                                        generateActivitiesSelect ($this->resources, 'nombre',$strings['resource'],'resource','');
+                                        ?>
+
+                                        <?php
+                                        generateActivitiesSelect ($this->coaches, 'nombre',$strings['act_coach'],'act_coach','');
+                                        ?>
+
                                     <div class="form-group">
-                                        <label class="control-label col-md-2" for="frecuencia"> <?php echo $strings['frecuencia']; ?>* </label>
-                                        <div class="col-md-10">
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="frecuencia[]" id="frecuencia" value="<?php echo $strings['monday']; ?>"> <?php echo $strings['monday']; ?>
-                                                </label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="frecuencia[]" id="frecuencia" value="<?php echo $strings['tuesday']; ?>"> <?php echo $strings['tuesday']; ?>
-                                                </label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="frecuencia[]" id="frecuencia" value="<?php echo $strings['wednesday']; ?>"> <?php echo $strings['wednesday']; ?>
-                                                </label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="frecuencia[]" id="frecuencia" value="<?php echo $strings['thursday']; ?>"> <?php echo $strings['thursday']; ?>
-                                                </label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="frecuencia[]" id="frecuencia" value="<?php echo $strings['friday']; ?>"> <?php echo $strings['friday']; ?>
-                                                </label>
-                                            </div>
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['frecuencia']; ?>* </label>
+                                        <div class="col-md-3">
+                                            <select class="selectpicker form-control" name="frecuencia" id="frecuencia" required>
+                                                <option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option>
+                                                <option value="<?php echo $strings['monday']; ?>"> <?php echo $strings['monday']; ?> </option>
+                                                <option value="<?php echo $strings['tuesday']; ?>"> <?php echo $strings['tuesday']; ?> </option>
+                                                <option value="<?php echo $strings['wednesday']; ?>"> <?php echo $strings['wednesday']; ?> </option>
+                                                <option value="<?php echo $strings['thursday']; ?>"> <?php echo $strings['thursday']; ?> </option>
+                                                <option value="<?php echo $strings['friday']; ?>"> <?php echo $strings['friday']; ?> </option>
+                                            </select>
                                         </div>
                                     </div>
 
+
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="horaInicio"> <?php echo $strings['horaInicio']; ?>* </label>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <input type="time" class="form-control" name="horaInicio" id="horaInicio" placeholder=" <?php echo $strings['Enter start time']; ?> " onchange="checkActivityTimes(this)" required>
                                         </div>
 
                                         <label class="control-label col-md-2" for="horaFin"> <?php echo $strings['horaFin']; ?>* </label>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <input type="time" class="form-control" name="horaFin" id="horaFin" placeholder=" <?php echo $strings['Enter end time']; ?> " onchange="checkActivityTimes(this)" required>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
+                                        <label class="control-label col-md-2" for="fechaInicio"> <?php echo $strings['fechaInicio']; ?>* </label>
+                                        <div class="col-md-3">
+                                            <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" placeholder=" <?php echo $strings['Enter start date']; ?> " onchange="checkActivityDates(this)" required>
+                                        </div>
+
+                                        <label class="control-label col-md-2" for="fechaFin"> <?php echo $strings['fechaFin']; ?>* </label>
+                                        <div class="col-md-3">
+                                            <input type="date" class="form-control" name="fechaFin" id="fechaFin" placeholder=" <?php echo $strings['Enter end date']; ?> " onchange="checkActivityDates(this)" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?>* </label>
-                                        <div class="col-md-10">
+                                        <div class="col-md-3">
                                             <select class="selectpicker form-control" name="tipo" id="tipo" required>
                                                 <option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option>
                                                 <option value="<?php echo $strings['individual']; ?>"> <?php echo $strings['individual']; ?> </option>
