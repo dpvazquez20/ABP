@@ -1,22 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
--- https://www.phpmyadmin.net/
+-- version 4.2.12deb2
+-- http://www.phpmyadmin.net
 --
--- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 20-11-2017 a las 03:30:40
--- Versión del servidor: 5.7.19
--- Versión de PHP: 5.6.31
+-- Servidor: localhost
+-- Tiempo de generación: 02-01-2018 a las 20:24:23
+-- Versión del servidor: 5.5.44-0+deb8u1
+-- Versión de PHP: 5.6.13-0+deb8u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Base de datos: `actifit`
@@ -31,7 +29,7 @@ USE `actifit`;
 --
 
 CREATE TABLE IF NOT EXISTS `actividades` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `nombre` varchar(60) NOT NULL,
   `descripcion` longtext,
   `frecuencia` varchar(50) NOT NULL,
@@ -40,18 +38,19 @@ CREATE TABLE IF NOT EXISTS `actividades` (
   `tipo` varchar(45) NOT NULL,
   `numMaxParticipantes` int(11) NOT NULL,
   `borrado` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `nombre_UNIQUE` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  `coach_id` int(11) NOT NULL,
+  `fechaInicio` date NOT NULL,
+  `fechaFin` date NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `actividades`
 --
 
-INSERT IGNORE INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `horaInicio`, `horaFin`, `tipo`, `numMaxParticipantes`, `borrado`) VALUES
-(1, 'Zumba', 'Práctica de ritmos latinos que tiene como objetivo ejercitar todo el cuerpo para pasar un buen rato mientras uno se divierte al mismo tiempo que practica ejercicio.', 'Martes,Jueves', '17:00:00', '18:00:00', 'Grupal', 10, 0),
-(2, 'SoftBoxing', 'Ejercicio aeróbico que utiliza movimientos propios del boxeo. ', 'Lunes,Miercoles,Viernes', '19:00:00', '20:00:00', 'Grupal', 10, 0),
-(3, 'Spinning', 'Sesión de entrenamiento de alta intensidad con bicicletas estáticas', 'Lunes,Viernes', '16:00:00', '17:00:00', 'Grupal', 20, 0);
+INSERT IGNORE INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `horaInicio`, `horaFin`, `tipo`, `numMaxParticipantes`, `borrado`, `coach_id`, `fechaInicio`, `fechaFin`) VALUES
+(40, 'Zumba', 'Se trata de una fusiÃ³n de ritmos aerÃ³bicos o coreografÃ­as sencillas con distintos gÃ©neros, inspirados en la mÃºsica latina y con una mezcla de mÃºsica internacional.', 'Martes', '17:00:00', '19:00:00', 'Grupal', 5, 0, 3, '2018-01-08', '2018-01-25'),
+(41, 'SoftBoxing', 'Clase de cardio utilizando movimientos propios del boxeo y otras artesmarciales que obligan a ejercitar todos los grupos musculares. ', 'Jueves', '20:00:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-16', '2018-01-26'),
+(42, 'Spinning', 'El spinning es una variante de los deportes de fitness (o de gimnasio) que consiste en pedalear sobre una bicicleta estÃ¡tica al ritmo de la mÃºsica y siguiendo los ejercicios que nos marca el monitor. TambiÃ©n se le llama indoor cycling.', 'MiÃ©rcoles', '19:30:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-09', '2018-01-26');
 
 -- --------------------------------------------------------
 
@@ -60,15 +59,12 @@ INSERT IGNORE INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `
 --
 
 CREATE TABLE IF NOT EXISTS `ejercicios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `nombre` varchar(60) NOT NULL,
   `descripcion` longtext,
   `imagen` varchar(90) NOT NULL,
   `tipo` varchar(45) NOT NULL,
-  `borrado` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `nombre` (`nombre`),
-  UNIQUE KEY `nombre_2` (`nombre`)
+  `borrado` tinyint(4) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
@@ -95,12 +91,10 @@ INSERT IGNORE INTO `ejercicios` (`id`, `nombre`, `descripcion`, `imagen`, `tipo`
 --
 
 CREATE TABLE IF NOT EXISTS `entrenamientos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `nombre` varchar(60) NOT NULL,
   `borrado` tinyint(4) NOT NULL,
-  `sesiones` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `nombre_UNIQUE` (`nombre`)
+  `sesiones` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
@@ -121,11 +115,16 @@ INSERT IGNORE INTO `entrenamientos` (`id`, `nombre`, `borrado`, `sesiones`) VALU
 CREATE TABLE IF NOT EXISTS `entrenamientos_has_tablas` (
   `entrenamiento_id` int(11) NOT NULL,
   `tabla_id` int(11) NOT NULL,
-  `orden_sesion` int(11) NOT NULL,
-  PRIMARY KEY (`entrenamiento_id`,`tabla_id`,`orden_sesion`),
-  KEY `fk_entrenamiento_has_tabla_tabla1_idx` (`tabla_id`),
-  KEY `fk_entrenamiento_has_tabla_entrenamiento1_idx` (`entrenamiento_id`)
+  `orden_sesion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `entrenamientos_has_tablas`:
+--   `entrenamiento_id`
+--       `entrenamientos` -> `id`
+--   `tabla_id`
+--       `tablas` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `entrenamientos_has_tablas`
@@ -147,11 +146,16 @@ INSERT IGNORE INTO `entrenamientos_has_tablas` (`entrenamiento_id`, `tabla_id`, 
 
 CREATE TABLE IF NOT EXISTS `entrenamientos_has_usuarios` (
   `entrenamiento_id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  PRIMARY KEY (`entrenamiento_id`,`usuario_id`),
-  KEY `fk_entrenamiento_has_usuario_usuario1_idx` (`usuario_id`),
-  KEY `fk_entrenamiento_has_usuario_entrenamiento1_idx` (`entrenamiento_id`)
+  `usuario_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `entrenamientos_has_usuarios`:
+--   `entrenamiento_id`
+--       `entrenamientos` -> `id`
+--   `usuario_id`
+--       `usuarios` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `entrenamientos_has_usuarios`
@@ -167,20 +171,26 @@ INSERT IGNORE INTO `entrenamientos_has_usuarios` (`entrenamiento_id`, `usuario_i
 --
 
 CREATE TABLE IF NOT EXISTS `inscripciones` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `borrado` tinyint(4) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_inscripcion_usuario1_idx` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  `usuario_id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `inscripciones`:
+--   `usuario_id`
+--       `usuarios` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `inscripciones`
 --
 
 INSERT IGNORE INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALUES
-(1, '2017-11-14', 0, 4);
+(11, '2018-01-02', 0, 4),
+(12, '2018-01-02', 0, 5),
+(13, '2018-01-02', 0, 5);
 
 -- --------------------------------------------------------
 
@@ -190,18 +200,25 @@ INSERT IGNORE INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALU
 
 CREATE TABLE IF NOT EXISTS `inscripciones_has_actividades` (
   `inscripciones_id` int(11) NOT NULL,
-  `actividades_id` int(11) NOT NULL,
-  PRIMARY KEY (`inscripciones_id`,`actividades_id`),
-  KEY `fk_inscripciones_has_actividades_actividades1_idx` (`actividades_id`),
-  KEY `fk_inscripciones_has_actividades_inscripciones1_idx` (`inscripciones_id`)
+  `actividades_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `inscripciones_has_actividades`:
+--   `actividades_id`
+--       `actividades` -> `id`
+--   `inscripciones_id`
+--       `inscripciones` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `inscripciones_has_actividades`
 --
 
 INSERT IGNORE INTO `inscripciones_has_actividades` (`inscripciones_id`, `actividades_id`) VALUES
-(1, 1);
+(13, 40),
+(12, 41),
+(11, 42);
 
 -- --------------------------------------------------------
 
@@ -210,17 +227,22 @@ INSERT IGNORE INTO `inscripciones_has_actividades` (`inscripciones_id`, `activid
 --
 
 CREATE TABLE IF NOT EXISTS `lineasdetabla` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `repeticiones` varchar(45) DEFAULT NULL,
   `duracion` varchar(45) DEFAULT NULL,
   `descanso` varchar(45) DEFAULT NULL,
   `series` int(11) DEFAULT NULL,
   `tabla_id` int(11) NOT NULL,
-  `ejercicio_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`tabla_id`,`ejercicio_id`),
-  KEY `fk_lineasDeTabla_tablas1_idx` (`tabla_id`),
-  KEY `fk_lineasDeTabla_ejercicios1_idx` (`ejercicio_id`)
+  `ejercicio_id` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `lineasdetabla`:
+--   `ejercicio_id`
+--       `ejercicios` -> `id`
+--   `tabla_id`
+--       `tablas` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `lineasdetabla`
@@ -253,13 +275,11 @@ INSERT IGNORE INTO `lineasdetabla` (`id`, `repeticiones`, `duracion`, `descanso`
 --
 
 CREATE TABLE IF NOT EXISTS `recursos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `nombre` varchar(60) NOT NULL,
   `aforo` varchar(45) DEFAULT NULL,
   `descripcion` longtext,
-  `borrado` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `nombre_UNIQUE` (`nombre`)
+  `borrado` tinyint(4) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
@@ -293,47 +313,34 @@ INSERT IGNORE INTO `recursos` (`id`, `nombre`, `aforo`, `descripcion`, `borrado`
 --
 
 CREATE TABLE IF NOT EXISTS `reservas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fechaInicio` date NOT NULL,
-  `fechaFin` date NOT NULL,
-  `frecuencia` varchar(45) NOT NULL,
+`id` int(11) NOT NULL,
+  `fecha` date NOT NULL,
   `borrado` tinyint(4) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
   `actividades_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_reserva_usuario1_idx` (`usuario_id`),
-  KEY `fk_reservas_actividades1_idx` (`actividades_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `recurso_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=18989 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `reservas`:
+--   `recurso_id`
+--       `recursos` -> `id`
+--   `actividades_id`
+--       `actividades` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `reservas`
 --
 
-INSERT IGNORE INTO `reservas` (`id`, `fechaInicio`, `fechaFin`, `frecuencia`, `borrado`, `usuario_id`, `actividades_id`) VALUES
-(1, '2018-01-01', '2018-02-28', 'Semanal', 0, 2, 1),
-(2, '2018-01-01', '2018-01-31', 'Semanal', 0, 2, 2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `reservas_has_recursos`
---
-
-CREATE TABLE IF NOT EXISTS `reservas_has_recursos` (
-  `reservas_id` int(11) NOT NULL,
-  `recursos_id` int(11) NOT NULL,
-  PRIMARY KEY (`reservas_id`,`recursos_id`),
-  KEY `fk_reservas_has_recursos_recursos1_idx` (`recursos_id`),
-  KEY `fk_reservas_has_recursos_reservas1_idx` (`reservas_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `reservas_has_recursos`
---
-
-INSERT IGNORE INTO `reservas_has_recursos` (`reservas_id`, `recursos_id`) VALUES
-(1, 1),
-(2, 2);
+INSERT IGNORE INTO `reservas` (`id`, `fecha`, `borrado`, `actividades_id`, `recurso_id`) VALUES
+(18981, '2018-01-09', 0, 40, 1),
+(18982, '2018-01-16', 0, 40, 1),
+(18983, '2018-01-23', 0, 40, 1),
+(18984, '2018-01-18', 0, 41, 3),
+(18985, '2018-01-25', 0, 41, 3),
+(18986, '2018-01-10', 0, 42, 4),
+(18987, '2018-01-17', 0, 42, 4),
+(18988, '2018-01-24', 0, 42, 4);
 
 -- --------------------------------------------------------
 
@@ -342,15 +349,20 @@ INSERT IGNORE INTO `reservas_has_recursos` (`reservas_id`, `recursos_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `sesiondelineadetabla` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `completado` tinyint(4) NOT NULL,
   `comentario` mediumtext,
   `sesiones_id` int(11) NOT NULL,
-  `lineasDeTabla_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`sesiones_id`),
-  KEY `fk_sesion_lineaDeTabla_sesiones1_idx` (`sesiones_id`),
-  KEY `fk_sesion_lineaDeTabla_lineasDeTabla1_idx` (`lineasDeTabla_id`)
+  `lineasDeTabla_id` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=787 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `sesiondelineadetabla`:
+--   `lineasDeTabla_id`
+--       `lineasdetabla` -> `id`
+--   `sesiones_id`
+--       `sesiones` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `sesiondelineadetabla`
@@ -401,7 +413,7 @@ INSERT IGNORE INTO `sesiondelineadetabla` (`id`, `completado`, `comentario`, `se
 --
 
 CREATE TABLE IF NOT EXISTS `sesiones` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `completado` tinyint(4) DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   `tablas_id` int(11) NOT NULL,
@@ -409,10 +421,14 @@ CREATE TABLE IF NOT EXISTS `sesiones` (
   `orden_sesion_max` int(11) NOT NULL,
   `usuarios_id` int(11) NOT NULL,
   `entrenamientos_id` int(11) NOT NULL,
-  `anterior_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_sesiones_tablas1_idx` (`tablas_id`)
+  `anterior_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=238 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `sesiones`:
+--   `tablas_id`
+--       `tablas` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `sesiones`
@@ -433,11 +449,9 @@ INSERT IGNORE INTO `sesiones` (`id`, `completado`, `fecha`, `tablas_id`, `orden_
 --
 
 CREATE TABLE IF NOT EXISTS `tablas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `nombre` varchar(60) NOT NULL,
-  `borrado` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `nombre_UNIQUE` (`nombre`)
+  `borrado` tinyint(4) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
@@ -456,7 +470,7 @@ INSERT IGNORE INTO `tablas` (`id`, `nombre`, `borrado`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) NOT NULL,
   `login` varchar(45) NOT NULL,
   `contrasenha` varchar(300) NOT NULL,
   `nombre` varchar(45) NOT NULL,
@@ -465,12 +479,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `email` varchar(45) NOT NULL,
   `borrado` tinyint(4) NOT NULL,
   `tipo` varchar(45) NOT NULL,
-  `imagen` varchar(90) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `login_UNIQUE` (`login`),
-  UNIQUE KEY `dni_UNIQUE` (`dni`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
+  `imagen` varchar(90) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
@@ -485,6 +494,153 @@ INSERT IGNORE INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellido
 (5, 'deportista2', '$2y$15$GAnBBHxkDagIEmM4MBClY.sLyzXF358348Jy6Uub6H8z5rq5gfn4m', 'deportistaDos', 'deportistaDos', '72946407K', 'deportista2@gmail.com', 0, 'Deportista', 'default.png');
 
 --
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `actividades`
+--
+ALTER TABLE `actividades`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `nombre_UNIQUE` (`nombre`);
+
+--
+-- Indices de la tabla `ejercicios`
+--
+ALTER TABLE `ejercicios`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `nombre` (`nombre`), ADD UNIQUE KEY `nombre_2` (`nombre`);
+
+--
+-- Indices de la tabla `entrenamientos`
+--
+ALTER TABLE `entrenamientos`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `nombre_UNIQUE` (`nombre`);
+
+--
+-- Indices de la tabla `entrenamientos_has_tablas`
+--
+ALTER TABLE `entrenamientos_has_tablas`
+ ADD PRIMARY KEY (`entrenamiento_id`,`tabla_id`,`orden_sesion`), ADD KEY `fk_entrenamiento_has_tabla_tabla1_idx` (`tabla_id`), ADD KEY `fk_entrenamiento_has_tabla_entrenamiento1_idx` (`entrenamiento_id`);
+
+--
+-- Indices de la tabla `entrenamientos_has_usuarios`
+--
+ALTER TABLE `entrenamientos_has_usuarios`
+ ADD PRIMARY KEY (`entrenamiento_id`,`usuario_id`), ADD KEY `fk_entrenamiento_has_usuario_usuario1_idx` (`usuario_id`), ADD KEY `fk_entrenamiento_has_usuario_entrenamiento1_idx` (`entrenamiento_id`);
+
+--
+-- Indices de la tabla `inscripciones`
+--
+ALTER TABLE `inscripciones`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_inscripcion_usuario1_idx` (`usuario_id`);
+
+--
+-- Indices de la tabla `inscripciones_has_actividades`
+--
+ALTER TABLE `inscripciones_has_actividades`
+ ADD PRIMARY KEY (`inscripciones_id`,`actividades_id`), ADD KEY `fk_inscripciones_has_actividades_actividades1_idx` (`actividades_id`), ADD KEY `fk_inscripciones_has_actividades_inscripciones1_idx` (`inscripciones_id`);
+
+--
+-- Indices de la tabla `lineasdetabla`
+--
+ALTER TABLE `lineasdetabla`
+ ADD PRIMARY KEY (`id`,`tabla_id`,`ejercicio_id`), ADD KEY `fk_lineasDeTabla_tablas1_idx` (`tabla_id`), ADD KEY `fk_lineasDeTabla_ejercicios1_idx` (`ejercicio_id`);
+
+--
+-- Indices de la tabla `recursos`
+--
+ALTER TABLE `recursos`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `nombre_UNIQUE` (`nombre`);
+
+--
+-- Indices de la tabla `reservas`
+--
+ALTER TABLE `reservas`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_reservas_actividades1_idx` (`actividades_id`), ADD KEY `fk_recursos_id` (`recurso_id`);
+
+--
+-- Indices de la tabla `sesiondelineadetabla`
+--
+ALTER TABLE `sesiondelineadetabla`
+ ADD PRIMARY KEY (`id`,`sesiones_id`), ADD KEY `fk_sesion_lineaDeTabla_sesiones1_idx` (`sesiones_id`), ADD KEY `fk_sesion_lineaDeTabla_lineasDeTabla1_idx` (`lineasDeTabla_id`);
+
+--
+-- Indices de la tabla `sesiones`
+--
+ALTER TABLE `sesiones`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_sesiones_tablas1_idx` (`tablas_id`);
+
+--
+-- Indices de la tabla `tablas`
+--
+ALTER TABLE `tablas`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `nombre_UNIQUE` (`nombre`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `id_UNIQUE` (`id`), ADD UNIQUE KEY `login_UNIQUE` (`login`), ADD UNIQUE KEY `dni_UNIQUE` (`dni`), ADD UNIQUE KEY `email_UNIQUE` (`email`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `actividades`
+--
+ALTER TABLE `actividades`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=43;
+--
+-- AUTO_INCREMENT de la tabla `ejercicios`
+--
+ALTER TABLE `ejercicios`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT de la tabla `entrenamientos`
+--
+ALTER TABLE `entrenamientos`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `inscripciones`
+--
+ALTER TABLE `inscripciones`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT de la tabla `lineasdetabla`
+--
+ALTER TABLE `lineasdetabla`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+--
+-- AUTO_INCREMENT de la tabla `recursos`
+--
+ALTER TABLE `recursos`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+--
+-- AUTO_INCREMENT de la tabla `reservas`
+--
+ALTER TABLE `reservas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18989;
+--
+-- AUTO_INCREMENT de la tabla `sesiondelineadetabla`
+--
+ALTER TABLE `sesiondelineadetabla`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=787;
+--
+-- AUTO_INCREMENT de la tabla `sesiones`
+--
+ALTER TABLE `sesiones`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=238;
+--
+-- AUTO_INCREMENT de la tabla `tablas`
+--
+ALTER TABLE `tablas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -492,63 +648,55 @@ INSERT IGNORE INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellido
 -- Filtros para la tabla `entrenamientos_has_tablas`
 --
 ALTER TABLE `entrenamientos_has_tablas`
-  ADD CONSTRAINT `fk_entrenamiento_has_tabla_entrenamiento1` FOREIGN KEY (`entrenamiento_id`) REFERENCES `entrenamientos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_entrenamiento_has_tabla_tabla1` FOREIGN KEY (`tabla_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_entrenamiento_has_tabla_entrenamiento1` FOREIGN KEY (`entrenamiento_id`) REFERENCES `entrenamientos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_entrenamiento_has_tabla_tabla1` FOREIGN KEY (`tabla_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `entrenamientos_has_usuarios`
 --
 ALTER TABLE `entrenamientos_has_usuarios`
-  ADD CONSTRAINT `fk_entrenamiento_has_usuario_entrenamiento1` FOREIGN KEY (`entrenamiento_id`) REFERENCES `entrenamientos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_entrenamiento_has_usuario_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_entrenamiento_has_usuario_entrenamiento1` FOREIGN KEY (`entrenamiento_id`) REFERENCES `entrenamientos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_entrenamiento_has_usuario_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `inscripciones`
 --
 ALTER TABLE `inscripciones`
-  ADD CONSTRAINT `fk_inscripcion_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_inscripcion_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `inscripciones_has_actividades`
 --
 ALTER TABLE `inscripciones_has_actividades`
-  ADD CONSTRAINT `fk_inscripciones_has_actividades_actividades1` FOREIGN KEY (`actividades_id`) REFERENCES `actividades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_inscripciones_has_actividades_inscripciones1` FOREIGN KEY (`inscripciones_id`) REFERENCES `inscripciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_inscripciones_has_actividades_actividades1` FOREIGN KEY (`actividades_id`) REFERENCES `actividades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_inscripciones_has_actividades_inscripciones1` FOREIGN KEY (`inscripciones_id`) REFERENCES `inscripciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `lineasdetabla`
 --
 ALTER TABLE `lineasdetabla`
-  ADD CONSTRAINT `fk_lineasDeTabla_ejercicios1` FOREIGN KEY (`ejercicio_id`) REFERENCES `ejercicios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_lineasDeTabla_tablas1` FOREIGN KEY (`tabla_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_lineasDeTabla_ejercicios1` FOREIGN KEY (`ejercicio_id`) REFERENCES `ejercicios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_lineasDeTabla_tablas1` FOREIGN KEY (`tabla_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  ADD CONSTRAINT `fk_reserva_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_reservas_actividades1` FOREIGN KEY (`actividades_id`) REFERENCES `actividades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `reservas_has_recursos`
---
-ALTER TABLE `reservas_has_recursos`
-  ADD CONSTRAINT `fk_reservas_has_recursos_recursos1` FOREIGN KEY (`recursos_id`) REFERENCES `recursos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_reservas_has_recursos_reservas1` FOREIGN KEY (`reservas_id`) REFERENCES `reservas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_recursos_id` FOREIGN KEY (`recurso_id`) REFERENCES `recursos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_reservas_actividades1` FOREIGN KEY (`actividades_id`) REFERENCES `actividades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `sesiondelineadetabla`
 --
 ALTER TABLE `sesiondelineadetabla`
-  ADD CONSTRAINT `fk_sesion_lineaDeTabla_lineasDeTabla1` FOREIGN KEY (`lineasDeTabla_id`) REFERENCES `lineasdetabla` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_sesion_lineaDeTabla_sesiones1` FOREIGN KEY (`sesiones_id`) REFERENCES `sesiones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_sesion_lineaDeTabla_lineasDeTabla1` FOREIGN KEY (`lineasDeTabla_id`) REFERENCES `lineasdetabla` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_sesion_lineaDeTabla_sesiones1` FOREIGN KEY (`sesiones_id`) REFERENCES `sesiones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `sesiones`
 --
 ALTER TABLE `sesiones`
-  ADD CONSTRAINT `fk_sesiones_tablas1` FOREIGN KEY (`tablas_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
+ADD CONSTRAINT `fk_sesiones_tablas1` FOREIGN KEY (`tablas_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
