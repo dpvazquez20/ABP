@@ -71,6 +71,9 @@ $strings = array(
     'ErrorResourceNotReady' => 'El recurso no está disponible',
 	'ErrorReservationTime' => 'Hora de reserva ocupada',
 	
+	//Assistance
+	'ErrorNoResults' => 'No hay inscripciones',
+	
 	// Resource
 	'aforo' => 'Aforo',
 
