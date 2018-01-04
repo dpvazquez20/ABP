@@ -44,7 +44,7 @@ class TableConsult
                         <div class="col-md-12">
                             <!-- Table view -->
                             <?php
-                            $titles = array('nombre');
+                            $titles = array('nombre','tipo');
                             generateView($this->data, 'table', $titles);
                             ?>
                             <!-- End of the view -->

@@ -56,7 +56,7 @@ class TableDefault
                             <div class="col-md-12">
                                 <!-- List -->
                                 <?php
-                                    $titles = array('nombre');
+                                    $titles = array('nombre','tipo');
                                     generateList ($this->data, 'table', $titles);
                                 ?>
                                 <!-- End of the list -->

@@ -88,6 +88,8 @@ class UserModify
                                         </div>
                                     </div>
 
+                                    <input type="hidden" name="tipoOri" value="<?php echo $this->data[0]['tipo']; ?>">
+
                                     <div class="form-group">
                                         <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
                                         <div class="col-md-10">
@@ -98,6 +100,19 @@ class UserModify
                                                 <option value="<?php echo $strings['secretary']; ?>"> <?php echo $strings['secretary']; ?> </option>
                                                 <option value="<?php echo $strings['coach']; ?>"> <?php echo $strings['coach']; ?> </option>
                                                 <option value="<?php echo $strings['sportsman']; ?>"> <?php echo $strings['sportsman']; ?> </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['clase']; ?> </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="clase" id="clase">
+                                                <!--<option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option>-->
+                                                <option value=""> <?php echo $this->data[0]['clase']; ?> </option>
+                                                <option value="<?php echo $strings['tdu']; ?>"> <?php echo $strings['tdu']; ?> </option>
+                                                <option value="<?php echo $strings['pef']; ?>"> <?php echo $strings['pef']; ?> </option>
+                                                <option value="<?php echo $strings['other']; ?>"> <?php echo $strings['other']; ?> </option>
                                             </select>
                                         </div>
                                     </div>

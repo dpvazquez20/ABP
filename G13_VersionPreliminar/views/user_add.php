@@ -90,11 +90,24 @@ class UserAdd
                                         <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?>* </label>
                                         <div class="col-md-10">
                                             <select class="selectpicker form-control" name="tipo" id="tipo" required>
-                                                <option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option>
+                                                <!-- <option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option> -->
+                                                <option value="<?php echo $strings['sportsman']; ?>"> <?php echo $strings['sportsman']; ?> </option>
                                                 <option value="<?php echo $strings['admin']; ?>"> <?php echo $strings['admin']; ?> </option>
                                                 <option value="<?php echo $strings['secretary']; ?>"> <?php echo $strings['secretary']; ?> </option>
                                                 <option value="<?php echo $strings['coach']; ?>"> <?php echo $strings['coach']; ?> </option>
-                                                <option value="<?php echo $strings['sportsman']; ?>"> <?php echo $strings['sportsman']; ?> </option>
+                                                <!-- <option value="<?php echo $strings['sportsman']; ?>"> <?php echo $strings['sportsman']; ?> </option> -->
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['clase']; ?> </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="clase" id="clase">
+                                                <!-- <option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option> -->
+                                                <option value="<?php echo $strings['tdu']; ?>"> <?php echo $strings['tdu']; ?> </option>
+                                                <option value="<?php echo $strings['pef']; ?>"> <?php echo $strings['pef']; ?> </option>
+                                                <option value="<?php echo $strings['other']; ?>"> <?php echo $strings['other']; ?> </option>
                                             </select>
                                         </div>
                                     </div>

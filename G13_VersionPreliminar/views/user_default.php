@@ -65,7 +65,7 @@ class UserDefault
                             <div class="col-md-12">
                                 <!-- List -->
                                 <?php
-                                    $titles = array('imagen', 'nombre', 'apellidos', 'dni');
+                                    $titles = array('imagen', 'nombre', 'apellidos', 'dni','tipo','clase');
 
                                     if ($_SESSION['userType'] == $strings['coach'])
                                     {

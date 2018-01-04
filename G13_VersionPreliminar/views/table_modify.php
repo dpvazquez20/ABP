@@ -39,10 +39,22 @@ class TableModify
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
                                 <form class="form-horizontal" action='../controllers/table_controller.php?id=<?php echo $this->data[0]['id']; ?>' method='post'>
+
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="nombre"> <?php echo $strings['nombre']; ?> </label>
                                         <div class="col-md-10">
                                             <input type="text" class="form-control" name="nombre" id="nombre" placeholder=" <?php echo $this->data[0]['nombre']; ?> " maxlength="60">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="tipo" id="tipo">
+                                                <option value=""> <?php echo $this->data[0]['tipo']; ?> </option>
+                                                <option value="<?php echo $strings['normal']; ?>"> <?php echo $strings['normal']; ?> </option>
+                                                <option value="<?php echo $strings['personal']; ?>"> <?php echo $strings['personal']; ?> </option>
+                                            </select>
                                         </div>
                                     </div>
 

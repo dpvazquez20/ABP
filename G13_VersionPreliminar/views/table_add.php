@@ -36,10 +36,21 @@ class TableAdd
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
                                 <form class="form-horizontal" action='../controllers/table_controller.php' method='post'>
+                                    
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="nombre"> <?php echo $strings['nombre']; ?>* </label>
                                         <div class="col-md-10">
                                             <input type="text" class="form-control" name="nombre" id="nombre" placeholder=" <?php echo $strings['nombre']; ?> " maxlength="60" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="tipo" id="tipo">
+                                                <option value="<?php echo $strings['normal']; ?>"> <?php echo $strings['normal']; ?> </option>
+                                                <option value="<?php echo $strings['personal']; ?>"> <?php echo $strings['personal']; ?> </option>
+                                            </select>
                                         </div>
                                     </div>
 
