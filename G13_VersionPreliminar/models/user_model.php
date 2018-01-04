@@ -4,7 +4,7 @@ include '../functions/connectDB.php';
 
 class UserModel
 {
-	function __construct($id, $login, $contrasenha, $nombre, $apellidos, $dni, $email, $tipo, $imagen)
+	function __construct($id, $login, $contrasenha, $nombre, $apellidos, $dni, $email, $tipo, $tipoOri, $clase, $imagen)
     {
 		$this->id = $id;
 		$this->login = $login;
@@ -14,6 +14,8 @@ class UserModel
 		$this->dni = $dni;
 		$this->email = $email;
 		$this->tipo = $tipo;
+		$this->tipoOri = $tipoOri;
+		$this->clase = $clase;
         $this->imagen = $imagen;
 
 		$this->mysqli = connect();
@@ -56,7 +58,12 @@ class UserModel
 		}
 		if($this->tipo <> '')
 		{
-			$toret = "tipo";
+			//$toret = "tipo";
+			$toret = "clase";
+		}
+		if($this->clase <> '')
+		{
+			$toret = "clase";
 		}
         if($this->imagen <> '')
         {
@@ -87,9 +94,28 @@ class UserModel
                 // checking that the user doesn't exist
                 if ($result->num_rows == 0)
                 {
+                	$c = $strings['other'];
 
-                    $sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,borrado,imagen) 
-							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','0','"  . $this->imagen . "')";
+                	if($this->tipo == $strings['sportsman'])
+                	{
+                		if($this->clase == $strings['pef'])
+                		{
+                			$c = $strings['pef'];
+                		}else{
+                			$c = $strings['tdu'];
+                		}
+
+                	}
+
+                	$i = $this->imagen;
+
+                	if($i == '')
+                	{
+                		$i = "default.png";
+                	}
+
+                    $sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,clase,borrado,imagen) 
+							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','"  . $c . "','0','"  . $i . "')";
 
                     // inserting new user
                     if ($result = $this->mysqli->query($sql))
@@ -268,6 +294,45 @@ class UserModel
 					{
 						$sql = $sql . "tipo ='" . $this->tipo . "'";
 						if($lastModify <> "tipo")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+						if($this->tipo == $strings['sportsman'])
+						{
+							if($this->clase == $strings['pef']){
+								$this->clase = $strings['pef'];
+							}else{
+								$this->clase = $strings['tdu'];
+							}
+						}else{
+							$this->clase = $strings['other'];
+						}
+					}
+
+					if($this->clase <> '')
+					{
+						if($this->tipo == '')
+						{
+							$tip = $this->tipoOri;
+						}else{
+							$tip = $this->tipo;
+						}
+						
+						if($tip == $strings['sportsman'])
+						{
+							if($this->clase == $strings['pef']){
+								$this->clase = $strings['pef'];
+							}else{
+								$this->clase = $strings['tdu'];
+							}
+						}else{
+							$this->clase = $strings['other'];
+						}
+
+						$sql = $sql . "clase ='" . $this->clase . "'";
+						if($lastModify <> "clase")
 						{
 							$sql = $sql . ",";
 						}

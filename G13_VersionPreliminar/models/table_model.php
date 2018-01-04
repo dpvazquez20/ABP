@@ -4,10 +4,11 @@ include '../functions/connectDB.php';
 
 class TableModel
 {
-	function __construct($id, $nombre)
+	function __construct($id, $nombre,$tipo)
     {
 		$this->id = $id;
 		$this->nombre = $nombre;
+		$this->tipo = $tipo;
 		$this->mysqli = connect();
 	}
 
@@ -25,6 +26,10 @@ class TableModel
 		if($this->nombre <> '')
 		{
 			$toret = "nombre";
+		}
+		if($this->tipo <> '')
+		{
+			$toret = "tipo";
 		}
 
 		return $toret;
@@ -69,8 +74,8 @@ class TableModel
                 if ($result->num_rows == 0)
                 {
 
-                    $sql = "INSERT INTO tablas (nombre,borrado) 
-							VALUES('" . $this->nombre . "','0')";
+                    $sql = "INSERT INTO tablas (nombre,tipo,borrado) 
+							VALUES('" . $this->nombre . "','" . $this->tipo . "','0')";
 
                     // inserting new table
                     if ($result = $this->mysqli->query($sql))
@@ -183,6 +188,17 @@ class TableModel
 					{
 						$sql = $sql . "nombre ='" . $this->nombre . "'";
 						if($lastModify <> "nombre")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+
+					if($this->tipo <> '')
+					{
+						$sql = $sql . "tipo ='" . $this->tipo . "'";
+						if($lastModify <> "tipo")
 						{
 							$sql = $sql . ",";
 						}
