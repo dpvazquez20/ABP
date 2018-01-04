@@ -16,6 +16,7 @@
 
 		$id = '';
 		$nombre = '';
+		$tipo = '';
 
 		if(isset($_REQUEST['id']))
 		{
@@ -27,8 +28,13 @@
 			$nombre = $_REQUEST['nombre'];
 			//unset($_REQUEST['nombre']);
 		}
+		if(isset($_REQUEST['tipo']))
+		{
+			$tipo = $_REQUEST['tipo'];
+			unset($_REQUEST['tipo']);
+		}
 
-		$table = new TableModel($id,$nombre);
+		$table = new TableModel($id,$nombre,$tipo);
 
 		return $table;
 	}
@@ -109,9 +115,13 @@
 
 						$table = get_data_form(); // getting data
 						$reply = $table->insert(); // trying insert
-						$tableId = $table->getId();
-						$textLocation = 'Location: table_line_controller.php?idTabla=' . $tableId . '&action=' . $strings['Insert'];
-						header($textLocation);
+
+						$data = $table->toList(); // getting tables list
+						new TableDefault($data, $reply); // showing tables list with a message
+
+						//$tableId = $table->getId();
+						//$textLocation = 'Location: table_line_controller.php?idTabla=' . $tableId . '&action=' . $strings['Insert'];
+						//header($textLocation);
 					}
 
 					break;
