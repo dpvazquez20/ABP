@@ -227,7 +227,13 @@ $strings = array(
 	'previous' => 'Anterior',
 	'next' => 'Siguiente',
 
-
+	'NoTrainingError' => 'No hay ningún entrenamiento asignado',
+	'clase' => 'Clase',
+	'other' => 'Otro',
+	'pef' => 'PEF',
+	'tdu' => 'TDU',
+	'normal' => 'Normal',
+	'personal' => 'Personal',
 
 	// ----------------------------------------------------------------
 	
