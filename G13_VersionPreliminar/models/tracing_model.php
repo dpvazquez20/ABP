@@ -39,7 +39,7 @@ class TracingModel
 				$sql="
 				SELECT tablas.id,tablas.nombre AS nombreTabla,
 						sesiones.completado,
-						usuarios.nombre,usuarios.apellidos,sesiones.id AS sesionId
+						usuarios.nombre,usuarios.apellidos,sesiones.id,usuarios.dni,usuarios.imagen AS sesionId
                 FROM tablas
                 INNER JOIN sesiones
                 ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0'
@@ -87,7 +87,7 @@ class TracingModel
 
 				$sql="
 				SELECT tablas.id,tablas.nombre,
-						sesiones.completado,sesiones.id AS sesionId
+						sesiones.completado,sesiones.id AS sesionId,sesiones.inicio,sesiones.comentario
                 FROM tablas
                 INNER JOIN sesiones
                 ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0'
@@ -141,12 +141,12 @@ class TracingModel
 
 					$sql="
 					SELECT tablas.id,tablas.nombre,
-							sesiones.completado,sesiones.id AS sesionId
+							sesiones.completado,sesiones.id AS sesionId,sesiones.inicio,sesiones.comentario
 	                FROM tablas
 	                INNER JOIN sesiones
 	                ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.id = $newSessionId
 	                ";
-
+	                //die("die sql: $sql");
 					$result2 = $this->mysqli->query($sql);
 					
 					$toret=[];
@@ -192,7 +192,7 @@ class TracingModel
 
 				$sql="
 				SELECT tablas.id,tablas.nombre,
-						sesiones.completado,sesiones.id AS sesionId
+						sesiones.completado,sesiones.id AS sesionId,sesiones.inicio,sesiones.comentario
                 FROM tablas
                 INNER JOIN sesiones
                 ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.id = $newSessionId
@@ -239,46 +239,58 @@ class TracingModel
 
         if ($this->id <> '' )
         {
-
-            $sql = "SELECT * FROM sesiones WHERE usuarios_id = '" . $this->id . "' AND completado = '0'";
-
-            if (!$result = $this->mysqli->query($sql))
+        	$sqlEntrenamiento = "SELECT * FROM entrenamientos_has_usuarios WHERE usuario_id = '" . $this->id . "'";
+	        	
+	        if ($resultEntrenamiento = $this->mysqli->query($sqlEntrenamiento))
 			{
-                $toret = $strings['ConnectionDBError'];
-	        }else {
-	          	if ($result->num_rows == 0)
-	           	{
-					$this->createSession();
-					$result = $this->mysqli->query($sql);
+				if($resultEntrenamiento->num_rows > 0)
+				{
+		            $sql = "SELECT * FROM sesiones WHERE usuarios_id = '" . $this->id . "' AND completado = '0'";
+
+		            if (!$result = $this->mysqli->query($sql))
+					{
+		                $toret = $strings['ConnectionDBError'];
+			        }else {
+			          	if ($result->num_rows == 0)
+			           	{
+							$this->createSession();
+							$result = $this->mysqli->query($sql);
+						}
+						$row = $result->fetch_array();
+						$tableId = $row['tablas_id'];
+						$sesionId = $row['id'];
+
+						$sql="
+						SELECT lineasDeTabla.id,lineasDeTabla.repeticiones,lineasDeTabla.duracion,
+								lineasDeTabla.series,lineasDeTabla.descanso,
+								ejercicios.nombre,ejercicios.imagen,
+								sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado
+		                FROM lineasDeTabla
+		                INNER JOIN ejercicios 
+		                ON lineasDeTabla.ejercicio_id = ejercicios.id AND lineasDeTabla.tabla_id = $tableId
+		                	INNER JOIN sesionDeLineaDeTabla
+		                	ON sesionDeLineaDeTabla.lineasDeTabla_id = lineasDeTabla.id
+		                		INNER JOIN sesiones
+		                		ON sesiones.id = sesionDeLineaDeTabla.sesiones_id AND sesiones.id = $sesionId
+		                ";
+
+		                //die("die: $sql");
+						$result2 = $this->mysqli->query($sql);
+						
+						$toret=[];
+						$i=0;
+
+						while ($row = $result2->fetch_array())
+		                {
+							$toret[$i] = $row;
+							$i++;
+						}
+					}
+				}else{
+					$toret = $strings['NoTrainingError'];
 				}
-				$row = $result->fetch_array();
-				$tableId = $row['tablas_id'];
-				$sesionId = $row['id'];
-
-				$sql="
-				SELECT lineasDeTabla.id,lineasDeTabla.repeticiones,lineasDeTabla.duracion,
-						lineasDeTabla.series,lineasDeTabla.descanso,
-						ejercicios.nombre,ejercicios.imagen,
-						sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado,sesionDeLineaDeTabla.comentario
-                FROM lineasDeTabla
-                INNER JOIN ejercicios 
-                ON lineasDeTabla.ejercicio_id = ejercicios.id AND lineasDeTabla.tabla_id = $tableId
-                	INNER JOIN sesionDeLineaDeTabla
-                	ON sesionDeLineaDeTabla.lineasDeTabla_id = lineasDeTabla.id
-                		INNER JOIN sesiones
-                		ON sesiones.id = sesionDeLineaDeTabla.sesiones_id AND sesiones.id = $sesionId
-                ";
-
-				$result2 = $this->mysqli->query($sql);
-				
-				$toret=[];
-				$i=0;
-
-				while ($row = $result2->fetch_array())
-                {
-					$toret[$i] = $row;
-					$i++;
-				}
+			}else{
+				$toret = $strings['NoTrainingError'];
 			}
         }else {
             $toret = $strings['FollowErrorForm']; // ----------------------------- strings
@@ -369,7 +381,7 @@ class TracingModel
 			SELECT lineasDeTabla.id,lineasDeTabla.repeticiones,lineasDeTabla.duracion,
 					lineasDeTabla.series,lineasDeTabla.descanso,
 					ejercicios.nombre,ejercicios.imagen,
-					sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado,sesionDeLineaDeTabla.comentario
+					sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado
             FROM lineasDeTabla
             INNER JOIN ejercicios 
             ON lineasDeTabla.ejercicio_id = ejercicios.id AND lineasDeTabla.tabla_id = $tableId
@@ -378,7 +390,7 @@ class TracingModel
             		INNER JOIN sesiones
             		ON sesiones.id = sesionDeLineaDeTabla.sesiones_id AND sesiones.id = $sesionId
             ";
-
+            //die("die sql: $sql");
 			if($result2 = $this->mysqli->query($sql))
 			{
 				$toret=[];
@@ -439,7 +451,7 @@ class TracingModel
 			SELECT lineasDeTabla.id,lineasDeTabla.repeticiones,lineasDeTabla.duracion,
 					lineasDeTabla.series,lineasDeTabla.descanso,
 					ejercicios.nombre,ejercicios.imagen,
-					sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado,sesionDeLineaDeTabla.comentario
+					sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado
             FROM lineasDeTabla
             INNER JOIN ejercicios 
             ON lineasDeTabla.ejercicio_id = ejercicios.id AND lineasDeTabla.tabla_id = $tableId
@@ -471,7 +483,8 @@ class TracingModel
 
 	function getPreviousId(){
 
-		$sql = "SELECT id FROM sesiones WHERE usuarios_id = '" . $this->id . "' AND anterior_id IS NOT NULL ORDER BY id DESC LIMIT 1";
+		//$sql = "SELECT id FROM sesiones WHERE usuarios_id = '" . $this->id . "' AND anterior_id IS NOT NULL ORDER BY id DESC LIMIT 1";
+		$sql = "SELECT id FROM sesiones WHERE usuarios_id = '" . $this->id . "' ORDER BY id DESC LIMIT 1";
 
 		if (!$result = $this->mysqli->query($sql))
 		{
@@ -503,107 +516,126 @@ class TracingModel
 			{
                 $toret = $strings['ConnectionDBError'];
 	        }else {
-	          	if ($result->num_rows == 0)
-	           	{
-	                $sql="
-					SELECT tablas.id as tablas_id,
-							entrenamientos.sesiones as orden_sesion_max,entrenamientos.id as entrenamientos_id,
-							entrenamientos_has_tablas.orden_sesion
-	                FROM entrenamientos_has_usuarios
-	                INNER JOIN entrenamientos
-	                ON entrenamientos_has_usuarios.entrenamiento_id = entrenamientos.id AND entrenamientos_has_usuarios.usuario_id = $this->id
-	                	INNER JOIN entrenamientos_has_tablas
-	                	ON entrenamientos.id = entrenamientos_has_tablas.entrenamiento_id 
-		                	INNER JOIN tablas
-		                	ON entrenamientos_has_tablas.tabla_id = tablas.id
-	                ";
 
-	                $resultToSession = $this->mysqli->query($sql);
+	        	$sqlEntrenamiento = "SELECT * FROM entrenamientos_has_usuarios WHERE usuario_id = '" . $this->id . "'";
+	        	
+	        	if ($resultEntrenamiento = $this->mysqli->query($sqlEntrenamiento))
+				{
+					if($resultEntrenamiento->num_rows > 0)
+					{
+			          	if ($result->num_rows == 0)
+			           	{
+			                $sql="
+							SELECT tablas.id as tablas_id,
+									entrenamientos.sesiones as orden_sesion_max,entrenamientos.id as entrenamientos_id,
+									entrenamientos_has_tablas.orden_sesion
+			                FROM entrenamientos_has_usuarios
+			                INNER JOIN entrenamientos
+			                ON entrenamientos_has_usuarios.entrenamiento_id = entrenamientos.id AND entrenamientos_has_usuarios.usuario_id = $this->id
+			                	INNER JOIN entrenamientos_has_tablas
+			                	ON entrenamientos.id = entrenamientos_has_tablas.entrenamiento_id 
+				                	INNER JOIN tablas
+				                	ON entrenamientos_has_tablas.tabla_id = tablas.id
+			                ";
+			                
+			                $resultToSession = $this->mysqli->query($sql);
 
-	                /*$insert = "INSERT INTO sesiones
-						(completado,tablas_id,orden_sesion,orden_sesion_max,usuarios_id,entrenamientos_id,anterior_id)
-						VALUES";*/
+			                /*$insert = "INSERT INTO sesiones
+								(completado,tablas_id,orden_sesion,orden_sesion_max,usuarios_id,entrenamientos_id,anterior_id)
+								VALUES";*/
 
-					$primero = true;
-					$usuarios_id = $this->id;
-					//$anterior_id = $this->getPreviousId();
+							$primero = true;
+							$usuarios_id = $this->id;
+							//$anterior_id = $this->getPreviousId();
 
-					while ($row = $resultToSession->fetch_array())
-	                {
-	                	$tablas_id = $row['tablas_id'];
-	                	$orden_sesion = $row['orden_sesion'];
-	                	$orden_sesion_max = $row['orden_sesion_max'];
-	                	$entrenamientos_id = $row['entrenamientos_id'];
-	                	$anterior_id = $this->getPreviousId();
+							while ($row = $resultToSession->fetch_array())
+			                {
+			                	//$hoy = new DateTime();
+			                	//$fecha = $hoy->format('Y-d-m H:i:s');
+			                	$fecha = date('Y-m-d H:i:s');
+			                	//$fecha = date('Y:m:d H:i:s');
+			                	$tablas_id = $row['tablas_id'];
+			                	$orden_sesion = $row['orden_sesion'];
+			                	$orden_sesion_max = $row['orden_sesion_max'];
+			                	$entrenamientos_id = $row['entrenamientos_id'];
+			                	$anterior_id = $this->getPreviousId();
 
-	                	/*if(!$primero){
-							$insert = $insert . ",";
-						}*/
+			                	/*if(!$primero){
+									$insert = $insert . ",";
+								}*/
 
-						$insert = "
-						INSERT INTO sesiones (completado,tablas_id,orden_sesion,orden_sesion_max,usuarios_id,entrenamientos_id,anterior_id)
-						VALUES('0',$tablas_id,$orden_sesion,$orden_sesion_max,$usuarios_id,$entrenamientos_id,$anterior_id)
-						";
-						$result = $this->mysqli->query($insert);
-						$primero = false;
-					}
-
-					$insert = $insert . ";";
-
-		            $sql2 ="
-					SELECT id as sesiones_id,tablas_id
-					FROM sesiones
-					WHERE completado = '0' AND usuarios_id = $this->id
-	                ";
-
-                    $resultSessionId = $this->mysqli->query($sql2);
-
-                    $insert = "INSERT INTO sesiondelineadetabla
-					(completado,sesiones_id,lineasDeTabla_id)
-					VALUES ";
-					$primero = true;
-
-                    while ($row1 = $resultSessionId->fetch_array())
-		            {
-		            	$tablas_id = $row1['tablas_id'];
-		            	$sesiones_id = $row1['sesiones_id'];
-
-		            	$sql3 ="
-						SELECT lineasDeTabla.id as lineasDeTabla_id
-		                FROM entrenamientos_has_usuarios
-		                INNER JOIN entrenamientos
-		                ON entrenamientos_has_usuarios.entrenamiento_id = entrenamientos.id AND entrenamientos_has_usuarios.usuario_id = $this->id
-		                	INNER JOIN entrenamientos_has_tablas
-		                	ON entrenamientos.id = entrenamientos_has_tablas.entrenamiento_id 
-			                	INNER JOIN tablas
-			                	ON entrenamientos_has_tablas.tabla_id = tablas.id
-			                		INNER JOIN lineasDeTabla
-			                		ON lineasDeTabla.tabla_id = tablas.id AND lineasDeTabla.tabla_id = $tablas_id
-		                ";
-
-                        $resultTableLineId = $this->mysqli->query($sql3);
-
-                        while ($row2 = $resultTableLineId->fetch_array())
-		            	{
-		            		$lineasDeTabla_id = $row2['lineasDeTabla_id'];
-		            		if(!$primero){
-								$insert = $insert . ",";
+								$insert = "
+								INSERT INTO sesiones (completado,fecha,tablas_id,orden_sesion,orden_sesion_max,usuarios_id,entrenamientos_id,anterior_id)
+								VALUES('0','$fecha',$tablas_id,$orden_sesion,$orden_sesion_max,$usuarios_id,$entrenamientos_id,$anterior_id)
+								";
+								//die("die insert: $insert");
+								$result = $this->mysqli->query($insert);
+								$primero = false;
+								
 							}
-	                        $insert = $insert . "('0',$sesiones_id,$lineasDeTabla_id)";
-	                        $primero = false;
-			            }
-		            }
 
-		            $insert = $insert . ";";
+							$insert = $insert . ";";
 
-					if ($result = $this->mysqli->query($insert))
-                    {
-                        $toret = $strings['InsertSuccess'];
-                    }else {
-                        $toret = $strings['InsertError'];
-                    }
+				            $sql2 ="
+							SELECT id as sesiones_id,tablas_id
+							FROM sesiones
+							WHERE completado = '0' AND usuarios_id = $this->id
+			                ";
+
+		                    $resultSessionId = $this->mysqli->query($sql2);
+
+		                    $insert = "INSERT INTO sesiondelineadetabla
+							(completado,sesiones_id,lineasDeTabla_id)
+							VALUES ";
+							$primero = true;
+
+		                    while ($row1 = $resultSessionId->fetch_array())
+				            {
+				            	$tablas_id = $row1['tablas_id'];
+				            	$sesiones_id = $row1['sesiones_id'];
+
+				            	$sql3 ="
+								SELECT lineasDeTabla.id as lineasDeTabla_id
+				                FROM entrenamientos_has_usuarios
+				                INNER JOIN entrenamientos
+				                ON entrenamientos_has_usuarios.entrenamiento_id = entrenamientos.id AND entrenamientos_has_usuarios.usuario_id = $this->id
+				                	INNER JOIN entrenamientos_has_tablas
+				                	ON entrenamientos.id = entrenamientos_has_tablas.entrenamiento_id 
+					                	INNER JOIN tablas
+					                	ON entrenamientos_has_tablas.tabla_id = tablas.id
+					                		INNER JOIN lineasDeTabla
+					                		ON lineasDeTabla.tabla_id = tablas.id AND lineasDeTabla.tabla_id = $tablas_id
+				                ";
+
+		                        $resultTableLineId = $this->mysqli->query($sql3);
+
+		                        while ($row2 = $resultTableLineId->fetch_array())
+				            	{
+				            		$lineasDeTabla_id = $row2['lineasDeTabla_id'];
+				            		if(!$primero){
+										$insert = $insert . ",";
+									}
+			                        $insert = $insert . "('0',$sesiones_id,$lineasDeTabla_id)";
+			                        $primero = false;
+					            }
+				            }
+
+				            $insert = $insert . ";";
+
+							if ($result = $this->mysqli->query($insert))
+		                    {
+		                        $toret = $strings['InsertSuccess'];
+		                    }else {
+		                        $toret = $strings['InsertError'];
+		                    }
+						}else{
+							$toret = $strings['Idontknowwhyyoucallme'];  // ----------------------------- strings
+						}
+					}else{
+						$toret = $strings['NoTrainingError'];
+					}
 				}else{
-					$toret = $strings['Idontknowwhyyoucallme'];  // ----------------------------- strings
+					$toret = $strings['NoTrainingError'];
 				}
 			}
         }else {
@@ -648,7 +680,9 @@ class TracingModel
 	{
 		include '../languages/spanish.php';
 
-        $sql = "UPDATE sesiones SET completado ='1' WHERE id ='" . $sesionId . "'";
+		$fin = date('Y-m-d H:i:s');
+
+        $sql = "UPDATE sesiones SET completado = '1', fin = '$fin' WHERE id ='" . $sesionId . "'";
 
         if ($result = $this->mysqli->query($sql))
 		{
@@ -782,6 +816,34 @@ class TracingModel
 
         return $toret;
 
+    }
+
+    function startTime($actualId){
+    	include '../languages/spanish.php';
+
+    	$inicio = date('Y-m-d H:i:s');
+
+        $sql = "UPDATE sesiones SET inicio ='$inicio' WHERE id ='" . $actualId . "'";
+
+        if ($result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['UpdateSuccess'];
+		}else {
+			$toret = $strings['UpdateError'];
+		}
+    }
+
+    function comment($actualId,$comment){
+    	include '../languages/spanish.php';
+
+        $sql = "UPDATE sesiones SET comentario = '$comment' WHERE id ='" . $actualId . "'";
+
+        if ($result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['UpdateSuccess'];
+		}else {
+			$toret = $strings['UpdateError'];
+		}
     }
 
 
