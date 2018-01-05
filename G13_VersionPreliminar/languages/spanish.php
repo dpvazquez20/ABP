@@ -252,6 +252,14 @@ $strings = array(
 	'InsertAnother' => 'InsertarOtra',
 	'AssignTraining' => 'Agisnar Entrenamiento',
 	'InsertMaxError' => 'No se pueden introducir mas sesiones de entrenamiento',
+	'Enter date' => 'Introduzca una fecha',
+	'New event' => 'Nuevo evento',
+	'fecha' => 'Fecha',
+	'Most recent first' => 'Más recientes primero',
+	'Oldest first' => 'Más antiguos primero',
+	'Consult event' => 'Consultar evento',
+	'Modify event' => 'Modificar evento',
+	'Show events' => 'Mostrar eventos',
 	
 	// ----------------------------------------------------------------
 
