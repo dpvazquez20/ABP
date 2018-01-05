@@ -1883,6 +1883,71 @@ function generateViewStatisticsCoach($list, $page_name,$titles)
     }
 }
 
+function generateEvents ()
+{
+    include '../languages/spanish.php';
+	include '../functions/connectDB.php';	
+	
+	$cnn = new stdClass;
+	
+	$cnn->mysqli = connect();
+	
+	// show only the 3 newest events
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha LIMIT 3";
+
+        // checking DB connection
+		if (!$result = $cnn->mysqli->query($sql))
+		{
+			$list = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one resource exists
+			if ($result->num_rows != 0)
+			{
+
+				$list=[];
+				$i=0;
+
+				// introducing all resources into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$list[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$list = $strings['ListErrorNotExist'];
+			}
+		}	
+
+		echo '<div class="col-md-12">
+			<div id="events-container" class="container">
+        
+        <h2>Eventos</h2>
+  
+		</div>
+        <hr>';
+
+		for ($i = 0; $i < count($list); $i++)
+		{
+  
+			echo '<div id="jumbo1" class="jumbotron">
+                <div class="media-body">
+					<h2 class="media-heading">' . $list[$i]['nombre'] . '</h3>
+					<p>' . $list[$i]['descripcion'] . '</p>
+					<p> <b>Día: </b>' . $list[$i]['fecha'] . '</p>
+      
+					<p> <b>Horario:</b> De ' . $list[$i]['horaInicio'] . ' a ' . $list[$i]['horaFin'] . '</p>
+				</div>
+			</div>  
+		<hr>';
+	}
+	
+	echo '</div>';
+
+}
+
 
 
 ?>
