@@ -3,13 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 04-01-2018 a las 03:36:26
+-- Tiempo de generación: 05-01-2018 a las 06:17:25
 -- Versión del servidor: 5.7.19
 -- Versión de PHP: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -21,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `actifit`
 --
-CREATE DATABASE IF NOT EXISTS `actifit` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `actifit`;
 
 -- --------------------------------------------------------
 
@@ -30,6 +26,7 @@ USE `actifit`;
 -- Estructura de tabla para la tabla `actividades`
 --
 
+DROP TABLE IF EXISTS `actividades`;
 CREATE TABLE IF NOT EXISTS `actividades` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -62,6 +59,7 @@ INSERT IGNORE INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `
 -- Estructura de tabla para la tabla `ejercicios`
 --
 
+DROP TABLE IF EXISTS `ejercicios`;
 CREATE TABLE IF NOT EXISTS `ejercicios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -97,6 +95,7 @@ INSERT IGNORE INTO `ejercicios` (`id`, `nombre`, `descripcion`, `imagen`, `tipo`
 -- Estructura de tabla para la tabla `entrenamientos`
 --
 
+DROP TABLE IF EXISTS `entrenamientos`;
 CREATE TABLE IF NOT EXISTS `entrenamientos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -121,6 +120,7 @@ INSERT IGNORE INTO `entrenamientos` (`id`, `nombre`, `borrado`, `sesiones`) VALU
 -- Estructura de tabla para la tabla `entrenamientos_has_tablas`
 --
 
+DROP TABLE IF EXISTS `entrenamientos_has_tablas`;
 CREATE TABLE IF NOT EXISTS `entrenamientos_has_tablas` (
   `entrenamiento_id` int(11) NOT NULL,
   `tabla_id` int(11) NOT NULL,
@@ -148,6 +148,7 @@ INSERT IGNORE INTO `entrenamientos_has_tablas` (`entrenamiento_id`, `tabla_id`, 
 -- Estructura de tabla para la tabla `entrenamientos_has_usuarios`
 --
 
+DROP TABLE IF EXISTS `entrenamientos_has_usuarios`;
 CREATE TABLE IF NOT EXISTS `entrenamientos_has_usuarios` (
   `entrenamiento_id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
@@ -169,6 +170,7 @@ INSERT IGNORE INTO `entrenamientos_has_usuarios` (`entrenamiento_id`, `usuario_i
 -- Estructura de tabla para la tabla `inscripciones`
 --
 
+DROP TABLE IF EXISTS `inscripciones`;
 CREATE TABLE IF NOT EXISTS `inscripciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
@@ -193,6 +195,7 @@ INSERT IGNORE INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALU
 -- Estructura de tabla para la tabla `inscripciones_has_actividades`
 --
 
+DROP TABLE IF EXISTS `inscripciones_has_actividades`;
 CREATE TABLE IF NOT EXISTS `inscripciones_has_actividades` (
   `inscripciones_id` int(11) NOT NULL,
   `actividades_id` int(11) NOT NULL,
@@ -216,6 +219,7 @@ INSERT IGNORE INTO `inscripciones_has_actividades` (`inscripciones_id`, `activid
 -- Estructura de tabla para la tabla `lineasdetabla`
 --
 
+DROP TABLE IF EXISTS `lineasdetabla`;
 CREATE TABLE IF NOT EXISTS `lineasdetabla` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repeticiones` varchar(45) DEFAULT NULL,
@@ -259,6 +263,7 @@ INSERT IGNORE INTO `lineasdetabla` (`id`, `repeticiones`, `duracion`, `descanso`
 -- Estructura de tabla para la tabla `recursos`
 --
 
+DROP TABLE IF EXISTS `recursos`;
 CREATE TABLE IF NOT EXISTS `recursos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -299,6 +304,7 @@ INSERT IGNORE INTO `recursos` (`id`, `nombre`, `aforo`, `descripcion`, `borrado`
 -- Estructura de tabla para la tabla `reservas`
 --
 
+DROP TABLE IF EXISTS `reservas`;
 CREATE TABLE IF NOT EXISTS `reservas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
@@ -330,58 +336,58 @@ INSERT IGNORE INTO `reservas` (`id`, `fecha`, `borrado`, `actividades_id`, `recu
 -- Estructura de tabla para la tabla `sesiondelineadetabla`
 --
 
+DROP TABLE IF EXISTS `sesiondelineadetabla`;
 CREATE TABLE IF NOT EXISTS `sesiondelineadetabla` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `completado` tinyint(4) NOT NULL,
-  `comentario` mediumtext,
   `sesiones_id` int(11) NOT NULL,
   `lineasDeTabla_id` int(11) NOT NULL,
   PRIMARY KEY (`id`,`sesiones_id`),
   KEY `fk_sesion_lineaDeTabla_sesiones1_idx` (`sesiones_id`),
   KEY `fk_sesion_lineaDeTabla_lineasDeTabla1_idx` (`lineasDeTabla_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=787 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `sesiondelineadetabla`
 --
 
-INSERT IGNORE INTO `sesiondelineadetabla` (`id`, `completado`, `comentario`, `sesiones_id`, `lineasDeTabla_id`) VALUES
-(679, 0, NULL, 199, 1),
-(680, 0, NULL, 199, 2),
-(681, 0, NULL, 199, 3),
-(682, 0, NULL, 199, 4),
-(683, 0, NULL, 199, 5),
-(684, 0, NULL, 199, 6),
-(685, 0, NULL, 200, 7),
-(686, 0, NULL, 200, 8),
-(687, 0, NULL, 200, 9),
-(688, 0, NULL, 200, 10),
-(689, 0, NULL, 200, 11),
-(690, 0, NULL, 200, 12),
-(691, 0, NULL, 201, 13),
-(692, 0, NULL, 201, 14),
-(693, 0, NULL, 201, 15),
-(694, 0, NULL, 201, 16),
-(695, 0, NULL, 201, 17),
-(696, 0, NULL, 201, 18),
-(769, 0, NULL, 235, 1),
-(770, 0, NULL, 235, 2),
-(771, 0, NULL, 235, 3),
-(772, 0, NULL, 235, 4),
-(773, 0, NULL, 235, 5),
-(774, 0, NULL, 235, 6),
-(775, 0, NULL, 236, 7),
-(776, 0, NULL, 236, 8),
-(777, 0, NULL, 236, 9),
-(778, 0, NULL, 236, 10),
-(779, 0, NULL, 236, 11),
-(780, 0, NULL, 236, 12),
-(781, 0, NULL, 237, 13),
-(782, 0, NULL, 237, 14),
-(783, 0, NULL, 237, 15),
-(784, 0, NULL, 237, 16),
-(785, 0, NULL, 237, 17),
-(786, 0, NULL, 237, 18);
+INSERT IGNORE INTO `sesiondelineadetabla` (`id`, `completado`, `sesiones_id`, `lineasDeTabla_id`) VALUES
+(37, 1, 245, 1),
+(38, 0, 245, 2),
+(39, 0, 245, 3),
+(40, 0, 245, 4),
+(41, 0, 245, 5),
+(42, 0, 245, 6),
+(43, 1, 246, 7),
+(44, 1, 246, 8),
+(45, 1, 246, 9),
+(46, 1, 246, 10),
+(47, 0, 246, 11),
+(48, 0, 246, 12),
+(49, 0, 247, 13),
+(50, 0, 247, 14),
+(51, 0, 247, 15),
+(52, 0, 247, 16),
+(53, 1, 247, 17),
+(54, 1, 247, 18),
+(55, 0, 248, 1),
+(56, 0, 248, 2),
+(57, 0, 248, 3),
+(58, 0, 248, 4),
+(59, 0, 248, 5),
+(60, 0, 248, 6),
+(61, 0, 249, 7),
+(62, 0, 249, 8),
+(63, 0, 249, 9),
+(64, 0, 249, 10),
+(65, 0, 249, 11),
+(66, 0, 249, 12),
+(67, 0, 250, 13),
+(68, 0, 250, 14),
+(69, 0, 250, 15),
+(70, 0, 250, 16),
+(71, 0, 250, 17),
+(72, 0, 250, 18);
 
 -- --------------------------------------------------------
 
@@ -389,10 +395,14 @@ INSERT IGNORE INTO `sesiondelineadetabla` (`id`, `completado`, `comentario`, `se
 -- Estructura de tabla para la tabla `sesiones`
 --
 
+DROP TABLE IF EXISTS `sesiones`;
 CREATE TABLE IF NOT EXISTS `sesiones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `completado` tinyint(4) DEFAULT NULL,
-  `fecha` date DEFAULT NULL,
+  `fecha` datetime NOT NULL,
+  `inicio` datetime DEFAULT NULL,
+  `fin` datetime DEFAULT NULL,
+  `comentario` varchar(1000) DEFAULT NULL,
   `tablas_id` int(11) NOT NULL,
   `orden_sesion` int(11) NOT NULL,
   `orden_sesion_max` int(11) NOT NULL,
@@ -401,19 +411,19 @@ CREATE TABLE IF NOT EXISTS `sesiones` (
   `anterior_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_sesiones_tablas1_idx` (`tablas_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=238 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=251 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `sesiones`
 --
 
-INSERT IGNORE INTO `sesiones` (`id`, `completado`, `fecha`, `tablas_id`, `orden_sesion`, `orden_sesion_max`, `usuarios_id`, `entrenamientos_id`, `anterior_id`) VALUES
-(199, 1, NULL, 1, 1, 3, 4, 3, NULL),
-(200, 1, NULL, 2, 2, 3, 4, 3, 199),
-(201, 1, NULL, 3, 3, 3, 4, 3, 200),
-(235, 0, NULL, 1, 1, 3, 4, 3, 201),
-(236, 0, NULL, 2, 2, 3, 4, 3, 235),
-(237, 1, NULL, 3, 3, 3, 4, 3, 236);
+INSERT IGNORE INTO `sesiones` (`id`, `completado`, `fecha`, `inicio`, `fin`, `comentario`, `tablas_id`, `orden_sesion`, `orden_sesion_max`, `usuarios_id`, `entrenamientos_id`, `anterior_id`) VALUES
+(245, 1, '2018-01-05 03:57:25', '2018-01-05 04:44:27', '2018-01-05 04:50:49', 'Comentario', 1, 1, 3, 4, 3, NULL),
+(246, 1, '2018-01-05 03:57:25', '2018-01-05 04:51:10', '2018-01-05 04:51:26', NULL, 2, 2, 3, 4, 3, 245),
+(247, 1, '2018-01-05 03:57:25', '2018-01-05 04:51:48', '2018-01-05 04:51:55', 'Comentario 247', 3, 3, 3, 4, 3, 246),
+(248, 0, '2018-01-05 04:51:55', '2018-01-05 05:07:48', NULL, 'fsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmfaaafsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmfaaa', 1, 1, 3, 4, 3, 247),
+(249, 0, '2018-01-05 04:51:55', NULL, NULL, 'Comentario 249', 2, 2, 3, 4, 3, 248),
+(250, 1, '2018-01-05 04:51:55', '2018-01-05 06:10:10', '2018-01-05 06:10:45', 'Comentario adelantado', 3, 3, 3, 4, 3, 249);
 
 -- --------------------------------------------------------
 
@@ -421,6 +431,7 @@ INSERT IGNORE INTO `sesiones` (`id`, `completado`, `fecha`, `tablas_id`, `orden_
 -- Estructura de tabla para la tabla `tablas`
 --
 
+DROP TABLE IF EXISTS `tablas`;
 CREATE TABLE IF NOT EXISTS `tablas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -446,6 +457,7 @@ INSERT IGNORE INTO `tablas` (`id`, `nombre`, `tipo`, `borrado`) VALUES
 -- Estructura de tabla para la tabla `usuarios`
 --
 
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(45) NOT NULL,
@@ -537,7 +549,6 @@ ALTER TABLE `sesiondelineadetabla`
 --
 ALTER TABLE `sesiones`
   ADD CONSTRAINT `fk_sesiones_tablas1` FOREIGN KEY (`tablas_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
