@@ -234,6 +234,9 @@ $strings = array(
 	'tdu' => 'TDU',
 	'normal' => 'Normal',
 	'personal' => 'Personal',
+	'startTime' => 'Empezar',
+	'comment' => 'Comentario',
+	'writeComments' => 'Escriba aquí sus comentarios',
 
 	// ----------------------------------------------------------------
 	
