@@ -65,7 +65,11 @@
 						$tracing = get_data_form(); // getting data
 						$data1 = $tracing ->headCoach();
 						$data2 = $tracing ->follow();
-						new TracingConsult($data1, $data2,true);   
+						if($data2 == $strings['NoTrainingError']){
+								new TracingDefault($data1,$strings['NoTrainingError']);
+						}else{
+							new TracingConsult($data1, $data2,true);
+						}
 					
 					}else { // if not, the view is called
 						$tracing = get_data_form(); // getting data
@@ -151,7 +155,12 @@
 							$tracing->changeComplete($_REQUEST['lineaSesionesId']); // trying consult
 							$data1 = $tracing ->headSportsman();
 							$data2 = $tracing ->follow();
-							new TracingConsult($data1, $data2,false);
+							if($data1[0]['completado'] == 0 && $data1[0]['inicio'] <> '')
+							{
+								new TracingConsult($data1, $data2,false);
+							}else{
+								new TracingConsult($data1, $data2,true);
+							}
 						
 						}else { // if not, the view is called
 							header("Location: ../views/home.php");
@@ -189,7 +198,7 @@
 								new TracingConsult($data1, $data2,false);
 							}else{
 								$data1 = $tracing->headSportsmanIdPrevious($_REQUEST['sesionId']);
-								if($data1[0]['completado'] == 0)
+								if($data1[0]['completado'] == 0 && $data1[0]['inicio'] <> '')
 								{
 									new TracingConsult($data1, $data2,false);
 								}else{
@@ -217,12 +226,56 @@
 								new TracingConsult($data1, $data2,false);
 							}else{
 								$data1 = $tracing->headSportsmanIdNext($_REQUEST['sesionId']);
-								if($data1[0]['completado'] == 0)
+								//die("die: " . $data1[0]['inicio']);
+								if($data1[0]['completado'] == 0 && $data1[0]['inicio'] <> '')
 								{
 									new TracingConsult($data1, $data2,false);
 								}else{
 									new TracingConsult($data1, $data2,true);
 								}
+							}
+						
+						}else { // if not, the view is called
+							header("Location: ../views/home.php");
+						}
+
+						break;
+
+					case $strings['startTime']:
+
+						if (isset($_REQUEST['sesionId'])) // if we have form's data, we insert it
+						{
+							$tracing = get_data_form_sportsman(); // getting data
+							$tracing->startTime($_REQUEST['sesionId']); // trying consult
+							$data1 = $tracing ->headSportsman();
+							$data2 = $tracing ->follow();
+							if($data1[0]['completado'] == 0 && $data1[0]['inicio'] <> '')
+							{
+								new TracingConsult($data1, $data2,false);
+							}else{
+								new TracingConsult($data1, $data2,true);
+							}
+						
+						}else { // if not, the view is called
+							header("Location: ../views/home.php");
+						}
+
+						break;
+					
+					case $strings['comment']:
+
+						//die("die: |" . $_REQUEST['comment'] . "|");
+						if (isset($_REQUEST['sesionId']) && isset($_REQUEST['comment'])) // if we have form's data, we insert it
+						{
+							$tracing = get_data_form_sportsman(); // getting data
+							$tracing->comment($_REQUEST['sesionId'],$_REQUEST['comment']); // trying consult
+							$data1 = $tracing ->headSportsman();
+							$data2 = $tracing ->follow();
+							if($data1[0]['completado'] == 0 && $data1[0]['inicio'] <> '')
+							{
+								new TracingConsult($data1, $data2,false);
+							}else{
+								new TracingConsult($data1, $data2,true);
 							}
 						
 						}else { // if not, the view is called
@@ -239,7 +292,16 @@
 							$tracing = get_data_form_sportsman(); // getting data
 							$data1 = $tracing ->headSportsman();
 							$data2 = $tracing ->follow();
-							new TracingConsult($data1, $data2,false);
+							if($data2 == $strings['NoTrainingError']){
+								new TracingDefault($data1,$strings['NoTrainingError']);
+							}else{
+								if($data1[0]['completado'] == 0 && $data1[0]['inicio'] <> '')
+								{
+									new TracingConsult($data1, $data2,false);
+								}else{
+									new TracingConsult($data1, $data2,true);
+								}
+							}
 
 						}else { // if not, the view is called
 							header("Location: ../views/home.php");
