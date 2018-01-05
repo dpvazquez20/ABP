@@ -104,7 +104,7 @@ class TableLineAdd
 
                         <!-- End button -->
                         <div class="col-md-12" id="addEditButtons">
-                            <button class='btn btn-lg btn-danger' onclick="end_elem(<?php echo $this->tableId; ?>)"> <?php echo $strings['End'] ?></button>
+                            <button class='btn btn-lg btn-danger' onclick="end_elem(<?php /*echo $this->tableId;*/  ?>)"> <?php echo $strings['End'] ?></button>
                         </div>
                         <!-- End of the end button -->
                     </div>
