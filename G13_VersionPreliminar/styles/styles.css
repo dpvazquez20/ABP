@@ -28,6 +28,10 @@ body {
 	background-color: #D2EAC3 !important;
 }
 
+#event {
+	background-color: white;
+}
+
 #foot {
 	position: relative;
 	margin-top: 5%;
@@ -47,7 +51,7 @@ body {
 	background-color: #C2DBB2;
 }
 
-div .jumbotron {
+#jumbo {
 	background: url('../images/login.jpg');
 	background-size: 100%;
 	background-position: center;
