@@ -27,12 +27,20 @@
 
                     <!-- Jumbotron -->
                     <div class="col-md-12">
-                        <div class="jumbotron">
+                        <div id="jumbo" class="jumbotron">
                             <h1> <?php echo $strings['ActiFit'] ?> </h1>
                             <h2> <?php echo $strings['Welcome'] ?> </h2>
-                        </div>
-                    </div>
-                    <!-- End of the jumbotron -->
+                        </div>			
+					<!-- End of the jumbotron -->
+					
+					<!-- List of events -->
+					<?php
+						generateEvents();
+					?>
+					<!-- End of the list -->
+						
+                    </div>              
+					
                 </div>
             </div>
         </div>
