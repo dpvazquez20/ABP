@@ -39,7 +39,7 @@ class ProfileDefault
 
                         <!-- Profile view -->
                         <?php
-                            $titles = array('imagen', 'login', 'nombre', 'apellidos', 'dni', 'email', 'tipo');
+                            $titles = array('imagen', 'login', 'nombre', 'apellidos', 'dni', 'email', 'tipo', 'clase');
                             generateProfile($this->data, $titles);
                         ?>
                         <!-- End of the view -->
