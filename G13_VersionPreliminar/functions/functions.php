@@ -1498,5 +1498,392 @@ function generateActivitiesDisabledSelect ($list, $col, $labelName,$idname,$pred
     echo '</div>';
 }
 
+
+
+
+/** Function to automatically generate the secretary's statistic
+ *  Example => generateSecretaryStatistics ($this->data);
+ */
+function generateSecretaryStatistics($data)
+{
+    include '../languages/spanish.php';
+
+    $activities = getActivitiesPerDays();       // Get the amount of activities per day
+    $users = getUsersPerActivity();             // Get the amount of users per activity
+    $users2 = getUsersPerActivity2();
+    $result = mergeList($users,$users2);
+
+    // View
+    echo '<div class="row" style="margin-top: 1%">
+            <!-- Showing activities per day -->
+            <div class="col-md-4">
+                <h3 style="text-align: center">' . $strings['days'] . '</h3>
+                    <div class="list-group">
+                        <a class="list-group-item">' . $strings['monday'] . '<span class="badge">' . $activities['monday'] . '</span></a>
+                        <a class="list-group-item">' . $strings['tuesday'] . '<span class="badge">' . $activities['tuesday'] . '</span></a>
+                        <a class="list-group-item">' . $strings['wednesday'] . '<span class="badge">' . $activities['wednesday'] . '</span></a>
+                        <a class="list-group-item">' . $strings['thursday'] . '<span class="badge">' . $activities['thursday'] . '</span></a>
+                        <a class="list-group-item">' . $strings['friday'] . '<span class="badge">' . $activities['friday'] . '</span></a>
+                    </div>
+            </div>
+            <!-- End -->';
+            
+    echo    '<!-- Showing users per activity -->
+            <div class="col-md-4">
+                <h3 style="text-align: center">' . $strings['activitiesUsers'] . '</h3>
+                    <div class="list-group">';
+
+                    foreach ($result as $row)
+                    {
+                        echo '<a class="list-group-item">' . $row['nombre'] . '<span class="badge">' . $row['num'] . '</span></a>';
+                    }
+
+        echo        '</div> 
+            </div>
+            <!-- End -->
+            
+            <!-- Showing the amount of users -->
+            <div class="col-md-4">
+                <h3 style="text-align: center">' . $strings['amountUsers'] . $data['numUsers'] . '</h3>
+                    <div class="list-group">
+                        <a class="list-group-item">' . $strings['TDUUsers'] . '<span class="badge">' . $data['TDUUsers'] . '</span></a>
+                        <a class="list-group-item">' . $strings['PEFUsers'] . '<span class="badge">' . $data['PEFUsers'] . '</span></a>
+                    </div>           
+            </div>
+            <!--End -->
+          </div>';
+}
+
+
+
+
+/** Function to get the amount of activities per day
+ *  Example => $data = getActivitiesPerDays();
+ */
+function getActivitiesPerDays()
+{
+    include '../languages/spanish.php';
+
+    $mysqli = connect();
+    $sql = "SELECT * FROM actividades";
+
+    // Checking the DB connection
+    if (!$result = $mysqli->query($sql))
+    {
+        $toret = $strings['ConnectionDBError'];
+
+    } else { //Obtaining the amount of activities per day
+        $sql = "SELECT * FROM actividades WHERE frecuencia LIKE '%Lunes%'";
+        $toret['monday'] = $mysqli->query($sql)->num_rows;
+
+        $sql = "SELECT * FROM actividades WHERE frecuencia LIKE '%Martes%'";
+        $toret['tuesday'] = $mysqli->query($sql)->num_rows;
+
+        $sql = "SELECT * FROM actividades WHERE frecuencia LIKE '%Miercoles%'";
+        $toret['wednesday'] = $mysqli->query($sql)->num_rows;
+
+        $sql = "SELECT * FROM actividades WHERE frecuencia LIKE '%Jueves%'";
+        $toret['thursday'] = $mysqli->query($sql)->num_rows;
+
+        $sql = "SELECT * FROM actividades WHERE frecuencia LIKE '%Viernes%'";
+        $toret['friday'] = $mysqli->query($sql)->num_rows;
+
+        // I suppose that the coachs in charge of activities like, for example, Zumba, don't work at weekends
+    }
+
+    return $toret;
+}
+
+
+
+
+/** Function to get the amount of users per activities
+ *  Example => $data = getUsersPerActivity();
+ */
+function getUsersPerActivity()
+{
+    include '../languages/spanish.php';
+
+    $mysqli = connect();
+    $sql = "SELECT * FROM inscripciones";
+
+    // Checking the DB connection
+    if (!$result = $mysqli->query($sql))
+    {
+        $toret = $strings['ConnectionDBError'];
+
+    } else {
+
+        $sql = "SELECT COUNT(inscripciones.usuario_id) AS num, actividades.nombre AS nombre 
+                FROM inscripciones 
+                INNER JOIN inscripciones_has_actividades ON inscripciones.id = inscripciones_has_actividades.inscripciones_id AND inscripciones.borrado ='0'
+                INNER JOIN actividades ON inscripciones_has_actividades.actividades_id = actividades.id
+                GROUP BY actividades.nombre
+                ORDER BY actividades.nombre";
+
+        $result = $mysqli->query($sql); // getting hard data
+
+        $toret=[];
+        $i=0;
+
+        // introducing all rows into an array
+        while ($row = $result->fetch_array())
+        {
+            $toret[$i] = $row;
+            $i++;
+        }
+    }
+
+    return $toret;
+}
+
+
+
+
+/** Function to get the amount of users per activities (activities that don't have users)
+ *  Example => $data = getUsersPerActivity2();
+ */
+function getUsersPerActivity2()
+{
+    include '../languages/spanish.php';
+
+    $mysqli = connect();
+    $sql = "SELECT * FROM inscripciones";
+
+    // Checking the DB connection
+    if (!$result = $mysqli->query($sql))
+    {
+        $toret = $strings['ConnectionDBError'];
+
+    } else {
+
+        $sql = "SELECT nombre FROM actividades ORDER BY nombre";
+
+        $result = $mysqli->query($sql); // getting hard data
+
+        $toret=[];
+        $i=0;
+
+        // introducing all rows into an array
+        while ($row = $result->fetch_array())
+        {
+            $toret[$i] = $row;
+            $i++;
+        }
+    }
+
+    return $toret;
+}
+
+
+
+/** Function to merge two arrays
+ *  Example => $data = mergeList($array1,$array2);
+ */
+function mergeList($array1, $array2)
+{
+    $cont = 0;
+
+    foreach ($array2 as $row2)
+    {
+        foreach ($array1 as $row1)
+        {
+            if ($row2['nombre'] == $row1['nombre'])
+            {
+                $cont = 1;
+            }
+        }
+
+        if ($cont == 1)
+        {
+            $cont = 0;
+
+        } else {
+
+            $row2['num'] = 0;
+            array_push($array1, $row2);
+        }
+    }
+
+    return $array1;
+}
+
+
+
+
+/** Function to automatically generate the coach's statistics
+ *  Example => generateCoachStatistics ($this->data);
+ */
+function generateCoachStatistics($data)
+{
+    include '../languages/spanish.php';
+
+    $mExercises = getMostUsedExercise();
+
+    // View
+    echo '<div class="row" style="margin-top: 1%">
+            <!-- Showing amount of exercises -->
+            <div class="col-md-4">
+                <h3 style="text-align: center">' . $strings['numExercises'] . $data['numExercises'] . '</h3>
+                    <div class="list-group">
+                        <a class="list-group-item">' . $strings['numMuscular'] . '<span class="badge">' . $data['numMuscular'] . '</span></a>
+                        <a class="list-group-item">' . $strings['numCardio'] . '<span class="badge">' . $data['numCardio'] . '</span></a>
+                        <a class="list-group-item">' . $strings['numStretching'] . '<span class="badge">' . $data['numStretching'] . '</span></a>
+                    </div>
+            </div>
+            <!-- End -->';
+
+    echo    '<!-- Showing the most used exercise -->
+            <div class="col-md-4">
+                <h3 style="text-align: center">' . $strings['mostUsedExercise'] . '</h3>
+                    <div class="list-group">';
+
+                    foreach ($mExercises as $row)
+                    {
+                        echo '<a class="list-group-item">' . $row['nombre'] . '<span class="badge">' . $row['num'] . '</span></a>';
+                    }
+
+    echo            '</div>
+            </div>
+            <!-- End -->';
+      
+    echo    '<!-- Showing the percentage of men/women -->
+            <div class="col-md-4">
+                <h3 style="text-align: center">' . $strings['menWomen'] . '</h3>
+                    <div class="list-group">
+                       <a class="list-group-item">' . $strings['men'] . '<span class="badge"> 0% </span></a>
+                       <a class="list-group-item">' . $strings['women'] . '<span class="badge"> 0% </span></a>
+                       <a class="list-group-item">Los métodos de modelo ya están hechos, falta que descomenteis lo de generateCoach() en el modelo y pongáis estas 2 badges bien<span class="badge"> 0% </span></a>
+                    </div>
+            </div>
+            <!-- End -->
+          </div>';
+   
+}
+
+
+
+
+/** Function to obtain de most used exercise
+ *  Example => generateCoachStatistics ($this->data);
+ */
+function getMostUsedExercise()
+{
+    include '../languages/spanish.php';
+
+    $mysqli = connect();
+    $sql = "SELECT * FROM tablas";
+
+    // Checking the DB connection
+    if (!$result = $mysqli->query($sql))
+    {
+        $toret = $strings['ConnectionDBError'];
+
+    } else {
+
+        $sql = "SELECT MAX(lineaid) AS num, nom AS nombre 
+                FROM (SELECT COUNT(lineasdetabla.ejercicio_id) AS lineaid, ejercicios.nombre AS nom
+                      FROM lineasdetabla
+                      INNER JOIN ejercicios ON lineasdetabla.ejercicio_id = ejercicios.id WHERE ejercicios.borrado = '0'
+                      GROUP BY lineasdetabla.ejercicio_id) AS aux";
+
+        $result = $mysqli->query($sql); // getting hard data
+
+        $toret=[];
+        $i=0;
+
+        // introducing all rows into an array
+        while ($row = $result->fetch_array())
+        {
+            $toret[$i] = $row;
+            $i++;
+        }
+    }
+
+    return $toret;
+}
+
+
+
+
+/** Function to automatically generate a list of elements (statistics)
+ *  Example => generateViewStatisticsCoach($lista_usuarios, 'statistics', $titles);
+ */
+function generateViewStatisticsCoach($list, $page_name,$titles)
+{
+    include '../languages/spanish.php';
+
+    $name = strtolower($page_name);
+
+    // Select the images directory
+    $directory = '../images/profiles/';
+
+    // Print the table if data aren't a string
+    if (!is_string($list))
+    {
+        // Table
+        echo '<div class="table-responsive" style="display: none" id="viewSporstmen">
+                <table class="table table-hover">';
+
+        // Attribute's titles
+        echo '<thead>
+                  <tr>';
+
+        foreach ($titles as $title)
+        {
+            echo '<th>' . $strings[$title] . '</th>';
+        }
+
+        echo     '</tr>
+               </thead>';
+
+        // Attribute's values
+        echo '<tbody>';
+
+        for ($i = 0; $i < count($list); $i++)
+        {
+            echo '<tr>';
+
+            for ($j = 0; $j < count($titles); $j++)
+            {
+                // Check if the attribute is an image
+                if ($titles[$j] == 'imagen')
+                {
+                    if ($list[$i]["$titles[$j]"] <> '')
+                    {
+                        echo '<td> <img src="' . $directory . $list[$i]["$titles[$j]"] . '" alt="' . $list[$i]["$titles[$j]"] . '" height="150" width="150"> </td>';
+
+                    } else {
+                        echo '<td> <img src="' . $directory . 'default.png" alt="default.png" height="150" width="150"> </td>';
+                    }
+
+                } else {
+                        echo '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+                }
+            }
+
+            // Print the buttons for each element
+                        echo '<td>
+                                  <div class="pull-right action-buttons">';
+                        echo         '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['See'] . '" class="btn btn-sm btn-primary">' . $strings['Statistics'] . '&nbsp<span class="glyphicon glyphicon-signal" aria-hidden="true"></span> </a>';
+                        echo     '</div>
+                            </td>';
+            echo '</tr>';
+        }
+
+        echo '  </tbody>
+              </table>
+              
+              <!-- Hide button -->
+              <div id="hideSportsmen" style="text-align: center; margin-top: 1%">
+                    <button class="btn btn-lg btn-default">' . $strings['hideSportsmen'] . '</button>
+              </div>
+                
+             </div>';
+    }
+}
+
+
+
 ?>
 
