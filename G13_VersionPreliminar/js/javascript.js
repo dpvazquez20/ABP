@@ -17,6 +17,18 @@ $(document).ready( function() {
         $("#profileForm").delay(500).fadeOut("slow");
     });
 
+	// Form for showing the sportsmen in the coach statistics */
+    $("#showSportsmen").click( function() {
+        $("#viewSporstmen").delay(500).fadeIn("slow");
+        //$("#hideSporstmen").delay(500).fadeIn("slow");
+    });
+
+    // Form to hide the sportsmen in the coach statistics */
+    $("#hideSportsmen").click( function() {
+        //$("#hideSporstmen").delay(500).fadeOut("slow");
+        $("#viewSporstmen").delay(500).fadeOut("slow");
+    });
+	
     // Custom alerts
     window.alert = function (message) {
         alertify.alert('¡ATENCION!', message,
