@@ -253,6 +253,28 @@ $strings = array(
 	'AssignTraining' => 'Agisnar Entrenamiento',
 	'InsertMaxError' => 'No se pueden introducir mas sesiones de entrenamiento',
 	
+	// ----------------------------------------------------------------
+
+    // ------------------------- STATISTICS -------------------------------
+
+	'days'	=>	'Actividades por día',
+    'activitiesUsers'	=> 'Nº de usuarios por actividad',
+    'amountUsers'	=> 'Deportistas totales: ',
+    'TDUUsers'	=>	'Deportistas TDU',
+    'PEFUsers'	=>	'Deportistas PEF',
+    'numExercises'	=> 'Nº de ejercicios: ',
+    'numMuscular'	=>	'Musculares',
+    'numCardio'	=>	'Cardiovasculares',
+    'numStretching'	=>	'Estiramientos',
+    'mostUsedExercise' => 'Ejercicio más usado',
+    'menWomen'	=>	'Porcentaje hombres-mujeres',
+    'men'	=>	'Hombres',
+    'women'	=>	'Mujeres',
+    'Statistics user' => 'Estadísticas del usuario',
+    'showSportsmen'	=>	'Ver deportistas',
+    'hideSportsmen'	=>	'Ocultar deportistas',
+
+    // ----------------------------------------------------------------
 	
 
 );
