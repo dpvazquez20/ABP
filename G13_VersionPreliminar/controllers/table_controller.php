@@ -116,12 +116,12 @@
 						$table = get_data_form(); // getting data
 						$reply = $table->insert(); // trying insert
 
-						$data = $table->toList(); // getting tables list
-						new TableDefault($data, $reply); // showing tables list with a message
+						//$data = $table->toList(); // getting tables list
+						//new TableDefault($data, $reply); // showing tables list with a message
 
-						//$tableId = $table->getId();
-						//$textLocation = 'Location: table_line_controller.php?idTabla=' . $tableId . '&action=' . $strings['Insert'];
-						//header($textLocation);
+						$tableId = $table->getId();
+						$textLocation = 'Location: table_line_controller.php?idTabla=' . $tableId . '&action=' . $strings['Insert'];
+						header($textLocation);
 					}
 
 					break;
@@ -192,14 +192,22 @@
 					// looking for form's data
 					if (isset($_REQUEST['id'])) // if we have form's data, we insert it
 					{
-						$table = get_data_form(); // getting data
-						$data = $table->consult(); // trying consult
-						$lines = $table->getLines();
-						$reply = '';
-						if(isset($_REQUEST['message'])){
-							$reply = $_REQUEST['message'];
-						}
-						new TableConsult($data,$lines,$reply,$_REQUEST['id']); // showing table data   
+						if($_REQUEST['id'] <> 'undefined')
+						{
+							$table = get_data_form(); // getting data
+							$data = $table->consult(); // trying consult
+							$lines = $table->getLines();
+							$reply = '';
+							if(isset($_REQUEST['message'])){
+								$reply = $_REQUEST['message'];
+							}
+							new TableConsult($data,$lines,$reply,$_REQUEST['id']); // showing table data
+						}else{
+							$table = get_data_form();
+							$data = $table->toList(); // getting tables list
+							$reply = '';
+							new TableDefault($data, $reply); // showing tables list without a message
+						}   
 					
 					}else { // if not, the view is called
 						$table = get_data_form(); // getting data
