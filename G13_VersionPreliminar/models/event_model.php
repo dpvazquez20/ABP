@@ -1,0 +1,474 @@
+<?php
+
+include '../functions/connectDB.php';
+
+class EventModel
+{
+	function __construct($id, $nombre, $descripcion, $fecha, $horaInicio, $horaFin)
+    {
+		$this->id = $id;
+		$this->nombre = $nombre;
+		$this->descripcion = $descripcion;
+		$this->fecha = $fecha;
+		$this->horaInicio = $horaInicio;
+		$this->horaFin = $horaFin;
+
+		$this->mysqli = connect();
+	}
+
+	function __destruct()
+    {
+
+	}
+
+	function lastModify(){
+
+		if($this->id <> '')
+		{
+			$toret = "id";
+		}
+		if($this->nombre <> '')
+		{
+			$toret = "nombre";
+		}		
+		if($this->descripcion <> '')
+		{
+			$toret = "descripcion";
+		}
+		if($this->fecha <> '')
+		{
+			$toret = "fecha";
+		}
+		if($this->horaInicio <> '')
+		{
+			$toret = "horaInicio";
+		}
+		if($this->horaFin <> '')
+		{
+			$toret = "horaFin";
+		}
+
+		return $toret;
+	}
+
+	// insert new resource
+	function insert()
+    {
+        include '../languages/spanish.php';
+
+		// checking form's data
+
+        if ($this->nombre <> '' )
+        {
+            $sql = "SELECT * FROM eventos WHERE nombre = '".$this->nombre."'";
+
+            // checking DB connection
+            if (!$result = $this->mysqli->query($sql))
+            {
+                $toret = $strings['ConnectionDBError'];
+
+            }else {
+
+                // checking that the resource doesn't exist
+                if ($result->num_rows == 0)
+                {
+
+                    $sql = "INSERT INTO eventos (nombre,descripcion,fecha,horaInicio,horaFin,borrado) 
+							VALUES('" . $this->nombre . "','" . $this->descripcion . "','" . $this->fecha . "','" . $this->horaInicio . "','" . $this->horaFin . "','0')";
+
+                    // inserting new resource
+                    if ($result = $this->mysqli->query($sql))
+                    {
+                        $toret = $strings['InsertSuccess'];
+                    }else {
+						
+						die($sql);
+                        $toret = $strings['InsertError'];
+                    }
+
+                }else {
+
+                    // seeing if the resource had been created before
+                    $sql = "SELECT * FROM eventos WHERE nombre = '".$this->nombre."' AND borrado='1'";
+                    $result = $this->mysqli->query($sql);
+
+                    if ($result->num_rows == 1)
+                    {
+                        $sql = "UPDATE eventos SET borrado ='0' WHERE nombre = '" . $this->nombre ."'";
+                        if ($result = $this->mysqli->query($sql))
+                        {
+                            $toret = $strings['InsertSuccess'];
+                        }else {
+                            $toret = $strings['InsertError'];
+                        }
+
+                    } else {
+                        $toret = $strings['InsertErrorRepeat'];
+                    }
+                }
+            }
+        }else {
+            $toret = $strings['InsertErrorForm'];
+        }
+
+		return $toret;
+	}
+
+	// delete event
+	function delete(){
+
+        include '../languages/spanish.php';
+
+		// checking form's data
+		if ($this->id <> '' )
+		{
+	        $sql = "SELECT * FROM eventos WHERE id = '".$this->id."'";
+
+	        // checking DB connection
+	        if (!$result = $this->mysqli->query($sql))
+	        {
+				$toret = $strings['ConnectionDBError'];
+			}else {
+		
+				// checking that the resource exists
+				if ($result->num_rows == 1)
+				{
+
+					$sql = "UPDATE eventos SET borrado ='1' WHERE id = '" . $this->id ."'";
+
+					$this->mysqli->query($sql);
+
+					// deleting resource
+					if ($result = $this->mysqli->query($sql))
+					{
+						$toret = $strings['DeleteSuccess'];
+					}else {
+						$toret = $strings['DeleteError'];
+					}
+
+				}else {
+					$toret = $strings['ErrorNotExist'];
+				}
+
+			}
+
+	    }else {
+	    	$toret = $strings['DeleteErrorForm'];
+		}
+
+		return $toret;
+
+	}
+
+	// modify event
+	function modify()
+    {
+
+		include '../languages/spanish.php';
+
+		// checking form's data
+		if ($this->id <> '' )
+		{
+
+	        $sql = "SELECT * FROM eventos WHERE id = '".$this->id."'";
+
+	        // checking DB connection
+			if (!$result = $this->mysqli->query($sql))
+			{
+				$toret = $strings['ConnectionDBError'];
+			}else {
+				
+				// checking that the event exists
+				if ($result->num_rows == 1)
+				{
+					$modify = false;
+					$lastModify = $this->lastModify(); 
+					$sql = "UPDATE eventos SET ";
+
+					if($this->nombre <> '')
+					{
+						$sql = $sql . "nombre ='" . $this->nombre . "'";
+						if($lastModify <> "nombre")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+					
+					if($this->fecha <> '')
+					{
+						$sql = $sql . "fecha ='" . $this->fecha . "'";
+						if($lastModify <> "fecha")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+
+					if($this->descripcion <> '')
+					{
+						$sql = $sql . "descripcion ='" . $this->descripcion . "'";
+						if($lastModify <> "descripcion")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+					
+					if($this->horaInicio <> '')
+					{
+						$sql = $sql . "horaInicio ='" . $this->horaInicio . "'";
+						if($lastModify <> "horaInicio")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+					
+					if($this->horaFin <> '')
+					{
+						$sql = $sql . "horaFin ='" . $this->horaFin . "'";
+						if($lastModify <> "horaFin")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+					
+					$sql = $sql . "WHERE id ='" . $this->id . "'";
+
+					// if exists modification
+					if($modify)
+					{
+						$this->mysqli->query($sql);
+
+						// updating event
+						if ($result = $this->mysqli->query($sql))
+						{
+							$toret = $strings['UpdateSuccess'];
+						}else {
+							$toret = $strings['UpdateError'];
+						}
+					}else{
+						$toret = $strings['UpdateNoModify'];
+					}
+					
+
+				}else {
+					$toret = $strings['ErrorNotExist'];
+				}
+			}
+	    }else {
+	    	$toret = $strings['UpdateErrorForm'];
+		}
+
+		return $toret;
+
+	}
+
+	// consulting resource
+	function consult()
+    {
+
+        include '../languages/spanish.php';
+
+		// checking form's data
+		if ($this->id <> '' )
+		{
+
+	        $sql = "SELECT * FROM eventos WHERE id = '".$this->id."'";
+
+	        // checking DB connection
+			if (!$result = $this->mysqli->query($sql))
+			{
+				$toret = $strings['ConnectionDBError'];
+			}else {
+				
+				// checking that the resource exists
+				if ($result->num_rows == 1)
+				{
+					$toret = array();
+					$toret[0] = $result->fetch_array();							
+
+				}else {
+					$toret = $strings['ErrorNotExist'];
+				}
+			}
+	    }else {
+	    	$toret = $strings['ConsultErrorForm'];
+		}
+
+		return $toret;
+
+	}
+
+	// listing all events
+	function toList()
+    {
+
+		include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha";
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one resource exists
+			if ($result->num_rows != 0)
+			{
+
+				$toret=[];
+				$i=0;
+
+				// introducing all resources into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$toret[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+
+		return $toret;
+
+	}
+	
+	// listing RECENT events En principio no se usa
+	function toShow()
+    {
+
+		include '../languages/spanish.php';
+		
+		// show only the 3 newest events
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha LIMIT 3";
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one resource exists
+			if ($result->num_rows != 0)
+			{
+
+				$toret=[];
+				$i=0;
+
+				// introducing all resources into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$toret[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+
+		return $toret;
+
+	}
+
+	// search events
+    function search($word)
+    {
+
+        include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' AND nombre LIKE '%".$word."%'";
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one events exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all events into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['SearchErrorNotExist'];
+            }
+        }
+
+        return $toret;
+
+    }
+
+    // order the element list
+    function order($value)
+    {
+
+        include '../languages/spanish.php';
+        $sql = '';
+
+        // sql query depends on the value of the order by
+        Switch ($value)
+        {
+            case 1: $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha";
+                break;
+            case 2: $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha DESC";
+                break;
+        }
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one resource exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all resources into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['ListErrorNotExist'];
+            }
+        }
+
+        return $toret;
+
+    }
+
+
+}
+
+?>
