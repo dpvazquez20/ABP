@@ -15,14 +15,12 @@ class TracingModel
 
 	}
 
-	function headCoach()
+	function headCoach($sessionId)
 	{
 		include '../languages/spanish.php';
 
-        if ($this->id <> '' )
-        {
 			//die("id: ". $this->id);
-            $sql = "SELECT * FROM sesiones WHERE usuarios_id = '" . $this->id . "' AND completado = '0'";
+            $sql = "SELECT * FROM sesiones WHERE id = '" . $sessionId . "'";
 
             if (!$result = $this->mysqli->query($sql))
 			{
@@ -39,13 +37,15 @@ class TracingModel
 				$sql="
 				SELECT tablas.id,tablas.nombre AS nombreTabla,
 						sesiones.completado,
-						usuarios.nombre,usuarios.apellidos,sesiones.id,usuarios.dni,usuarios.imagen AS sesionId
+						usuarios.nombre,usuarios.apellidos,usuarios.id AS userId,sesiones.id AS sesionId,usuarios.dni,usuarios.imagen
                 FROM tablas
                 INNER JOIN sesiones
-                ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0'
+                ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.id = $sessionId
                 	INNER JOIN usuarios
-                	ON usuarios.id = sesiones.usuarios_id AND usuarios.id = $this->id
+                	ON usuarios.id = sesiones.usuarios_id
                 ";
+
+                //die("die: $sql");
 
 				if (!$result2 = $this->mysqli->query($sql))
 				{
@@ -57,9 +57,6 @@ class TracingModel
 				}
 
 			}
-        }else {
-            $toret = $strings['FollowErrorForm']; // ----------------------------- strings
-        }
 
 		return $toret;
 	}
@@ -298,6 +295,57 @@ class TracingModel
 
 		return $toret;
 	}
+
+	function followSession($sessionId)
+    {
+        include '../languages/spanish.php';
+
+
+            $sql = "SELECT * FROM sesiones WHERE id = '" . $sessionId . "'";
+
+            if (!$result = $this->mysqli->query($sql))
+			{
+                $toret = $strings['ConnectionDBError'];
+	        }else {
+	          	if ($result->num_rows == 0)
+	           	{
+					//$this->createSession();
+					//$result = $this->mysqli->query($sql);
+				}
+				$row = $result->fetch_array();
+				$tableId = $row['tablas_id'];
+				$sesionId = $row['id'];
+
+				$sql="
+				SELECT lineasDeTabla.id,lineasDeTabla.repeticiones,lineasDeTabla.duracion,
+						lineasDeTabla.series,lineasDeTabla.descanso,
+						ejercicios.nombre,ejercicios.imagen,
+						sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado
+                FROM lineasDeTabla
+                INNER JOIN ejercicios 
+                ON lineasDeTabla.ejercicio_id = ejercicios.id AND lineasDeTabla.tabla_id = $tableId
+                	INNER JOIN sesionDeLineaDeTabla
+                	ON sesionDeLineaDeTabla.lineasDeTabla_id = lineasDeTabla.id
+                		INNER JOIN sesiones
+                		ON sesiones.id = sesionDeLineaDeTabla.sesiones_id AND sesiones.id = $sessionId
+                ";
+
+                //die("die: $sql");
+				$result2 = $this->mysqli->query($sql);
+				
+				$toret=[];
+				$i=0;
+
+				while ($row = $result2->fetch_array())
+                {
+					$toret[$i] = $row;
+					$i++;
+				}
+			}
+
+		return $toret;
+	}
+
 	function followId($sesionId)
     {
         include '../languages/spanish.php';
@@ -844,6 +892,105 @@ class TracingModel
 		}else {
 			$toret = $strings['UpdateError'];
 		}
+    }
+
+    function headList()
+	{
+		include '../languages/spanish.php';
+
+        if ($this->id <> '' )
+        {
+			//die("id: ". $this->id);
+            $sql = "SELECT * FROM sesiones WHERE usuarios_id = '" . $this->id . "'";
+
+            if (!$result = $this->mysqli->query($sql))
+			{
+                $toret = $strings['ConnectionDBError'];
+	        }else {
+	          	if ($result->num_rows == 0)
+	           	{
+					//$this->createSession();
+					//$result = $this->mysqli->query($sql);
+				}
+				$row = $result->fetch_array();
+				$tableId = $row['tablas_id'];
+
+				$sql="
+				SELECT tablas.id,tablas.nombre AS nombreTabla,
+						sesiones.completado,
+						usuarios.nombre,usuarios.apellidos,sesiones.id,usuarios.dni,usuarios.imagen AS sesionId
+                FROM tablas
+                INNER JOIN sesiones
+                ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0'
+                	INNER JOIN usuarios
+                	ON usuarios.id = sesiones.usuarios_id AND usuarios.id = $this->id
+                ";
+
+				if (!$result2 = $this->mysqli->query($sql))
+				{
+					$toret = $strings['ConnectionDBError'];
+				}else {
+					$toret=[];
+					$row = $result2->fetch_array();
+					$toret[0] = $row;
+				}
+
+			}
+        }else {
+            $toret = $strings['FollowErrorForm']; // ----------------------------- strings
+        }
+
+		return $toret;
+	}
+
+    function getSessions($id){
+
+    	include '../languages/spanish.php';
+
+    	$sqlEntrenamiento = "SELECT * FROM entrenamientos_has_usuarios WHERE usuario_id = '" . $this->id . "'";
+	        	
+        if ($resultEntrenamiento = $this->mysqli->query($sqlEntrenamiento))
+		{
+			if($resultEntrenamiento->num_rows > 0)
+			{
+				$sql = "SELECT id,fecha,inicio,fin,completado FROM sesiones WHERE usuarios_id = '$id' ORDER BY fecha,inicio";
+
+		        // checking DB connection
+		        if (!$result = $this->mysqli->query($sql))
+		        {
+		            $toret = $strings['connectionDBError'];
+		        }else {
+
+		            // checking that at least one user exists
+		            if ($result->num_rows != 0)
+		            {
+		                $toret=[];
+		                $i=0;
+
+		                // introducing all users into an array
+		                while ($row = $result->fetch_array())
+		                {
+		                	if($row == null || $row == 'null')
+		                	{
+		                		$toret[$i] = '';
+		                	}else{
+		                		$toret[$i] = $row;
+		                	}
+		                    $i++;
+		                }
+
+		            }else {
+		                $toret = $strings['ListErrorNotExist'];
+		            }
+		        }
+		    }else{
+				$toret = $strings['NoTrainingError'];
+			}
+		}else{
+			$toret = $strings['NoTrainingError'];
+		}
+
+        return $toret;
     }
 
 
