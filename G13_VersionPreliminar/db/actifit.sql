@@ -3,11 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 05-01-2018 a las 06:17:25
+-- Tiempo de generación: 06-01-2018 a las 05:15:24
 -- Versión del servidor: 5.7.19
 -- Versión de PHP: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -187,11 +189,10 @@ CREATE TABLE IF NOT EXISTS `eventos` (
 -- Volcado de datos para la tabla `eventos`
 --
 
-INSERT INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha`, `horaInicio`, `horaFin`, `borrado`) VALUES
+INSERT IGNORE INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha`, `horaInicio`, `horaFin`, `borrado`) VALUES
 (1, 'Zumba', 'Tendra lugar una clase de demostracion de Zumba para todas las edades. Los niÃ±os deberan ir acompaÃ±ados de un adulto o llevar una autorizacion. Aquellos que se inscriban en actividades de Zumba del gimnasio tras esta clase tendran un descuento del 30% los 3 primeros meses.', '2018-01-26', '15:30:00', '17:00:00', 0),
 (2, 'Inauguracion', 'Evento inaugural del gimansio donde se hara una presentacion de sus instalaciones asi como de la aplicacion de la que hace uso. Se hara un recorrido por el gimnasio mostrando las distintas salas y maquinas ademas de contar con la participacion de entrenadores especializados. Habra churrasco.', '2018-01-22', '12:30:00', '15:00:00', 0),
 (3, 'Torneo Futbol 7', 'Se organizara un pequeÃ±o torneo de Futbol 7 de hasta 16 equipos. Los interesados en apuntarse deberan acudir al gimnasio durante la semana previa al torneo para inscribirse. No hay lÃ­mite de edad pero los menores de 16 aÃ±os deberan presentar una autorizacion firmada de sus padres o tutores legales.', '2018-01-29', '09:00:00', '21:00:00', 0);
-COMMIT;
 
 -- --------------------------------------------------------
 
@@ -578,6 +579,7 @@ ALTER TABLE `sesiondelineadetabla`
 --
 ALTER TABLE `sesiones`
   ADD CONSTRAINT `fk_sesiones_tablas1` FOREIGN KEY (`tablas_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
