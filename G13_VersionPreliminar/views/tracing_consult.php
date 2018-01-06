@@ -56,6 +56,12 @@ class TracingConsult
 
                             if ($_SESSION['userType'] == $strings['coach'])
                             {
+                                ?>
+                                    <div class="col-md-12" id="new">
+                                        <a href='tracing_controller.php?id=<?php echo $this->data1[0]['userId']; ?>&action=<?php echo $strings['List']; ?>' class="btn btn-md btn-warning" id="newButton"> <?php echo $strings['Back']; ?></a>
+                                    </div>
+                                <?php
+                                //$this->data1[0]['sesionId'];
                                 generateViewTracingTitle($this->data1,true);
                             }else{
                                 generateViewTracingTitle($this->data1,false);
