@@ -986,7 +986,8 @@ function generateListCoach2 ($list, $page_name, $titles)
             echo        '<td>
                             <div class="pull-right action-buttons">';
 
-            echo                '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['Follow'] . '" class="btn btn-md btn-primary">' . $strings['Follow'] . '  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a>';
+            //echo                '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['Follow'] . '" class="btn btn-md btn-primary">' . $strings['Follow'] . '  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a>';
+            echo                '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['List'] . '" class="btn btn-md btn-primary">' . $strings['Follow'] . '  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </a>';
 
             echo            '</div>
                          </td>';
@@ -1193,8 +1194,8 @@ function generateViewTracingTitle($list,$coach)
     {
         echo "<p style='font-size: medium; font-style: normal;'><b>" . $strings['Name'] . ":</b> " . $list[0]['nombre'] . " " . $list[0]['apellidos'] . "</p>";
     }
-    //die("Completado: " . print_r($list[0]['completado']));
-    if($list[0]['completado'] == 0)
+    
+    if($list[0]['completado'] == '0')
     {
         echo "<p style='font-size: medium; font-style: normal;'><b>" . $strings['State'] . ":</b> " . $strings['No complete2'] . "</p>";
     }else{
@@ -1948,6 +1949,93 @@ function generateEvents ()
 
 }
 
+function generateViewTracingList ($list, $titles, $idUser)
+{
+    include '../languages/spanish.php';
+
+    $name = 'tracing';
+
+
+    // Select the images directory
+    $directory = '../images/exercises/';
+
+    // Print the table if data aren't a string
+    if (!is_string($list))
+    {
+        // Table
+        echo '<div class="table-responsive">
+                <table class="table table-bordered">';
+
+        // Attribute's titles
+        echo        '<thead>
+                        <tr>';
+
+        foreach ($titles as $title)
+        {
+            echo            '<th>' . $strings[$title] . '</th>';
+        }
+
+        echo            '</tr>
+                    </thead>';
+
+        // Attribute's values
+        echo        '<tbody>';
+
+        for ($i = 0; $i < count($list); $i++)
+        {
+            echo        '<tr>';
+
+            for ($j = 0; $j < count($titles); $j++)
+            {
+                // Check if the attribute is a date
+                if ($titles[$j] == 'fecha' || $titles[$j] == 'inicio' || $titles[$j] == 'fin')
+                {
+                    $dato = $list[$i]["$titles[$j]"];
+                    $toecho = '-';
+
+                    if($dato <> '')
+                    {
+                        $fech = new DateTime($dato);
+                        $toecho = $fech->format('d-m-Y H:i:s');
+                    }
+                    echo    '<td>' . $toecho  . '</td>';
+                } else {
+                    if($titles[$j] == 'completado')
+                    {
+                        if($list[$i]["$titles[$j]"] == '0')
+                        {
+                            $toecho = '<span class="glyphicon glyphicon-ban-circle" style="color:#708090; font-size: 20px"></span> ';
+                        }else{
+                            $toecho = '<span class="glyphicon glyphicon-ok-circle" style="color:#32CD32; font-size: 20px"></span>';
+                        }
+                        echo    '<td>' . $toecho . '</td>';
+                    }else{
+                        if($titles[$j] == 'enlace')
+                        {
+                            $var1 = $list[$i]['id'];
+                            $var2 = $strings['SeeSession'];
+                            $var3 = $strings['Consult'];
+                            $toecho = "<a href='tracing_controller.php?sesionId=$var1&action=$var2' class='btn btn-md btn-info' id='newButton'> $var3</a>";
+                            /*$toecho = "<a href='tracing_controller.php?id=<?php echo $list[$i]['id']; ?>&action=<?php echo $strings['SeeSession']; ?>' class='btn btn-md btn-info' id='newButton'> <?php echo $strings['List']; ?></a>";*/
+                            
+                            echo    '<td>' . $toecho . '</td>';
+                        }else{
+                            echo    '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+                        }
+                    }
+                }
+                //echo    '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+            }
+
+            echo        '</tr>';
+        }
+
+        echo        '</tbody>
+                </table>
+             </div>';
+
+    }
+}
 
 
 ?>
