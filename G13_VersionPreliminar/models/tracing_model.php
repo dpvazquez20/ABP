@@ -36,8 +36,8 @@ class TracingModel
 
 				$sql="
 				SELECT tablas.id,tablas.nombre AS nombreTabla,
-						sesiones.completado,
-						usuarios.nombre,usuarios.apellidos,usuarios.id AS userId,sesiones.id AS sesionId,usuarios.dni,usuarios.imagen
+						sesiones.completado,sesiones.comentario,sesiones.id AS sesionId,
+						usuarios.nombre,usuarios.apellidos,usuarios.id AS userId,usuarios.dni,usuarios.imagen
                 FROM tablas
                 INNER JOIN sesiones
                 ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.id = $sessionId
