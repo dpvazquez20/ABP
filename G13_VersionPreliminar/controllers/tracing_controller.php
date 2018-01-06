@@ -2,6 +2,7 @@
 
     include '../models/tracing_model.php';
     include '../views/tracing_default.php';
+    include '../views/tracing_list.php';
     include '../views/tracing_add.php';
     include '../views/tracing_modify.php';
     include '../views/tracing_consult.php';
@@ -56,6 +57,49 @@
 
 			Switch ($action)
             {
+
+            	case $strings['List']:
+
+            		if (isset($_REQUEST['id'])) // if we have form's data, we insert it
+					{
+						$tracing = get_data_form(); // getting data
+						$data1 = $tracing->getSessions($_REQUEST['id']);
+						if($data1 == $strings['NoTrainingError']){
+							new TracingDefault($data1,$strings['NoTrainingError']);
+						}else{
+							new TracingList($data1, $_REQUEST['id']);
+						}
+					
+					}else { // if not, the view is called
+						$tracing = get_data_form(); // getting data
+						$data = $tracing->toListSportsmans(); // trying consult
+						new TracingDefault($data,''); // showing user data 
+					}
+
+            		break;
+
+            	case $strings['SeeSession']:
+
+            		// looking for form's data
+					if (isset($_REQUEST['sesionId'])) // if we have form's data, we insert it
+					{
+						$tracing = get_data_form(); // getting data
+						$data1 = $tracing ->headCoach($_REQUEST['sesionId']);
+						$data2 = $tracing ->followSession($_REQUEST['sesionId']);
+						if($data2 == $strings['NoTrainingError']){
+							new TracingDefault($data1,$strings['NoTrainingError']);
+						}else{
+							new TracingConsult($data1, $data2,true);
+						}
+					
+					}else { // if not, the view is called
+						$tracing = get_data_form(); // getting data
+						$data = $tracing->toListSportsmans(); // trying consult
+						new TracingDefault($data,''); // showing user data 
+					}
+
+            		break;
+
 				// selected see user's details
 				case $strings['Follow']:
 
