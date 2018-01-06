@@ -237,6 +237,14 @@ $strings = array(
 	'startTime' => 'Empezar',
 	'comment' => 'Comentario',
 	'writeComments' => 'Escriba aquí sus comentarios',
+	'List' => 'Listar',
+	'SeeSession' => 'VerSesion',
+	'Consult' => 'Consultar',
+	'fecha' => 'Fecha',
+	'inicio' => 'Inicio',
+	'fin' => 'Fin',
+	'enlace' => 'Enlace',
+	'Back' => 'Volver',
 
 	// ----------------------------------------------------------------
 	
