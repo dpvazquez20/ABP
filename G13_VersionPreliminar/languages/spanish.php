@@ -268,6 +268,9 @@ $strings = array(
 	'Consult event' => 'Consultar evento',
 	'Modify event' => 'Modificar evento',
 	'Show events' => 'Mostrar eventos',
+	'Add' => 'Anadir',
+	'Add table'	=>	'Añadir tabla',
+	'Modify training' => 'Modificar entrenamiento',
 	
 	// ----------------------------------------------------------------
 
