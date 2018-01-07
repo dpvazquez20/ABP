@@ -3,6 +3,7 @@
     include '../models/training_model.php';
     include '../views/training_default.php';
     include '../views/training_add.php';
+	include '../views/training_modify.php';
 	include '../views/training_table_add.php';
 	include '../views/user_training_add.php';
     include '../views/training_consult.php';

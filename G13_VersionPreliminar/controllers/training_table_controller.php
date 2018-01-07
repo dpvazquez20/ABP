@@ -2,6 +2,7 @@
 
     include '../models/training_table_model.php';
     include '../views/training_table_add.php';
+	include '../views/training_table_edit.php';
 	include '../views/training_default.php';
     include '../languages/spanish.php';
     include '../views/log_in.php';
@@ -61,19 +62,41 @@
 					{ 
 						$trainingTable = get_data_form(); 
 						$data = $trainingTable->toListTables(); // getting tables list
-						new TrainingTableAdd($data,$_REQUEST['entrenamiento_id'],'');
-					
+						new TrainingTableAdd($data,$_REQUEST['entrenamiento_id'],'');					
 					}else { // if we have form's data, we insert it						
 						$trainingTable = get_data_form(); // getting data						
 						$reply = $trainingTable->insert(); // trying insert						
 						$data = $trainingTable->toListTables(); // getting table list
-						if($reply == $strings['InsertMaxError'])
+						if($reply == $strings['InsertMaxInfo'])
 						{
 							$data2 = $trainingTable->toList();
 							new TrainingDefault($data2,$reply);
 						}else{
 							$trainid = $_REQUEST['entrenamiento_id'];
 							new TrainingTableAdd($data,$trainid,$reply);
+						}
+					}
+
+					break;
+					
+				case $strings['Add']:
+
+					
+					if (!isset($_REQUEST['orden_sesion']))
+					{ 
+						$trainingTable = get_data_form(); 
+						$data = $trainingTable->toListTables(); // getting tables list
+						new TrainingTableEdit($data,$_REQUEST['entrenamiento_id'],'');
+					}else { // if we have form's data, we insert it						
+						$trainingTable = get_data_form(); // getting data						
+						$reply = $trainingTable->add(); // trying insert		
+						if($reply == $strings['InsertSuccess'])
+						{
+							$data2 = $trainingTable->toList();
+							new TrainingDefault($data2,$reply);
+						}else{
+							$data3 = $trainingTable->toList();
+							new TrainingDefault($data3,$reply);
 						}
 					}
 
