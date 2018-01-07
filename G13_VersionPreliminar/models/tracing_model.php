@@ -87,7 +87,7 @@ class TracingModel
 						sesiones.completado,sesiones.id AS sesionId,sesiones.inicio,sesiones.comentario
                 FROM tablas
                 INNER JOIN sesiones
-                ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0'
+                ON tablas.id = sesiones.tablas_id AND tablas.id = $tableId AND sesiones.completado = '0' AND sesiones.usuarios_id = $this->id
                 ";
 
 				
@@ -233,7 +233,7 @@ class TracingModel
 	function follow()
     {
         include '../languages/spanish.php';
-
+        //die("die: " . $this->id);
         if ($this->id <> '' )
         {
         	$sqlEntrenamiento = "SELECT * FROM entrenamientos_has_usuarios WHERE usuario_id = '" . $this->id . "'";
@@ -261,14 +261,14 @@ class TracingModel
 						SELECT lineasDeTabla.id,lineasDeTabla.repeticiones,lineasDeTabla.duracion,
 								lineasDeTabla.series,lineasDeTabla.descanso,
 								ejercicios.nombre,ejercicios.imagen,
-								sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado
+								sesionDeLineaDeTabla.id AS lineaSesionesId,sesionDeLineaDeTabla.completado, sesiones.id AS sesionId
 		                FROM lineasDeTabla
 		                INNER JOIN ejercicios 
 		                ON lineasDeTabla.ejercicio_id = ejercicios.id AND lineasDeTabla.tabla_id = $tableId
 		                	INNER JOIN sesionDeLineaDeTabla
 		                	ON sesionDeLineaDeTabla.lineasDeTabla_id = lineasDeTabla.id
 		                		INNER JOIN sesiones
-		                		ON sesiones.id = sesionDeLineaDeTabla.sesiones_id AND sesiones.id = $sesionId
+		                		ON sesiones.id = sesionDeLineaDeTabla.sesiones_id AND sesiones.id = $sesionId AND sesiones.usuarios_id = $this->id
 		                ";
 
 		                //die("die: $sql");
@@ -279,6 +279,7 @@ class TracingModel
 
 						while ($row = $result2->fetch_array())
 		                {
+		                	//die("die: " . $row['sesionId']);
 							$toret[$i] = $row;
 							$i++;
 						}
@@ -962,7 +963,7 @@ class TracingModel
 		        }else {
 
 		            // checking that at least one user exists
-		            if ($result->num_rows != 0)
+		            if ($result->num_rows > 0)
 		            {
 		                $toret=[];
 		                $i=0;
@@ -980,7 +981,7 @@ class TracingModel
 		                }
 
 		            }else {
-		                $toret = $strings['ListErrorNotExist'];
+		                $toret = $strings['TracingErrorNotStarted'];
 		            }
 		        }
 		    }else{
