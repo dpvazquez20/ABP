@@ -207,13 +207,8 @@ function generateList ($list, $page_name, $titles)
             echo        '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['See'] . '" class="btn btn-sm btn-info"> <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> </a>';
             echo        '&nbsp';
             echo        "<button class='btn btn-sm btn-danger' onclick=delete_elem('" . $name . "'," . $list[$i]['id'] . ")> <span class='glyphicon glyphicon-trash' aria-hidden='true'></span> </button>";
-
-            // You can´t modify in 'Trainings'
-            if ($page_name <> 'training')
-            {
-                echo    '&nbsp';
-                echo    '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['Modify'] . '" class="btn btn-sm btn-primary"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
-            }
+            echo    '&nbsp';
+            echo    '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['Modify'] . '" class="btn btn-sm btn-primary"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
 
             echo    '</div>
                              </td>';
@@ -304,12 +299,7 @@ function generateView ($list, $page_name, $titles)
         echo    '<div class="col-md-12" id="single-buttons">';
         echo        "<button class='btn btn-md btn-danger' onclick=delete_elem('" . $name . "'," . $list[0]['id'] . ")> <span class='glyphicon glyphicon-trash' aria-hidden='true'></span> </button>";
         echo        '&nbsp';
-
-        // You can't modify in 'Trainings'
-        if ($page_name <> 'training')
-        {
-            echo       '<a href="' . $name . '_controller.php?id=' . $list[0]['id'] . '&action=' . $strings['Modify'] . '" class="btn btn-md btn-primary"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
-        }
+        echo       '<a href="' . $name . '_controller.php?id=' . $list[0]['id'] . '&action=' . $strings['Modify'] . '" class="btn btn-md btn-primary"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> </a>';
         echo    '</div>';
     }
 }
@@ -445,7 +435,29 @@ function generateSelect3 ($list, $col, $labelName,$default)
     echo '</div>';
 }
 
+/** Function to automatically generate a <select> for training tables
+ *  Example => generateSelect ($this->data, 'nombre', 'Recurso');
+ */
+function generateSelect4 ($list, $col, $labelName)
+{
+    include '../languages/spanish.php';
 
+    // $list is the exercise list, $col is the column name in the DB, $labelName is the field name in the form
+    echo '<div class="form-group">';
+    echo    '<label for="idChild"class="col-md-2 control-label">Tabla*</label>';
+    echo        '<div class="col-md-10">
+                    <select class="selectpicker form-control" name="'. $labelName .'" id="' . $labelName . '" required>';
+
+                    // Print options
+                    for ($i = 0; $i < count($list); $i++)
+                    {
+                        echo '<option value="' . $list[$i]['id'] . '">' . $list[$i][$col]. '</option>';
+                    }
+
+    echo            '</select>';
+    echo        '</div>';
+    echo '</div>';
+}
 
 
 /** Function to automatically generate a list of elements
@@ -534,7 +546,10 @@ function getIdTabla($data)
     echo $data[0]['id'];
 }
 
-
+function getIdEntrenamiento($data)
+{
+    echo $data[0]['id'];
+}
 
 
 /** Function to automatically generate a list of elements (list-group)
@@ -1203,7 +1218,7 @@ function generateViewTracingTitle($list,$coach)
     }
 }
 
-function generateListTrainingTables ($list, $page_name, $titles)
+function generateListTrainingTables ($list, $page_name, $titles, $training)
 {
     include '../languages/spanish.php';
 
@@ -1268,7 +1283,7 @@ function generateListTrainingTables ($list, $page_name, $titles)
 
             echo        '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['See'] . '" class="btn btn-sm btn-info"> <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> </a>';
             echo        '&nbsp';
-			echo        '<a href="training_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['DeleteTable'] . '" class="btn btn-sm btn-danger"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a>';
+			echo        '<a href="training_controller.php?id_entrenamiento=' . $training[0]['id'] .'&id=' . $list[$i]['id'] . '&action=' . $strings['DeleteTable'] . '" class="btn btn-sm btn-danger"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a>';
             
             echo    '</div>
                              </td>';
