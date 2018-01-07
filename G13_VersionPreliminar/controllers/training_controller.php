@@ -17,6 +17,7 @@
 
 		$id = '';
 		$nombre= '';
+		$tipo= '';
 		$sesiones = '';
 
 		if(isset($_REQUEST['id']))
@@ -29,13 +30,18 @@
 			$nombre = $_REQUEST['nombre'];
 			unset($_REQUEST['nombre']);
 		}
+		if(isset($_REQUEST['tipo']))
+		{
+			$tipo = $_REQUEST['tipo'];
+			//unset($_REQUEST['tipo']);
+		}
 		if(isset($_REQUEST['sesiones']))
 		{
 		    $sesiones = $_REQUEST['sesiones'];
 		    unset($_REQUEST['sesiones']);
 		}		
 
-		$training = new TrainingModel($id,$nombre,$sesiones);
+		$training = new TrainingModel($id,$nombre, $tipo, $sesiones);
 
 		return $training;
 	}
@@ -93,7 +99,13 @@
 						
 						$training = get_data_form(); // getting data
 						$data = $training->insert();
-						$listTables = $training->toListTables();
+						
+						if($_REQUEST['tipo'] == $strings['personal'])
+						{
+							$listTables = $training->toListTables();
+						}else{
+							$listTables = $training->toListTduTables();							
+						}
 						//new TrainingAdd($listTables);
 						$training_id = $training->getTrainingId();
 						if($data == $strings['InsertSuccess'])
@@ -216,14 +228,22 @@
                     if (!isset($_REQUEST['training_id'])) // if we have form's data, we insert it
 					{
 						$user_id = $_REQUEST['user_id'];
+						$user_clase = $_REQUEST['user_clase'];
 						$training = get_data_form(); // getting data
-						$listTrainings = $training->toListTrainings();
+						if($user_clase == $strings['pef']){							
+							$listTrainings = $training->toListTrainings();
+						}else{
+							if($user_clase == $strings['tdu']){
+								$listTrainings = $training->toListTduTrainings();
+							}else{
+								header('Location: ../controllers/user_controller.php');
+							}								
+						}
 						new UserTrainingAdd($listTrainings, $user_id); // showing training data   
 					
 					}else { // if not, the view is called
 						$training = get_data_form(); // getting data
 						$user_id = $_REQUEST['user_id'];
-						die($user_id);
                         $reply = $training->assign($user_id); // trying consult
                         $data = $training->toList(); // getting trainings list
                         new TrainingDefault($data, $reply); // showing trainings list without a message

@@ -60,14 +60,19 @@
 					
 					if (!isset($_REQUEST['orden_sesion']))
 					{ 
-						$trainingTable = get_data_form(); 
+						$trainingTable = get_data_form();						
 						$data = $trainingTable->toListTables(); // getting tables list
 						new TrainingTableAdd($data,$_REQUEST['entrenamiento_id'],'');					
-					}else { // if we have form's data, we insert it						
-						$trainingTable = get_data_form(); // getting data						
-						$reply = $trainingTable->insert(); // trying insert						
-						$data = $trainingTable->toListTables(); // getting table list
-						if($reply == $strings['InsertMaxInfo'])
+					}else { // if we have form's data, we insert it								
+						$trainingTable = get_data_form(); // getting data
+						$reply = $trainingTable->insert(); // trying insert
+						$tipo = $trainingTable->getTipo($_REQUEST['entrenamiento_id']);						
+						if($tipo == $strings['personal']){												
+							$data = $trainingTable->toListTables(); // getting table list
+						}else{
+							$data = $trainingTable->toListTduTables();
+						}
+						if($reply == $strings['InsertSuccessMax'])
 						{
 							$data2 = $trainingTable->toList();
 							new TrainingDefault($data2,$reply);
@@ -85,7 +90,12 @@
 					if (!isset($_REQUEST['orden_sesion']))
 					{ 
 						$trainingTable = get_data_form(); 
-						$data = $trainingTable->toListTables(); // getting tables list
+						$tipo = $trainingTable->getTipo($_REQUEST['entrenamiento_id']);						
+						if($tipo == $strings['personal']){												
+							$data = $trainingTable->toListTables(); // getting table list
+						}else{
+							$data = $trainingTable->toListTduTables();
+						}
 						new TrainingTableEdit($data,$_REQUEST['entrenamiento_id'],'');
 					}else { // if we have form's data, we insert it						
 						$trainingTable = get_data_form(); // getting data						
