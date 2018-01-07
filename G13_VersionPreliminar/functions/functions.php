@@ -884,7 +884,7 @@ function generateListCoach ($list, $page_name, $titles)
             echo        '<td>
                             <div class="pull-right action-buttons">';
 
-            echo                '<a id="assignButton" href="' . $name . '_controller.php?user_id=' . $list[$i]['id'] . '&action=' . $strings['Assign'] . '" class="btn btn-md btn-default">' . $strings['Assign'] . '  <span class="glyphicon glyphicon-scale" aria-hidden="true"></span> </a>';
+            echo                '<a id="assignButton" href="' . $name . '_controller.php?user_id=' . $list[$i]['id'] . '&user_clase=' . $list[$i]['clase'] . '&action=' . $strings['Assign'] . '" class="btn btn-md btn-default">' . $strings['Assign'] . '  <span class="glyphicon glyphicon-scale" aria-hidden="true"></span> </a>';
 
             echo            '</div>
                          </td>';
@@ -1283,7 +1283,7 @@ function generateListTrainingTables ($list, $page_name, $titles, $training)
 
             echo        '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['See'] . '" class="btn btn-sm btn-info"> <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> </a>';
             echo        '&nbsp';
-			echo        '<a href="training_controller.php?id_entrenamiento=' . $training[0]['id'] .'&id=' . $list[$i]['id'] . '&action=' . $strings['DeleteTable'] . '" class="btn btn-sm btn-danger"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a>';
+			echo        '<a href="training_controller.php?id_entrenamiento=' . $training[0]['id'] .'&id=' . $list[$i]['id'] . '&orden_sesion=' . $list[$i]['orden_sesion'] . '&action=' . $strings['DeleteTable'] . '" class="btn btn-sm btn-danger"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a>';
             
             echo    '</div>
                              </td>';
@@ -1909,7 +1909,7 @@ function generateEvents ()
 	$cnn->mysqli = connect();
 	
 	// show only the 3 newest events
-        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha LIMIT 3";
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha DESC LIMIT 3";
 
         // checking DB connection
 		if (!$result = $cnn->mysqli->query($sql))
