@@ -244,8 +244,20 @@ $strings = array(
 	'fin' => 'Fin',
 	'enlace' => 'Enlace',
 	'Back' => 'Volver',
-	
 	'TracingErrorNotStarted' => 'El usuario no ha comenzado el seguimiento',
+	
+	'notify' => 'Notificar',
+	'Notification' => 'Notificacion',
+	'Subject' => 'Asunto',
+	'destination' => 'Destino',
+	'Addressees' => 'Destinatarios',
+	'sportsmans' => 'Deportistas',
+	'coachs' => 'Entrenadores',
+	'secretarys' => 'Secretarios',
+	'admins' => 'Administradores',
+	'Message' => 'Mensaje',
+	'NotificationError' => 'Error. No se ha podido enviar la notificación',
+	'NotificationOk' => 'Notificación enviada',
 
 	// ----------------------------------------------------------------
 	
