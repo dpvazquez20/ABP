@@ -39,11 +39,20 @@ class TrainingConsult
                         ?>
                         <!-- End of the view -->
 						
+						<!-- Insert button -->
+                            <div class="col-md-12" id="new">
+                                <a href='training_table_controller.php?entrenamiento_id=<?php getIdEntrenamiento($this->data); ?>&action=<?php echo $strings['Add']; ?>' class="btn btn-md btn-warning" id="newButton"> <?php echo $strings['Add table']; ?> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>
+                            </div>
+							<br>
+							<br>
+							<br>
+                        <!-- End of the insert button -->
+						
 						<!-- List -->
                         <?php
 							$titles = array('tabla', 'orden_sesion');
 							echo '<br><br><br><br>';
-							generateListTrainingTables($this->tables, 'table', $titles);
+							generateListTrainingTables($this->tables, 'table', $titles, $this->data);
                         ?>
                         <!-- End of the list -->
                     </div>

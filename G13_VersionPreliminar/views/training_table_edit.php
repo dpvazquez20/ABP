@@ -1,7 +1,7 @@
 <!-- Table line add view -->
 
 <?php
-class TrainingTableAdd
+class TrainingTableEdit
 {
     private $listTables; // Tables list
     private $training_id;
@@ -51,7 +51,7 @@ class TrainingTableAdd
 
                                     <div class="form-group">
                                         <div class="col-md-offset-2 col-md-8" id="addEditButtons">
-                                            <button type="submit" class="btn btn-md btn-success" name="action" value="<?php echo $strings['Insert']; ?>"> <?php echo $strings['Accept']; ?> </button>
+                                            <button type="submit" class="btn btn-md btn-success" name="action" value="<?php echo $strings['Add']; ?>"> <?php echo $strings['Accept']; ?> </button>
                                             <!-- <button id ="cancelNL" class="btn btn-md btn-danger"> <?php //echo $strings['Cancel']; ?> </button>-->
                                             <button type="reset" class="btn btn-md btn-default"> <?php echo $strings['Reset']; ?> </button>
                                         </div>
