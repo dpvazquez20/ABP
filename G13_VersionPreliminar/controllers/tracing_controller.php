@@ -64,8 +64,8 @@
 					{
 						$tracing = get_data_form(); // getting data
 						$data1 = $tracing->getSessions($_REQUEST['id']);
-						if($data1 == $strings['NoTrainingError']){
-							new TracingDefault($data1,$strings['NoTrainingError']);
+						if($data1 == $strings['NoTrainingError'] || $data1 == $strings['TracingErrorNotStarted']){
+							new TracingDefault($data1,$data1);
 						}else{
 							new TracingList($data1, $_REQUEST['id']);
 						}
@@ -313,8 +313,8 @@
 						{
 							$tracing = get_data_form_sportsman(); // getting data
 							$tracing->comment($_REQUEST['sesionId'],$_REQUEST['comment']); // trying consult
-							$data1 = $tracing ->headSportsman();
-							$data2 = $tracing ->follow();
+							$data1 = $tracing->headSportsman();
+							$data2 = $tracing->follow();
 							if($data1[0]['completado'] == 0 && $data1[0]['inicio'] <> '')
 							{
 								new TracingConsult($data1, $data2,false);
@@ -334,8 +334,8 @@
 						{
 							//die("DIE");
 							$tracing = get_data_form_sportsman(); // getting data
-							$data1 = $tracing ->headSportsman();
-							$data2 = $tracing ->follow();
+							$data1 = $tracing->headSportsman();
+							$data2 = $tracing->follow();
 							if($data2 == $strings['NoTrainingError']){
 								new TracingDefault($data1,$strings['NoTrainingError']);
 							}else{
