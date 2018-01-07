@@ -272,7 +272,6 @@ $strings = array(
 	'InsertTables' => 'InsertarTablas',
 	'InsertAnother' => 'InsertarOtra',
 	'AssignTraining' => 'Agisnar Entrenamiento',
-	'InsertMaxError' => 'No se pueden introducir mas sesiones de entrenamiento',
 	'Enter date' => 'Introduzca una fecha',
 	'New event' => 'Nuevo evento',
 	'fecha' => 'Fecha',
@@ -284,6 +283,8 @@ $strings = array(
 	'Add' => 'Anadir',
 	'Add table'	=>	'Añadir tabla',
 	'Modify training' => 'Modificar entrenamiento',
+	'InsertSuccessMax' => 'Entrenamiento añadido con éxito',
+	'NoAssingError' => 'No se le puede asignar entrenamiento a este usuario',
 	
 	// ----------------------------------------------------------------
 
