@@ -108,7 +108,7 @@ class TrainingTableModel
 		$max_sesions = $row2['sesiones'];
 		
 		if($max_sesions<$number){
-			$toret = $strings['InsertMaxError'];
+			$toret = $strings['InsertMaxInfo'];
 		}else{		
 			$sql3 = "INSERT INTO entrenamientos_has_tablas (tabla_id,entrenamiento_id,orden_sesion) 
 					VALUES('" . $this->tabla_id . "','" . $this->entrenamiento_id . "','" . $number . "')";				
@@ -121,6 +121,47 @@ class TrainingTableModel
 				$toret = $strings['InsertError'];
 			}
 		}
+		return $toret;
+	}
+	
+	
+	function add()
+    {
+		
+        include '../languages/spanish.php';
+
+        $sql1 = "SELECT orden_sesion FROM entrenamientos_has_tablas
+				WHERE entrenamiento_id = '" . $this->entrenamiento_id . "'
+				ORDER BY orden_sesion DESC LIMIT 1";
+					
+		$result = $this->mysqli->query($sql1);	
+
+		if ($result->num_rows == 0)
+		{
+			$number = 1;
+		}else{
+			$row = $result->fetch_array();
+			$number = $row['orden_sesion'];
+			$number = $number + 1;
+		}
+		
+		//die($this->entrenamiento_id);
+		
+		$sql2 = "UPDATE entrenamientos SET sesiones=sesiones+1 WHERE id = '" . $this->entrenamiento_id . "'";
+		
+		//die($this->entrenamiento_id);
+		
+		$sql3 = "INSERT INTO entrenamientos_has_tablas (tabla_id,entrenamiento_id,orden_sesion) 
+				VALUES('" . $this->tabla_id . "','" . $this->entrenamiento_id . "','" . $number . "')";				
+				
+			// inserting new TrainingTable
+		if (($result = $this->mysqli->query($sql3))&($result = $this->mysqli->query($sql2)))
+		{
+			$toret = $strings['InsertSuccess'];
+		}else {
+			$toret = $strings['InsertError'];
+		}
+		
 		return $toret;
 	}
 

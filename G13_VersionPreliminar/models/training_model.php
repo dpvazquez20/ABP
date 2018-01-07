@@ -165,9 +165,20 @@ class TrainingModel
 		// checking form's data
 		if ($this->id <> '' )
 		{
-	        $sql = "DELETE FROM entrenamientos_has_tablas WHERE tabla_id = '".$this->id."'";
-
-	        if (!$result = $this->mysqli->query($sql))
+	        //die($this->id_entrenamiento);
+			
+			$sqlAux = "SELECT orden_sesion FROM entrenamientos_has_tablas WHERE tabla_id = '".$this->id."' AND entrenamiento_id = '".$_REQUEST['id_entrenamiento']."'";
+			$resultAux = $this->mysqli->query($sqlAux);
+			
+			$row = $resultAux->fetch_array();
+			$number = $row['orden_sesion'];
+			
+			//die($number);
+			
+			$sql = "DELETE FROM entrenamientos_has_tablas WHERE tabla_id = '".$this->id."' AND entrenamiento_id = '".$_REQUEST['id_entrenamiento']."'";
+			$sql2 = "UPDATE entrenamientos SET sesiones=sesiones-1 WHERE id = '".$_REQUEST['id_entrenamiento']."'";
+	        $sql3 = "UPDATE entrenamientos_has_tablas SET orden_sesion=orden_sesion-1 WHERE entrenamiento_id = '".$_REQUEST['id_entrenamiento']."' AND orden_sesion > $number ";
+			if ((!$result = $this->mysqli->query($sql)) || (!$result2 = $this->mysqli->query($sql2)) || (!$result3 = $this->mysqli->query($sql3)))
 	        {
 				$toret = $strings['DeleteError'];
 			}else {
@@ -203,7 +214,7 @@ class TrainingModel
 				{
 
 					$sql = "UPDATE entrenamientos SET borrado ='1' WHERE id = '" . $this->id ."'";
-
+	
 					$this->mysqli->query($sql);
 
 					// deleting Training
@@ -251,23 +262,12 @@ class TrainingModel
 				{
 					$modify = false;
 					$lastModify = $this->lastModify(); 
-					$sql = "UPDATE Entrenamientos SET ";
+					$sql = "UPDATE entrenamientos SET ";
 					
 					if($this->nombre <> '')
 					{
 						$sql = $sql . "nombre ='" . $this->nombre . "'";
 						if($lastModify <> "nombre")
-						{
-							$sql = $sql . ",";
-						}
-						$sql = $sql . " ";
-						$modify = true;
-					}
-
-					if($this->sesiones <> '')
-					{
-						$sql = $sql . "sesiones ='" . $this->sesiones . "'";
-						if($lastModify <> "sesiones")
 						{
 							$sql = $sql . ",";
 						}
