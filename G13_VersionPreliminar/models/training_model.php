@@ -4,10 +4,11 @@ include '../functions/connectDB.php';
 
 class TrainingModel
 {
-	function __construct($id, $nombre, $sesiones)
+	function __construct($id, $nombre, $tipo, $sesiones)
     {
 		$this->id = $id;
 		$this->nombre = $nombre;
+		$this->tipo = $tipo;
 		$this->sesiones = $sesiones;
 
 		$this->mysqli = connect();
@@ -27,6 +28,10 @@ class TrainingModel
 		if($this->nombre <> '')
 		{
 			$toret = "nombre";
+		}
+		if($this->tipo <> '')
+		{
+			$toret = "tipo";
 		}
 		if($this->sesiones <> '')
 		{
@@ -58,8 +63,8 @@ class TrainingModel
                 if ($result->num_rows == 0)
                 {
 
-                    $sql = "INSERT INTO entrenamientos (nombre,sesiones,borrado) 
-							VALUES('" . $this->nombre . "','" . $this->sesiones . "','0')";
+                    $sql = "INSERT INTO entrenamientos (nombre,tipo,sesiones,borrado) 
+							VALUES('" . $this->nombre . "','" . $this->tipo . "','0','0')";
 
                     // inserting new Training
                     if ($result = $this->mysqli->query($sql))
@@ -167,17 +172,12 @@ class TrainingModel
 		{
 	        //die($this->id_entrenamiento);
 			
-			$sqlAux = "SELECT orden_sesion FROM entrenamientos_has_tablas WHERE tabla_id = '".$this->id."' AND entrenamiento_id = '".$_REQUEST['id_entrenamiento']."'";
-			$resultAux = $this->mysqli->query($sqlAux);
 			
-			$row = $resultAux->fetch_array();
-			$number = $row['orden_sesion'];
-			
-			//die($number);
-			
-			$sql = "DELETE FROM entrenamientos_has_tablas WHERE tabla_id = '".$this->id."' AND entrenamiento_id = '".$_REQUEST['id_entrenamiento']."'";
+			$sql = "DELETE FROM entrenamientos_has_tablas WHERE orden_sesion = '".$_REQUEST['orden_sesion']."' AND entrenamiento_id = '".$_REQUEST['id_entrenamiento']."'";
 			$sql2 = "UPDATE entrenamientos SET sesiones=sesiones-1 WHERE id = '".$_REQUEST['id_entrenamiento']."'";
-	        $sql3 = "UPDATE entrenamientos_has_tablas SET orden_sesion=orden_sesion-1 WHERE entrenamiento_id = '".$_REQUEST['id_entrenamiento']."' AND orden_sesion > $number ";
+	        $sql3 = "UPDATE entrenamientos_has_tablas SET orden_sesion=orden_sesion-1 WHERE entrenamiento_id = '".$_REQUEST['id_entrenamiento']."' AND orden_sesion >'" .$_REQUEST['orden_sesion']. "'";
+		
+			
 			if ((!$result = $this->mysqli->query($sql)) || (!$result2 = $this->mysqli->query($sql2)) || (!$result3 = $this->mysqli->query($sql3)))
 	        {
 				$toret = $strings['DeleteError'];
@@ -275,6 +275,17 @@ class TrainingModel
 						$modify = true;
 					}
 					
+					if($this->sesiones <> '')
+					{
+						$sql = $sql . "sesiones ='" . $this->sesiones . "'";
+						if($lastModify <> "sesiones")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+					
 					$sql = $sql . "WHERE id ='" . $this->id . "'";
 
 					// if exists modification
@@ -313,8 +324,7 @@ class TrainingModel
         include '../languages/spanish.php';
 
 		// checking form's data
-		if ($this->id <> '' )
-		{
+		
 
 	        $sql = "SELECT * FROM entrenamientos WHERE id = '".$this->id."'";
 
@@ -334,9 +344,6 @@ class TrainingModel
 					$toret = $strings['ErrorNotExist'];
 				}
 			}
-	    }else {
-	    	$toret = $strings['ConsultErrorForm'];
-		}
 
 		return $toret;
 
@@ -417,6 +424,43 @@ class TrainingModel
 
 	}
 	
+	function toListTduTables()
+    {
+
+		include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM tablas WHERE borrado = '0' AND tipo = 'Normal' ORDER BY nombre";
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one Training exists
+			if ($result->num_rows != 0)
+			{
+
+				$toret=[];
+				$i=0;
+
+				// introducing all Trainings into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$toret[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+
+		return $toret;
+
+	}
+	
 	function toListTrainings()
     {
 
@@ -454,12 +498,46 @@ class TrainingModel
 
 	}
 	
+	function toListTduTrainings()
+    {
+
+		include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM entrenamientos WHERE borrado = '0' AND tipo = 'Normal' ORDER BY nombre";
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one Training exists
+			if ($result->num_rows != 0)
+			{
+
+				$toret=[];
+				$i=0;
+
+				// introducing all Trainings into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$toret[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+
+		return $toret;
+
+	}
+	
 	function getTables()
 	{
 		include '../languages/spanish.php';
-		
-		if ($this->id <> '' )
-		{
 			
 			// get the id of the tables in the training
 	        $sql = "SELECT tabla_id, orden_sesion
@@ -500,9 +578,6 @@ class TrainingModel
 					$toret = $strings['ListErrorNotExist'];
 				}
 			}
-	    }else {
-	    	$toret = $strings['ConsultErrorForm'];
-		}
 		return $toret;	
 	}
 
