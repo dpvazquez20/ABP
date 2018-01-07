@@ -34,7 +34,7 @@ class TrainingConsult
 
                         <!-- User view -->
                         <?php
-                            $titles = array('nombre', 'sesiones');
+                            $titles = array('nombre', 'sesiones','tipo');
                             generateView($this->data, 'training', $titles);
                         ?>
                         <!-- End of the view -->

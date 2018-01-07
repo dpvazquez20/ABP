@@ -45,19 +45,16 @@ class TrainingAdd
                                             <input type="text" class="form-control" name="nombre" id="nombre" placeholder=" <?php echo $strings['Enter a name']; ?> " required>
                                         </div>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-2" for="sesiones"> <?php echo $strings['sesiones']; ?>* </label>
+									
+									<div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
                                         <div class="col-md-10">
-                                            <input type="number" class="form-control-number" name="sesiones" id="sesiones" placeholder=" <?php echo $strings['Enter number of sesions']; ?> " required>
+                                            <select class="selectpicker form-control" name="tipo" id="tipo">
+                                                <option value="<?php echo $strings['normal']; ?>"> <?php echo $strings['normal']; ?> </option>
+                                                <option value="<?php echo $strings['personal']; ?>"> <?php echo $strings['personal']; ?> </option>
+                                            </select>
                                         </div>
                                     </div>
-									
-									<!--<div class="form-group">
-                                        <div class="col-md-10">
-											generateCheckboxTables($this->tableList);
-										</div>
-									</div>-->
 
                                     <div class="form-group">
                                         <div class="col-md-offset-2 col-md-8" id="addEditButtons">

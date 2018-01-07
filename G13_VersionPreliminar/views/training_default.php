@@ -56,7 +56,7 @@ class TrainingDefault
                             <div class="col-md-12">
                                 <!-- List -->
                                 <?php
-                                    $titles = array('nombre', 'sesiones');
+                                    $titles = array('nombre', 'sesiones', 'tipo');
                                     generateList ($this->data, 'training', $titles);
                                 ?>
                                 <!-- End of the list -->
