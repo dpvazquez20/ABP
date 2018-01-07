@@ -226,7 +226,6 @@ $strings = array(
 	'nextTable' => 'tablaSiguiente',
 	'previous' => 'Anterior',
 	'next' => 'Siguiente',
-
 	'NoTrainingError' => 'No hay ningún entrenamiento asignado',
 	'clase' => 'Clase',
 	'other' => 'Otro',
@@ -245,6 +244,8 @@ $strings = array(
 	'fin' => 'Fin',
 	'enlace' => 'Enlace',
 	'Back' => 'Volver',
+	
+	'TracingErrorNotStarted' => 'El usuario no ha comenzado el seguimiento',
 
 	// ----------------------------------------------------------------
 	
