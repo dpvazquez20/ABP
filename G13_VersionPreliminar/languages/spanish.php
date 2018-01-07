@@ -244,7 +244,7 @@ $strings = array(
 	'fin' => 'Fin',
 	'enlace' => 'Enlace',
 	'Back' => 'Volver',
-	'TracingErrorNotStarted' => 'El usuario no ha comenzado el seguimiento',
+	'TracingErrorNotStarted' => 'El usuario no ha comenzado el plan de entrenamiento',
 	
 	'notify' => 'Notificar',
 	'Notification' => 'Notificacion',
