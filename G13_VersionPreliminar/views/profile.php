@@ -39,8 +39,13 @@ class ProfileDefault
 
                         <!-- Profile view -->
                         <?php
+                        if($_SESSION['userType'] == $strings['sportsman'])
+                        {
+                            $titles = array('imagen', 'login', 'nombre', 'apellidos', 'dni', 'email', 'tipo', 'clase', 'entrenador_nombre');
+                        }else{
                             $titles = array('imagen', 'login', 'nombre', 'apellidos', 'dni', 'email', 'tipo', 'clase');
-                            generateProfile($this->data, $titles);
+                        }
+                        generateProfile($this->data, $titles);
                         ?>
                         <!-- End of the view -->
 

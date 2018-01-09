@@ -33,7 +33,7 @@ class UserConsult
 
                         <!-- User view -->
                         <?php
-                            $titles = array('imagen', 'login', 'nombre','apellidos', 'dni', 'email', 'tipo','clase');
+                            $titles = array('imagen', 'login', 'nombre','apellidos', 'dni', 'email', 'tipo','entrenador_nombre','clase');
                             generateView($this->data, 'user', $titles);
                         ?>
                         <!-- End of the view -->

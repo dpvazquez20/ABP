@@ -5,9 +5,11 @@ class UserModify
 {
     private $data;
 
-    function __construct($data)
+    function __construct($data,$coaches,$defaultCoach)
     {
         $this->data = $data;
+        $this->coaches = $coaches;
+        $this->defaultCoach = $defaultCoach;
         $this->render();
     }
 
@@ -116,6 +118,8 @@ class UserModify
                                             </select>
                                         </div>
                                     </div>
+
+                                    <?php generateSelectCoachUserModify($this->coaches,$this->defaultCoach) ?>
 
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="imagen"> <?php echo $strings['imagen']; ?> </label>

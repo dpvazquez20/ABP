@@ -3,8 +3,10 @@
 <?php
 class UserAdd
 {
-    function __construct()
+    function __construct($coaches)
     {
+        //die("die: $coaches");
+        $this->coaches = $coaches;
         $this->render();
     }
 
@@ -111,6 +113,8 @@ class UserAdd
                                             </select>
                                         </div>
                                     </div>
+
+                                    <?php generateSelectCoachUser($this->coaches) ?>
 
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="imagen"> <?php echo $strings['imagen']; ?> </label>
