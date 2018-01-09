@@ -574,7 +574,7 @@ class UserModel
 
 		include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND entrenador_id = '$coachId' ORDER BY apellidos,nombre";
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND tipo = 'deportista' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) ORDER BY apellidos,nombre";
 
         // checking DB connection
 		if (!$result = $this->mysqli->query($sql))

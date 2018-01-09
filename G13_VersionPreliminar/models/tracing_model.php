@@ -270,7 +270,7 @@ class TracingModel
 		                		INNER JOIN sesiones
 		                		ON sesiones.id = sesionDeLineaDeTabla.sesiones_id AND sesiones.id = $sesionId AND sesiones.usuarios_id = $this->id
 		                ";
-
+		                
 		                //die("die: $sql");
 						$result2 = $this->mysqli->query($sql);
 						
@@ -747,7 +747,7 @@ class TracingModel
 
 		include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND tipo = 'deportista' ORDER BY nombre";
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND tipo = 'deportista' AND (entrenador_id = '" . $_SESSION['userId'] . "' OR entrenador_id IS NULL) ORDER BY apellidos,nombre";
 
         // checking DB connection
 		if (!$result = $this->mysqli->query($sql))
@@ -812,9 +812,42 @@ class TracingModel
                 $toret = $strings['SearchErrorNotExist'];
             }
         }
-
         return $toret;
+    }
 
+    function searchSportsman2($word)
+    {
+
+        include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (nombre LIKE '%".$word."%' OR apellidos LIKE '%".$word."%') AND entrenador_id = '" . $_SESSION['userId'] . "'";
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one user exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all users into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['SearchErrorNotExist'];
+            }
+        }
+        return $toret;
     }
 
     // order the element list
@@ -864,7 +897,54 @@ class TracingModel
         }
 
         return $toret;
+    }
 
+    function orderSportsman2($value)
+    {
+
+        include '../languages/spanish.php';
+        $sql = '';
+
+        // sql query depends on the value of the order by
+        Switch ($value)
+        {
+            case 1: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND entrenador_id = '" . $_SESSION['userId'] . "' ORDER BY nombre";
+                break;
+            case 2: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND entrenador_id = '" . $_SESSION['userId'] . "' ORDER BY nombre DESC";
+                break;
+            case 3: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND entrenador_id = '" . $_SESSION['userId'] . "' ORDER BY apellidos";
+                break;
+            case 4: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND entrenador_id = '" . $_SESSION['userId'] . "' ORDER BY apellidos DESC";
+                break;
+        }
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+
+            // checking that at least one user exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all users into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }
+
+            }else {
+                $toret = $strings['ListErrorNotExist'];
+            }
+        }
+
+        return $toret;
     }
 
     function startTime($actualId){
@@ -954,7 +1034,7 @@ class TracingModel
 		{
 			if($resultEntrenamiento->num_rows > 0)
 			{
-				$sql = "SELECT id,fecha,inicio,fin,completado FROM sesiones WHERE usuarios_id = '$id' ORDER BY fecha,inicio";
+				$sql = "SELECT id,fecha,inicio,fin,completado FROM sesiones WHERE usuarios_id = '$id' ORDER BY  fecha DESC";
 
 		        // checking DB connection
 		        if (!$result = $this->mysqli->query($sql))
