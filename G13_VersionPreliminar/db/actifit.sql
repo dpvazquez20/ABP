@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 09-01-2018 a las 01:02:07
+-- Tiempo de generación: 09-01-2018 a las 20:04:39
 -- Versión del servidor: 5.7.19
 -- Versión de PHP: 5.6.31
 
@@ -100,21 +100,22 @@ INSERT IGNORE INTO `ejercicios` (`id`, `nombre`, `descripcion`, `imagen`, `tipo`
 CREATE TABLE IF NOT EXISTS `entrenamientos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
+  `tipo` varchar(15) NOT NULL,
   `borrado` tinyint(4) NOT NULL,
   `sesiones` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre_UNIQUE` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `entrenamientos`
 --
 
-INSERT IGNORE INTO `entrenamientos` (`id`, `nombre`, `borrado`, `sesiones`) VALUES
-(1, 'Principiante', 0, 1),
-(2, 'Medio', 0, 2),
-(3, 'Avanzado', 0, 3),
-(4, 'Nuevo', 0, 5);
+INSERT IGNORE INTO `entrenamientos` (`id`, `nombre`, `tipo`, `borrado`, `sesiones`) VALUES
+(1, 'Principiante', 'Normal', 0, 1),
+(2, 'Medio', 'Normal', 0, 2),
+(3, 'Avanzado', 'Normal', 0, 3),
+(5, 'Entrenamiento personalizado', 'Personal', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -139,13 +140,11 @@ INSERT IGNORE INTO `entrenamientos_has_tablas` (`entrenamiento_id`, `tabla_id`, 
 (1, 1, 1),
 (2, 1, 1),
 (3, 1, 1),
-(4, 1, 1),
+(5, 1, 2),
 (2, 2, 2),
 (3, 2, 2),
-(4, 2, 2),
 (3, 3, 3),
-(4, 3, 3),
-(4, 3, 4);
+(5, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -167,7 +166,8 @@ CREATE TABLE IF NOT EXISTS `entrenamientos_has_usuarios` (
 
 INSERT IGNORE INTO `entrenamientos_has_usuarios` (`entrenamiento_id`, `usuario_id`) VALUES
 (3, 4),
-(3, 5);
+(3, 25),
+(5, 27);
 
 -- --------------------------------------------------------
 
@@ -209,16 +209,17 @@ CREATE TABLE IF NOT EXISTS `inscripciones` (
   `usuario_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_inscripcion_usuario1_idx` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `inscripciones`
 --
 
 INSERT IGNORE INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALUES
-(11, '2018-01-02', 0, 4),
+(11, '2018-01-02', 1, 4),
 (12, '2018-01-02', 0, 5),
-(13, '2018-01-02', 0, 5);
+(13, '2018-01-02', 0, 5),
+(14, '2018-01-09', 0, 4);
 
 -- --------------------------------------------------------
 
@@ -241,6 +242,7 @@ CREATE TABLE IF NOT EXISTS `inscripciones_has_actividades` (
 INSERT IGNORE INTO `inscripciones_has_actividades` (`inscripciones_id`, `actividades_id`) VALUES
 (13, 40),
 (12, 41),
+(14, 41),
 (11, 42);
 
 -- --------------------------------------------------------
@@ -260,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `lineasdetabla` (
   PRIMARY KEY (`id`,`tabla_id`,`ejercicio_id`),
   KEY `fk_lineasDeTabla_tablas1_idx` (`tabla_id`),
   KEY `fk_lineasDeTabla_ejercicios1_idx` (`ejercicio_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `lineasdetabla`
@@ -284,7 +286,8 @@ INSERT IGNORE INTO `lineasdetabla` (`id`, `repeticiones`, `duracion`, `descanso`
 (15, '10', NULL, '30 seg', 3, 3, 3),
 (16, NULL, '10 min', NULL, NULL, 3, 6),
 (17, '25', NULL, '30 seg', 4, 3, 9),
-(18, NULL, NULL, NULL, NULL, 3, 11);
+(18, NULL, NULL, NULL, NULL, 3, 11),
+(19, '1', NULL, '1', 1, 6, 9);
 
 -- --------------------------------------------------------
 
@@ -371,7 +374,74 @@ CREATE TABLE IF NOT EXISTS `sesiondelineadetabla` (
   PRIMARY KEY (`id`,`sesiones_id`),
   KEY `fk_sesion_lineaDeTabla_sesiones1_idx` (`sesiones_id`),
   KEY `fk_sesion_lineaDeTabla_lineasDeTabla1_idx` (`lineasDeTabla_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=194 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `sesiondelineadetabla`
+--
+
+INSERT IGNORE INTO `sesiondelineadetabla` (`id`, `completado`, `sesiones_id`, `lineasDeTabla_id`) VALUES
+(127, 0, 258, 1),
+(128, 0, 258, 2),
+(129, 0, 258, 3),
+(130, 0, 258, 4),
+(131, 0, 258, 5),
+(132, 0, 258, 6),
+(133, 0, 259, 7),
+(134, 0, 259, 8),
+(135, 0, 259, 9),
+(136, 0, 259, 10),
+(137, 0, 259, 11),
+(138, 0, 259, 12),
+(139, 0, 260, 13),
+(140, 0, 260, 14),
+(141, 0, 260, 15),
+(142, 0, 260, 16),
+(143, 0, 260, 17),
+(144, 0, 260, 18),
+(145, 0, 261, 1),
+(146, 0, 261, 2),
+(147, 0, 261, 3),
+(148, 0, 261, 4),
+(149, 0, 261, 5),
+(150, 0, 261, 6),
+(151, 0, 262, 7),
+(152, 0, 262, 8),
+(153, 0, 262, 9),
+(154, 0, 262, 10),
+(155, 0, 262, 11),
+(156, 0, 262, 12),
+(157, 0, 263, 13),
+(158, 0, 263, 14),
+(159, 0, 263, 15),
+(160, 0, 263, 16),
+(161, 0, 263, 17),
+(162, 0, 263, 18),
+(163, 0, 264, 1),
+(164, 0, 264, 2),
+(165, 0, 264, 3),
+(166, 0, 264, 4),
+(167, 0, 264, 5),
+(168, 0, 264, 6),
+(169, 0, 265, 7),
+(170, 0, 265, 8),
+(171, 0, 265, 9),
+(172, 0, 265, 10),
+(173, 0, 265, 11),
+(174, 0, 265, 12),
+(175, 0, 266, 13),
+(176, 0, 266, 14),
+(177, 0, 266, 15),
+(178, 0, 266, 16),
+(179, 0, 266, 17),
+(180, 0, 266, 18),
+(187, 0, 269, 1),
+(188, 0, 269, 2),
+(189, 0, 269, 3),
+(190, 0, 269, 4),
+(191, 0, 269, 5),
+(192, 0, 269, 6),
+(193, 0, 270, 19);
 
 -- --------------------------------------------------------
 
@@ -394,7 +464,24 @@ CREATE TABLE IF NOT EXISTS `sesiones` (
   `anterior_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_sesiones_tablas1_idx` (`tablas_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=255 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `sesiones`
+--
+
+INSERT IGNORE INTO `sesiones` (`id`, `completado`, `fecha`, `inicio`, `fin`, `comentario`, `tablas_id`, `orden_sesion`, `orden_sesion_max`, `usuarios_id`, `entrenamientos_id`, `anterior_id`) VALUES
+(258, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:41', '2018-01-09 19:07:43', NULL, 1, 1, 3, 4, 3, NULL),
+(259, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:58', '2018-01-09 19:07:59', NULL, 2, 2, 3, 4, 3, 258),
+(260, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:08', '2018-01-09 19:07:14', NULL, 3, 3, 3, 4, 3, 259),
+(261, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:06', '2018-01-09 19:10:07', NULL, 1, 1, 3, 4, 3, 260),
+(262, 1, '2018-01-09 19:07:59', '2018-01-09 19:11:04', '2018-01-09 19:11:06', NULL, 2, 2, 3, 4, 3, 261),
+(263, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:40', '2018-01-09 19:10:48', NULL, 3, 3, 3, 4, 3, 262),
+(264, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 1, 1, 3, 4, 3, 263),
+(265, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 2, 2, 3, 4, 3, 264),
+(266, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 3, 3, 3, 4, 3, 265),
+(269, 0, '2018-01-09 19:36:25', NULL, NULL, NULL, 1, 2, 2, 27, 5, NULL),
+(270, 1, '2018-01-09 19:36:25', '2018-01-09 19:36:47', '2018-01-09 19:36:44', 'Escriba aquÃ­ sus comentarios', 6, 1, 2, 27, 5, 269);
 
 -- --------------------------------------------------------
 
@@ -456,11 +543,11 @@ INSERT IGNORE INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellido
 (1, 'admin', '$2y$15$tKzm9o7fcPtDC9jD91nBHev7FVl15cgUJFReu/e/xuUrQNZfssnYa', 'admin', 'admin', '26826819X', 'actifitmail@gmail.com', 0, 'Administrador', 'Otro', NULL, NULL, 'default.png'),
 (2, 'secretario', '$2y$15$nKNj3f1/BkxclMiJYp/1PeQ7sVkrO4J5A3vWSrPqXQ3/dAWaCbJD6', 'secretario', 'secretario', '91690140L', 'saveiga@esei.uvigo.es', 0, 'Secretario', 'Otro', NULL, NULL, 'default.png'),
 (3, 'entrenador', '$2y$15$8n35X28JIU46CXjTACBZTO6Y1radwkcEZFRyrBzSY5AqvIhzJ5wMm', 'entrenador', 'entrenador', '78879758Q', 'dpvazquez@esei.uvigo.es', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
-(4, 'deportista', '$2y$15$LKEFHg8CLu7wKfmGg605R.nJDwVkrFWMtW41KFIvfYXUX2hYUZQbW', 'deportista', 'deportista', '27245554F', 'pcperez2@esei.uvigo.es', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
-(5, 'deportista2', '$2y$15$GAnBBHxkDagIEmM4MBClY.sLyzXF358348Jy6Uub6H8z5rq5gfn4m', 'deportistaDos', 'deportistaDos', '72946407K', 'afmontero@esei.uvigo.es', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
+(4, 'deportista', '$2y$15$LKEFHg8CLu7wKfmGg605R.nJDwVkrFWMtW41KFIvfYXUX2hYUZQbW', 'deportista', 'deportista', '27245554F', 'pcperez2@esei.uvigo.es', 0, 'Deportista', 'PEF', 3, 'entrenador, entrenador', 'default.png'),
+(5, 'deportista2', '$2y$15$GAnBBHxkDagIEmM4MBClY.sLyzXF358348Jy6Uub6H8z5rq5gfn4m', 'deportistaDos', 'deportistaDos', '72946407K', 'afmontero@esei.uvigo.es', 0, 'Deportista', 'PEF', 3, 'entrenador, entrenador', 'default.png'),
 (20, 'entrenador2', '$2y$15$5TkMsABh4XEIWaNyLsKnZ.ZqVBA/Tg4KnvQkVVv5RI0RplIk3cNf6', 'entrenadorDos', 'entrenadorDos', '29567043Z', 'entrenador2@gmail.com', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
-(25, 'deportista3', '$2y$15$mJLfWdXBuWDx/KlwbRItaOGd.2Y795GmOYZHvqWPZYk8XxORhzt2W', 'deportistaTres', 'deportistaTres', '96275637Y', 'deportista3@gmail.com', 0, 'Deportista', 'PEF', 20, 'entrenadorDos, entrenadorDos', 'default.png'),
-(27, 'deportista4', '$2y$15$2yXtUJy4JcPNt0ckygAU7ekoYtb8qtpYj63Wfr5.Jr8ORgmbez66y', 'deportistaCuatro', 'deportistaCuatro', '68215504B', 'deportista4@gmail.com', 0, 'Deportista', 'PEF', 20, 'entrenadorDos, entrenadorDos', 'default.png');
+(25, 'deportista3', '$2y$15$mJLfWdXBuWDx/KlwbRItaOGd.2Y795GmOYZHvqWPZYk8XxORhzt2W', 'deportistaTres', 'deportistaTres', '96275637Y', 'deportista3@gmail.com', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
+(27, 'deportista4', '$2y$15$2yXtUJy4JcPNt0ckygAU7ekoYtb8qtpYj63Wfr5.Jr8ORgmbez66y', 'deportistaCuatro', 'deportistaCuatro', '68215504B', 'deportista4@gmail.com', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png');
 
 --
 -- Restricciones para tablas volcadas
