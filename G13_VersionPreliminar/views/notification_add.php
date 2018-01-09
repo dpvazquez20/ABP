@@ -41,6 +41,11 @@ class NotificationAdd
                             <div class="col-md-8 col-md-offset-2">
                                 <form class="form-horizontal" action='../controllers/notification_controller.php' method='post'>
 
+                                <?php
+                                if($_SESSION['userType'] <> $strings['coach'])
+                                {
+                                ?>
+
                                     <div class="form-group">
                                         <label for="destino" class="col-md-2 control-label"> <?php echo $strings['Addressees']; ?>* </label>
                                         <div class="col-md-10">
@@ -52,6 +57,10 @@ class NotificationAdd
                                             </select>
                                         </div>
                                     </div>
+
+                                <?php
+                                }
+                                ?>
 
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="sujeto"> <?php echo $strings['Subject']; ?>* </label>
