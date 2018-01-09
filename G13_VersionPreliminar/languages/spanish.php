@@ -245,7 +245,6 @@ $strings = array(
 	'enlace' => 'Enlace',
 	'Back' => 'Volver',
 	'TracingErrorNotStarted' => 'El usuario no ha comenzado el plan de entrenamiento',
-	
 	'notify' => 'Notificar',
 	'Notification' => 'Notificacion',
 	'Subject' => 'Asunto',
@@ -257,7 +256,11 @@ $strings = array(
 	'admins' => 'Administradores',
 	'Message' => 'Mensaje',
 	'NotificationError' => 'Error. No se ha podido enviar la notificación',
-	'NotificationOk' => 'Notificación enviada',
+	'NotificationSent' => 'Notificación enviada con éxito',
+	
+	'entrenador_nombre' => 'Entrenador',
+	'connectionDBError' => 'Error de conexión con la base de datos',
+	'noSearchUserTrainer' => 'El entrenador no tiene usuarios asignados con esas características',
 
 	// ----------------------------------------------------------------
 	
