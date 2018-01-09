@@ -1050,7 +1050,7 @@ function generateViewTracingCoach2 ($list, $page_name, $titles)
         for ($i = 0; $i < count($list); $i++)
         {
             echo        '<tr>';
-
+            //die();
             for ($j = 0; $j < count($titles); $j++)
             {
                 // Check if the attribute is an image
@@ -1080,6 +1080,8 @@ function generateViewTracingCoach2 ($list, $page_name, $titles)
 
             echo        '</tr>';
         }
+
+
 
         echo        '</tbody>
                 </table>
