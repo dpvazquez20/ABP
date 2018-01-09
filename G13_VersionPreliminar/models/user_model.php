@@ -4,13 +4,14 @@ include '../functions/connectDB.php';
 
 class UserModel
 {
-	function __construct($id, $login, $contrasenha, $nombre, $apellidos, $dni, $email, $tipo, $tipoOri, $clase, $entrenador_id, $imagen)
+	function __construct($id, $login, $contrasenha, $nombre, $apellidos, $sexo, $dni, $email, $tipo, $tipoOri, $clase, $entrenador_id, $imagen)
     {
 		$this->id = $id;
 		$this->login = $login;
 		$this->contrasenha = $contrasenha;
 		$this->nombre = $nombre;
 		$this->apellidos = $apellidos;
+		$this->sexo = $sexo;
 		$this->dni = $dni;
 		$this->email = $email;
 		$this->tipo = $tipo;
@@ -48,6 +49,10 @@ class UserModel
 		if($this->apellidos <> '')
 		{
 			$toret = "apellidos";
+		}
+		if($this->sexo <> '')
+		{
+			$toret = "sexo";
 		}
 		if($this->dni <> '')
 		{
@@ -119,17 +124,23 @@ class UserModel
                 	}
 
                 	if($c <> 'PEF' || $this->tipo <> 'Deportista' || !isset($this->entrenador_id)){
-                		$sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,clase,borrado,imagen) 
+
+                		if($this->tipo == 'Secretario' || $this->tipo == 'Admin')
+                		{
+                			$sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,clase,borrado,imagen) 
 							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','"  . $c . "','0','"  . $i . "')";
+                		}else{
+                			$sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,sexo,dni,email,tipo,clase,borrado,imagen) 
+							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->sexo . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','"  . $c . "','0','"  . $i . "')";
+                		}
+
                 	}else{
 
                 		$coachName = $this->getCoachName($this->entrenador_id);
 
-                		$sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,clase,entrenador_id,entrenador_nombre,borrado,imagen) 
-							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','"  . $c . "','" . $this->entrenador_id . "','" . $coachName . "','0','"  . $i . "')";
+                		$sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,sexo,dni,email,tipo,clase,entrenador_id,entrenador_nombre,borrado,imagen) 
+							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->sexo . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','"  . $c . "','" . $this->entrenador_id . "','" . $coachName . "','0','"  . $i . "')";
                 	}
-
-                    
 
 					//die("die: $sql");
                     // inserting new user
@@ -293,6 +304,17 @@ class UserModel
 					{
 						$sql = $sql . "apellidos ='" . $this->apellidos . "'";
 						if($lastModify <> "apellidos")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+
+					if($this->sexo <> '')
+					{
+						$sql = $sql . "sexo ='" . $this->sexo . "'";
+						if($lastModify <> "sexo")
 						{
 							$sql = $sql . ",";
 						}
