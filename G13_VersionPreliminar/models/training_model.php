@@ -694,7 +694,7 @@ class TrainingModel
 						
 				if ($result = $this->mysqli->query($sql4))
 				{
-					$toret = $strings['InsertSuccess'];
+					$toret = $strings['AssingSuccess'];
 				}else {
 					$toret = $strings['InsertError'];
 				}
