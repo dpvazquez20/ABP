@@ -259,8 +259,10 @@
 						$user_id = $_REQUEST['user_id'];
 						$training_id = $_REQUEST['Entrenamiento'];
                         $reply = $training->assign($user_id, $training_id);
-                        $data = $training->toList();
-                        new TrainingDefault($data, $reply);
+                        //$data = $training->toList();
+                        //new TrainingDefault($data, $reply);
+                        $url = "../controllers/user_controller.php?action=" . $strings['Assing'] . "&assing=" . $reply;
+                        header("Location: $url");
 					
 					}else { // if not, the view is called
 						$training = get_data_form(); // getting data						
