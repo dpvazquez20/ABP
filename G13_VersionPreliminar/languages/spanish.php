@@ -257,10 +257,12 @@ $strings = array(
 	'Message' => 'Mensaje',
 	'NotificationError' => 'Error. No se ha podido enviar la notificación',
 	'NotificationSent' => 'Notificación enviada con éxito',
-	
 	'entrenador_nombre' => 'Entrenador',
 	'connectionDBError' => 'Error de conexión con la base de datos',
 	'noSearchUserTrainer' => 'El entrenador no tiene usuarios asignados con esas características',
+	
+	'Assing' => 'Asignar',
+	'AssingSuccess' => 'Entrenamiento asignado con éxito',	
 
 	// ----------------------------------------------------------------
 	
