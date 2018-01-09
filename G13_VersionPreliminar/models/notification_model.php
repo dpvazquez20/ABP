@@ -48,7 +48,12 @@ class NotificationModel
 				'allow_self_signed' => true
 		));	
 		
-		$sql = "SELECT * FROM usuarios WHERE tipo = '".$this->to."'";
+		if($_SESSION['userType'] == $strings['coach'])
+		{
+			$sql = "SELECT * FROM usuarios WHERE tipo = 'deportista' AND entrenador_id = '" . $_SESSION['userId'] . "' AND borrado ='0'";
+		}else{
+			$sql = "SELECT * FROM usuarios WHERE tipo = '".$this->to."'";
+		}
 
     	if (!$result = $this->mysqli->query($sql))
         {
