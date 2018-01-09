@@ -77,7 +77,44 @@
 					break;
 			}
 		}else {
-			header('Location: ../views/home.php');
+
+			if($_SESSION['userType'] == $strings['coach'])
+			{
+				if (isset($_REQUEST['action']))
+				{
+					$action = $_REQUEST['action'];
+				}else {
+					$action = '';
+				}
+
+				Switch ($action)
+	            {
+
+					// selected add an table
+					case $strings['Send']:
+
+						// looking for form's data
+						if (!isset($_REQUEST['sujeto']) | !isset($_REQUEST['mensaje']))
+						{ // if not, the view is called
+							new NotificationAdd('');
+						
+						}else { // if we have form's data, we insert it
+							$notification = get_data_form(); // getting data
+							$reply = $notification->sendMail(); // trying consult
+							new NotificationAdd($reply); // showing table data
+						}
+
+						break;
+
+	                default:
+
+						new NotificationAdd(''); // showing tables list without a message
+
+						break;
+				}
+			}else{
+				header('Location: ../views/home.php');
+			}
 		}
 
 	}else {
