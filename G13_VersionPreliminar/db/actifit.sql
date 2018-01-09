@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 07-01-2018 a las 22:26:22
+-- Tiempo de generación: 09-01-2018 a las 01:02:07
 -- Versión del servidor: 5.7.19
 -- Versión de PHP: 5.6.31
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `actifit`
 --
+CREATE DATABASE IF NOT EXISTS `actifit` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `actifit`;
 
 -- --------------------------------------------------------
 
@@ -28,7 +30,6 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `actividades`
 --
 
-DROP TABLE IF EXISTS `actividades`;
 CREATE TABLE IF NOT EXISTS `actividades` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -50,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `actividades` (
 -- Volcado de datos para la tabla `actividades`
 --
 
-INSERT INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `horaInicio`, `horaFin`, `tipo`, `numMaxParticipantes`, `borrado`, `coach_id`, `fechaInicio`, `fechaFin`) VALUES
+INSERT IGNORE INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `horaInicio`, `horaFin`, `tipo`, `numMaxParticipantes`, `borrado`, `coach_id`, `fechaInicio`, `fechaFin`) VALUES
 (40, 'Zumba', 'Se trata de una fusiÃ³n de ritmos aerÃ³bicos o coreografÃ­as sencillas con distintos gÃ©neros, inspirados en la mÃºsica latina y con una mezcla de mÃºsica internacional.', 'Martes', '17:00:00', '19:00:00', 'Grupal', 5, 0, 3, '2018-01-08', '2018-01-25'),
 (41, 'SoftBoxing', 'Clase de cardio utilizando movimientos propios del boxeo y otras artesmarciales que obligan a ejercitar todos los grupos musculares. ', 'Jueves', '20:00:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-16', '2018-01-26'),
 (42, 'Spinning', 'El spinning es una variante de los deportes de fitness (o de gimnasio) que consiste en pedalear sobre una bicicleta estÃ¡tica al ritmo de la mÃºsica y siguiendo los ejercicios que nos marca el monitor. TambiÃ©n se le llama indoor cycling.', 'MiÃ©rcoles', '19:30:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-09', '2018-01-26');
@@ -61,7 +62,6 @@ INSERT INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `horaIni
 -- Estructura de tabla para la tabla `ejercicios`
 --
 
-DROP TABLE IF EXISTS `ejercicios`;
 CREATE TABLE IF NOT EXISTS `ejercicios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `ejercicios` (
 -- Volcado de datos para la tabla `ejercicios`
 --
 
-INSERT INTO `ejercicios` (`id`, `nombre`, `descripcion`, `imagen`, `tipo`, `borrado`) VALUES
+INSERT IGNORE INTO `ejercicios` (`id`, `nombre`, `descripcion`, `imagen`, `tipo`, `borrado`) VALUES
 (1, 'Biceps barra', 'Ejercicio de biceps con barra', 'bicepsbarra.jpg', 'Muscular', 0),
 (2, 'Cinta', 'Correr en la cinta', 'cinta.jpg', 'Cardiovascular', 0),
 (3, 'Press banca', 'Ejercicio de pecho en banco horizontal. ', 'pressbanca.jpg', 'Muscular', 0),
@@ -97,11 +97,9 @@ INSERT INTO `ejercicios` (`id`, `nombre`, `descripcion`, `imagen`, `tipo`, `borr
 -- Estructura de tabla para la tabla `entrenamientos`
 --
 
-DROP TABLE IF EXISTS `entrenamientos`;
 CREATE TABLE IF NOT EXISTS `entrenamientos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
-  `tipo` varchar(15) NOT NULL,
   `borrado` tinyint(4) NOT NULL,
   `sesiones` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -112,11 +110,11 @@ CREATE TABLE IF NOT EXISTS `entrenamientos` (
 -- Volcado de datos para la tabla `entrenamientos`
 --
 
-INSERT INTO `entrenamientos` (`id`, `nombre`, `tipo`, `borrado`, `sesiones`) VALUES
-(1, 'Principiante', 'Normal', 0, 1),
-(2, 'Medio', 'Normal', 0, 2),
-(3, 'Avanzado', 'Normal', 0, 3),
-(4, 'Puesta a punto', 'Personal', 0, 3);
+INSERT IGNORE INTO `entrenamientos` (`id`, `nombre`, `borrado`, `sesiones`) VALUES
+(1, 'Principiante', 0, 1),
+(2, 'Medio', 0, 2),
+(3, 'Avanzado', 0, 3),
+(4, 'Nuevo', 0, 5);
 
 -- --------------------------------------------------------
 
@@ -124,7 +122,6 @@ INSERT INTO `entrenamientos` (`id`, `nombre`, `tipo`, `borrado`, `sesiones`) VAL
 -- Estructura de tabla para la tabla `entrenamientos_has_tablas`
 --
 
-DROP TABLE IF EXISTS `entrenamientos_has_tablas`;
 CREATE TABLE IF NOT EXISTS `entrenamientos_has_tablas` (
   `entrenamiento_id` int(11) NOT NULL,
   `tabla_id` int(11) NOT NULL,
@@ -138,16 +135,17 @@ CREATE TABLE IF NOT EXISTS `entrenamientos_has_tablas` (
 -- Volcado de datos para la tabla `entrenamientos_has_tablas`
 --
 
-INSERT INTO `entrenamientos_has_tablas` (`entrenamiento_id`, `tabla_id`, `orden_sesion`) VALUES
+INSERT IGNORE INTO `entrenamientos_has_tablas` (`entrenamiento_id`, `tabla_id`, `orden_sesion`) VALUES
 (1, 1, 1),
 (2, 1, 1),
 (3, 1, 1),
 (4, 1, 1),
 (2, 2, 2),
 (3, 2, 2),
-(4, 2, 3),
+(4, 2, 2),
 (3, 3, 3),
-(4, 6, 2);
+(4, 3, 3),
+(4, 3, 4);
 
 -- --------------------------------------------------------
 
@@ -155,7 +153,6 @@ INSERT INTO `entrenamientos_has_tablas` (`entrenamiento_id`, `tabla_id`, `orden_
 -- Estructura de tabla para la tabla `entrenamientos_has_usuarios`
 --
 
-DROP TABLE IF EXISTS `entrenamientos_has_usuarios`;
 CREATE TABLE IF NOT EXISTS `entrenamientos_has_usuarios` (
   `entrenamiento_id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
@@ -168,8 +165,9 @@ CREATE TABLE IF NOT EXISTS `entrenamientos_has_usuarios` (
 -- Volcado de datos para la tabla `entrenamientos_has_usuarios`
 --
 
-INSERT INTO `entrenamientos_has_usuarios` (`entrenamiento_id`, `usuario_id`) VALUES
-(3, 4);
+INSERT IGNORE INTO `entrenamientos_has_usuarios` (`entrenamiento_id`, `usuario_id`) VALUES
+(3, 4),
+(3, 5);
 
 -- --------------------------------------------------------
 
@@ -177,7 +175,6 @@ INSERT INTO `entrenamientos_has_usuarios` (`entrenamiento_id`, `usuario_id`) VAL
 -- Estructura de tabla para la tabla `eventos`
 --
 
-DROP TABLE IF EXISTS `eventos`;
 CREATE TABLE IF NOT EXISTS `eventos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -194,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `eventos` (
 -- Volcado de datos para la tabla `eventos`
 --
 
-INSERT INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha`, `horaInicio`, `horaFin`, `borrado`) VALUES
+INSERT IGNORE INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha`, `horaInicio`, `horaFin`, `borrado`) VALUES
 (1, 'Zumba', 'Tendra lugar una clase de demostracion de Zumba para todas las edades. Los niÃ±os deberan ir acompaÃ±ados de un adulto o llevar una autorizacion. Aquellos que se inscriban en actividades de Zumba del gimnasio tras esta clase tendran un descuento del 30% los 3 primeros meses.', '2018-01-26', '15:30:00', '17:00:00', 0),
 (2, 'Inauguracion', 'Evento inaugural del gimansio donde se hara una presentacion de sus instalaciones asi como de la aplicacion de la que hace uso. Se hara un recorrido por el gimnasio mostrando las distintas salas y maquinas ademas de contar con la participacion de entrenadores especializados. Habra churrasco.', '2018-01-22', '12:30:00', '15:00:00', 0),
 (3, 'Torneo Futbol 7', 'Se organizara un pequeÃ±o torneo de Futbol 7 de hasta 16 equipos. Los interesados en apuntarse deberan acudir al gimnasio durante la semana previa al torneo para inscribirse. No hay lÃ­mite de edad pero los menores de 16 aÃ±os deberan presentar una autorizacion firmada de sus padres o tutores legales.', '2018-01-29', '09:00:00', '21:00:00', 0);
@@ -205,7 +202,6 @@ INSERT INTO `eventos` (`id`, `nombre`, `descripcion`, `fecha`, `horaInicio`, `ho
 -- Estructura de tabla para la tabla `inscripciones`
 --
 
-DROP TABLE IF EXISTS `inscripciones`;
 CREATE TABLE IF NOT EXISTS `inscripciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
@@ -219,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `inscripciones` (
 -- Volcado de datos para la tabla `inscripciones`
 --
 
-INSERT INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALUES
+INSERT IGNORE INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALUES
 (11, '2018-01-02', 0, 4),
 (12, '2018-01-02', 0, 5),
 (13, '2018-01-02', 0, 5);
@@ -230,7 +226,6 @@ INSERT INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALUES
 -- Estructura de tabla para la tabla `inscripciones_has_actividades`
 --
 
-DROP TABLE IF EXISTS `inscripciones_has_actividades`;
 CREATE TABLE IF NOT EXISTS `inscripciones_has_actividades` (
   `inscripciones_id` int(11) NOT NULL,
   `actividades_id` int(11) NOT NULL,
@@ -243,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `inscripciones_has_actividades` (
 -- Volcado de datos para la tabla `inscripciones_has_actividades`
 --
 
-INSERT INTO `inscripciones_has_actividades` (`inscripciones_id`, `actividades_id`) VALUES
+INSERT IGNORE INTO `inscripciones_has_actividades` (`inscripciones_id`, `actividades_id`) VALUES
 (13, 40),
 (12, 41),
 (11, 42);
@@ -254,7 +249,6 @@ INSERT INTO `inscripciones_has_actividades` (`inscripciones_id`, `actividades_id
 -- Estructura de tabla para la tabla `lineasdetabla`
 --
 
-DROP TABLE IF EXISTS `lineasdetabla`;
 CREATE TABLE IF NOT EXISTS `lineasdetabla` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repeticiones` varchar(45) DEFAULT NULL,
@@ -272,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `lineasdetabla` (
 -- Volcado de datos para la tabla `lineasdetabla`
 --
 
-INSERT INTO `lineasdetabla` (`id`, `repeticiones`, `duracion`, `descanso`, `series`, `tabla_id`, `ejercicio_id`) VALUES
+INSERT IGNORE INTO `lineasdetabla` (`id`, `repeticiones`, `duracion`, `descanso`, `series`, `tabla_id`, `ejercicio_id`) VALUES
 (1, '10', NULL, '60 seg', 4, 1, 1),
 (2, NULL, '10 min', NULL, NULL, 1, 2),
 (3, '10', NULL, '30 seg', 4, 1, 3),
@@ -298,7 +292,6 @@ INSERT INTO `lineasdetabla` (`id`, `repeticiones`, `duracion`, `descanso`, `seri
 -- Estructura de tabla para la tabla `recursos`
 --
 
-DROP TABLE IF EXISTS `recursos`;
 CREATE TABLE IF NOT EXISTS `recursos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -313,7 +306,7 @@ CREATE TABLE IF NOT EXISTS `recursos` (
 -- Volcado de datos para la tabla `recursos`
 --
 
-INSERT INTO `recursos` (`id`, `nombre`, `aforo`, `descripcion`, `borrado`) VALUES
+INSERT IGNORE INTO `recursos` (`id`, `nombre`, `aforo`, `descripcion`, `borrado`) VALUES
 (1, 'Sala A1', '10', 'Sala primer piso ', 0),
 (2, 'Sala A2', '10', 'Sala primer piso ', 0),
 (3, 'Sala A3', '20', 'Sala primer piso ', 0),
@@ -339,7 +332,6 @@ INSERT INTO `recursos` (`id`, `nombre`, `aforo`, `descripcion`, `borrado`) VALUE
 -- Estructura de tabla para la tabla `reservas`
 --
 
-DROP TABLE IF EXISTS `reservas`;
 CREATE TABLE IF NOT EXISTS `reservas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
@@ -355,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
 -- Volcado de datos para la tabla `reservas`
 --
 
-INSERT INTO `reservas` (`id`, `fecha`, `borrado`, `actividades_id`, `recurso_id`) VALUES
+INSERT IGNORE INTO `reservas` (`id`, `fecha`, `borrado`, `actividades_id`, `recurso_id`) VALUES
 (18981, '2018-01-09', 0, 40, 1),
 (18982, '2018-01-16', 0, 40, 1),
 (18983, '2018-01-23', 0, 40, 1),
@@ -371,7 +363,6 @@ INSERT INTO `reservas` (`id`, `fecha`, `borrado`, `actividades_id`, `recurso_id`
 -- Estructura de tabla para la tabla `sesiondelineadetabla`
 --
 
-DROP TABLE IF EXISTS `sesiondelineadetabla`;
 CREATE TABLE IF NOT EXISTS `sesiondelineadetabla` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `completado` tinyint(4) NOT NULL,
@@ -380,49 +371,7 @@ CREATE TABLE IF NOT EXISTS `sesiondelineadetabla` (
   PRIMARY KEY (`id`,`sesiones_id`),
   KEY `fk_sesion_lineaDeTabla_sesiones1_idx` (`sesiones_id`),
   KEY `fk_sesion_lineaDeTabla_lineasDeTabla1_idx` (`lineasDeTabla_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `sesiondelineadetabla`
---
-
-INSERT INTO `sesiondelineadetabla` (`id`, `completado`, `sesiones_id`, `lineasDeTabla_id`) VALUES
-(37, 1, 245, 1),
-(38, 0, 245, 2),
-(39, 0, 245, 3),
-(40, 0, 245, 4),
-(41, 0, 245, 5),
-(42, 0, 245, 6),
-(43, 1, 246, 7),
-(44, 1, 246, 8),
-(45, 1, 246, 9),
-(46, 1, 246, 10),
-(47, 0, 246, 11),
-(48, 0, 246, 12),
-(49, 0, 247, 13),
-(50, 0, 247, 14),
-(51, 0, 247, 15),
-(52, 0, 247, 16),
-(53, 1, 247, 17),
-(54, 1, 247, 18),
-(55, 0, 248, 1),
-(56, 0, 248, 2),
-(57, 0, 248, 3),
-(58, 0, 248, 4),
-(59, 0, 248, 5),
-(60, 0, 248, 6),
-(61, 0, 249, 7),
-(62, 0, 249, 8),
-(63, 0, 249, 9),
-(64, 0, 249, 10),
-(65, 0, 249, 11),
-(66, 0, 249, 12),
-(67, 0, 250, 13),
-(68, 0, 250, 14),
-(69, 0, 250, 15),
-(70, 0, 250, 16),
-(71, 0, 250, 17),
-(72, 0, 250, 18);
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -430,7 +379,6 @@ INSERT INTO `sesiondelineadetabla` (`id`, `completado`, `sesiones_id`, `lineasDe
 -- Estructura de tabla para la tabla `sesiones`
 --
 
-DROP TABLE IF EXISTS `sesiones`;
 CREATE TABLE IF NOT EXISTS `sesiones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `completado` tinyint(4) DEFAULT NULL,
@@ -446,19 +394,7 @@ CREATE TABLE IF NOT EXISTS `sesiones` (
   `anterior_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_sesiones_tablas1_idx` (`tablas_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=251 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `sesiones`
---
-
-INSERT INTO `sesiones` (`id`, `completado`, `fecha`, `inicio`, `fin`, `comentario`, `tablas_id`, `orden_sesion`, `orden_sesion_max`, `usuarios_id`, `entrenamientos_id`, `anterior_id`) VALUES
-(245, 1, '2018-01-05 03:57:25', '2018-01-05 04:44:27', '2018-01-05 04:50:49', 'Comentario', 1, 1, 3, 4, 3, NULL),
-(246, 1, '2018-01-05 03:57:25', '2018-01-05 04:51:10', '2018-01-05 04:51:26', NULL, 2, 2, 3, 4, 3, 245),
-(247, 1, '2018-01-05 03:57:25', '2018-01-05 04:51:48', '2018-01-05 04:51:55', 'Comentario 247', 3, 3, 3, 4, 3, 246),
-(248, 0, '2018-01-05 04:51:55', '2018-01-05 05:07:48', NULL, 'fsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmfaaafsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmffsdÃ±lfmsdmfdsmfsdmfldsmfsmdfmdslÃ±fsmdfÃ±dsfsmdfÃ±ldsfdslfdsmfÃ±sdfdmfaaa', 1, 1, 3, 4, 3, 247),
-(249, 0, '2018-01-05 04:51:55', NULL, NULL, 'Comentario 249', 2, 2, 3, 4, 3, 248),
-(250, 1, '2018-01-05 04:51:55', '2018-01-05 06:10:10', '2018-01-05 06:10:45', 'Comentario adelantado', 3, 3, 3, 4, 3, 249);
+) ENGINE=InnoDB AUTO_INCREMENT=255 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -466,7 +402,6 @@ INSERT INTO `sesiones` (`id`, `completado`, `fecha`, `inicio`, `fin`, `comentari
 -- Estructura de tabla para la tabla `tablas`
 --
 
-DROP TABLE IF EXISTS `tablas`;
 CREATE TABLE IF NOT EXISTS `tablas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
@@ -480,7 +415,7 @@ CREATE TABLE IF NOT EXISTS `tablas` (
 -- Volcado de datos para la tabla `tablas`
 --
 
-INSERT INTO `tablas` (`id`, `nombre`, `tipo`, `borrado`) VALUES
+INSERT IGNORE INTO `tablas` (`id`, `nombre`, `tipo`, `borrado`) VALUES
 (1, 'Tabla 1', 'Normal', 0),
 (2, 'Tabla 2', 'Normal', 0),
 (3, 'Tabla 3', 'Normal', 0),
@@ -492,7 +427,6 @@ INSERT INTO `tablas` (`id`, `nombre`, `tipo`, `borrado`) VALUES
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(45) NOT NULL,
@@ -504,28 +438,29 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `borrado` tinyint(4) NOT NULL,
   `tipo` varchar(45) NOT NULL,
   `clase` varchar(10) NOT NULL,
+  `entrenador_id` int(1) DEFAULT NULL,
+  `entrenador_nombre` varchar(90) DEFAULT NULL,
   `imagen` varchar(90) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `login_UNIQUE` (`login`),
   UNIQUE KEY `dni_UNIQUE` (`dni`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellidos`, `dni`, `email`, `borrado`, `tipo`, `clase`, `imagen`) VALUES
-(1, 'admin', '$2y$15$tKzm9o7fcPtDC9jD91nBHev7FVl15cgUJFReu/e/xuUrQNZfssnYa', 'admin', 'admin', '00000001A', 'admin@admin', 0, 'Administrador', 'Otro', 'default.png'),
-(2, 'secretario', '$2y$15$nKNj3f1/BkxclMiJYp/1PeQ7sVkrO4J5A3vWSrPqXQ3/dAWaCbJD6', 'secretario', 'secretario', '00000002A', 'secretario@secretario', 0, 'Secretario', 'Otro', 'default.png'),
-(3, 'entrenador', '$2y$15$8n35X28JIU46CXjTACBZTO6Y1radwkcEZFRyrBzSY5AqvIhzJ5wMm', 'entrenador', 'entrenador', '00000003A', 'entrenador@entrenador', 0, 'Entrenador', 'Otro', 'default.png'),
-(4, 'deportista', '$2y$15$LKEFHg8CLu7wKfmGg605R.nJDwVkrFWMtW41KFIvfYXUX2hYUZQbW', 'deportista', 'deportista', '00000004A', 'deportista@deportista', 0, 'Deportista', 'TDU', 'default.png'),
-(5, 'deportista2', '$2y$15$GAnBBHxkDagIEmM4MBClY.sLyzXF358348Jy6Uub6H8z5rq5gfn4m', 'deportistaDos', 'deportistaDos', '72946407K', 'deportista2@gmail.com', 0, 'Deportista', 'PEF', 'default.png'),
-(6, 'deportista69', '$2y$15$e2mBOIXJ6qsZ4BA4oOv3HemOIBkRJT9NcxrPHtwW0s/FN0O4H4gpu', 'DEPORT', 'DEPORT', '77461655R', 'deportista69@gmail.com', 0, 'Deportista', 'PEF', 'default.png'),
-(8, 'deportista70', '$2y$15$B/3titw5ubQlMFbuKfo7euxODi4p1f2wx1dmInmdMQXlvCVCwCaFm', 'deportISTA', 'deportISTA', '44786624N', 'deportista70@gmail.com', 0, 'Deportista', 'TDU', 'default.png'),
-(13, 'entrenador2', '$2y$15$hHAmUbxvBsIar9JcovLgs.Jv2Kbx5iZe3mylyPkKU2wmyBiY7sOEu', 'entrenadorDOS', 'entrenadorDOS', '02842247E', 'entrenador2@gmail.com', 0, 'Entrenador', 'Otro', 'default.png'),
-(19, 'deportista71', '$2y$15$jviAnI.eO7zPr5pUlM9IT.u1EF6S/Qh5WQhWEyJia1NeQz45250aS', 'deportistaSIETEuno', 'deportistaSIETEuno', '73142344K', 'deportista71@gmail.com', 0, 'Deportista', 'PEF', 'default.png');
+INSERT IGNORE INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellidos`, `dni`, `email`, `borrado`, `tipo`, `clase`, `entrenador_id`, `entrenador_nombre`, `imagen`) VALUES
+(1, 'admin', '$2y$15$tKzm9o7fcPtDC9jD91nBHev7FVl15cgUJFReu/e/xuUrQNZfssnYa', 'admin', 'admin', '26826819X', 'actifitmail@gmail.com', 0, 'Administrador', 'Otro', NULL, NULL, 'default.png'),
+(2, 'secretario', '$2y$15$nKNj3f1/BkxclMiJYp/1PeQ7sVkrO4J5A3vWSrPqXQ3/dAWaCbJD6', 'secretario', 'secretario', '91690140L', 'saveiga@esei.uvigo.es', 0, 'Secretario', 'Otro', NULL, NULL, 'default.png'),
+(3, 'entrenador', '$2y$15$8n35X28JIU46CXjTACBZTO6Y1radwkcEZFRyrBzSY5AqvIhzJ5wMm', 'entrenador', 'entrenador', '78879758Q', 'dpvazquez@esei.uvigo.es', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
+(4, 'deportista', '$2y$15$LKEFHg8CLu7wKfmGg605R.nJDwVkrFWMtW41KFIvfYXUX2hYUZQbW', 'deportista', 'deportista', '27245554F', 'pcperez2@esei.uvigo.es', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
+(5, 'deportista2', '$2y$15$GAnBBHxkDagIEmM4MBClY.sLyzXF358348Jy6Uub6H8z5rq5gfn4m', 'deportistaDos', 'deportistaDos', '72946407K', 'afmontero@esei.uvigo.es', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
+(20, 'entrenador2', '$2y$15$5TkMsABh4XEIWaNyLsKnZ.ZqVBA/Tg4KnvQkVVv5RI0RplIk3cNf6', 'entrenadorDos', 'entrenadorDos', '29567043Z', 'entrenador2@gmail.com', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
+(25, 'deportista3', '$2y$15$mJLfWdXBuWDx/KlwbRItaOGd.2Y795GmOYZHvqWPZYk8XxORhzt2W', 'deportistaTres', 'deportistaTres', '96275637Y', 'deportista3@gmail.com', 0, 'Deportista', 'PEF', 20, 'entrenadorDos, entrenadorDos', 'default.png'),
+(27, 'deportista4', '$2y$15$2yXtUJy4JcPNt0ckygAU7ekoYtb8qtpYj63Wfr5.Jr8ORgmbez66y', 'deportistaCuatro', 'deportistaCuatro', '68215504B', 'deportista4@gmail.com', 0, 'Deportista', 'PEF', 20, 'entrenadorDos, entrenadorDos', 'default.png');
 
 --
 -- Restricciones para tablas volcadas
