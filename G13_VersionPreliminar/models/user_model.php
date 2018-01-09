@@ -4,7 +4,7 @@ include '../functions/connectDB.php';
 
 class UserModel
 {
-	function __construct($id, $login, $contrasenha, $nombre, $apellidos, $dni, $email, $tipo, $tipoOri, $clase, $imagen)
+	function __construct($id, $login, $contrasenha, $nombre, $apellidos, $dni, $email, $tipo, $tipoOri, $clase, $entrenador_id, $imagen)
     {
 		$this->id = $id;
 		$this->login = $login;
@@ -16,6 +16,7 @@ class UserModel
 		$this->tipo = $tipo;
 		$this->tipoOri = $tipoOri;
 		$this->clase = $clase;
+		$this->entrenador_id = $entrenador_id;
         $this->imagen = $imagen;
 
 		$this->mysqli = connect();
@@ -65,6 +66,10 @@ class UserModel
 		{
 			$toret = "clase";
 		}
+		if($this->entrenador_id <> '')
+		{
+			$toret = "entrenador_id";
+		}
         if($this->imagen <> '')
         {
             $toret = "imagen";
@@ -82,7 +87,7 @@ class UserModel
 
         if ($this->dni <> '' )
         {
-            $sql = "SELECT * FROM usuarios WHERE dni = '".$this->dni."'";
+            $sql = "SELECT * FROM usuarios WHERE dni = '$this->dni' OR email = '$this->email' OR login = '$this->login'";
 
             // checking DB connection
             if (!$result = $this->mysqli->query($sql))
@@ -104,7 +109,6 @@ class UserModel
                 		}else{
                 			$c = $strings['tdu'];
                 		}
-
                 	}
 
                 	$i = $this->imagen;
@@ -114,9 +118,20 @@ class UserModel
                 		$i = "default.png";
                 	}
 
-                    $sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,clase,borrado,imagen) 
+                	if($c <> 'PEF' || $this->tipo <> 'Deportista' || !isset($this->entrenador_id)){
+                		$sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,clase,borrado,imagen) 
 							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','"  . $c . "','0','"  . $i . "')";
+                	}else{
 
+                		$coachName = $this->getCoachName($this->entrenador_id);
+
+                		$sql = "INSERT INTO usuarios (login,contrasenha,nombre,apellidos,dni,email,tipo,clase,entrenador_id,entrenador_nombre,borrado,imagen) 
+							VALUES('" . $this->login . "','" . $this->contrasenha . "','" . $this->nombre . "','" . $this->apellidos . "','" . $this->dni . "','" . $this->email . "','"  . $this->tipo . "','"  . $c . "','" . $this->entrenador_id . "','" . $coachName . "','0','"  . $i . "')";
+                	}
+
+                    
+
+					//die("die: $sql");
                     // inserting new user
                     if ($result = $this->mysqli->query($sql))
                     {
@@ -153,6 +168,23 @@ class UserModel
 		return $toret;
 	}
 
+	function getCoachName($coachId){
+		$sql = "SELECT apellidos,nombre FROM usuarios WHERE id = '$this->entrenador_id'";
+
+		if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['ConnectionDBError'];
+        }else{
+        	while ($row2 = $result->fetch_array())
+            {
+				$aux[0] = $row2;
+			}
+			$toret = $aux[0]['apellidos'] . ", " . $aux[0]['nombre'];
+        }
+
+        return $toret;
+	}
+
 	// delete user
 	function delete(){
 
@@ -161,7 +193,7 @@ class UserModel
 		// checking form's data
 		if ($this->id <> '' )
 		{
-	        $sql = "SELECT * FROM usuarios WHERE id = '".$this->id."'";
+	        $sql = "SELECT * FROM usuarios WHERE id = '$this->id'";
 
 	        // checking DB connection
 	        if (!$result = $this->mysqli->query($sql))
@@ -331,14 +363,47 @@ class UserModel
 							$this->clase = $strings['other'];
 						}
 
+						if($this->clase == $strings['tdu'])
+						{
+							$sql = $sql . "entrenador_id = NULL,entrenador_nombre = NULL";
+	                        if($lastModify <> "entrenador_id")
+	                        {
+	                            $sql = $sql . ",";
+	                        }
+	                        $sql = $sql . " ";
+	                        $this->entrenador_id = '';
+						}
+
 						$sql = $sql . "clase ='" . $this->clase . "'";
 						if($lastModify <> "clase")
 						{
 							$sql = $sql . ",";
 						}
 						$sql = $sql . " ";
+						
 						$modify = true;
 					}
+
+					if(isset($this->entrenador_id) && $this->entrenador_id <> '')
+                    {
+
+                    	while ($row = $result->fetch_array())
+		                {
+							$aux[0] = $row;
+						}
+
+						if($aux[0]['clase'] == $strings['pef'] || $this->clase == $strings['pef'])
+						{
+							$coachName = $this->getCoachName($this->entrenador_id);
+	                        $sql = $sql . "entrenador_id ='" . $this->entrenador_id . "',entrenador_nombre ='" . $coachName . "'";
+	                        if($lastModify <> "entrenador_id")
+	                        {
+	                            $sql = $sql . ",";
+	                        }
+	                        $sql = $sql . " ";
+	                        $modify = true;
+						}
+                    }
 
                     if($this->imagen <> '')
                     {
@@ -351,7 +416,7 @@ class UserModel
                         $modify = true;
                     }
 
-
+                    //die("die: $sql");
 					$sql = $sql . "WHERE id ='" . $this->id . "'";
 
 					// if exists modification
@@ -419,6 +484,20 @@ class UserModel
 
 	}
 
+	function toListSwitch()
+    {
+    	include '../languages/spanish.php';
+
+    	if($_SESSION['userType'] == $strings['coach'])
+    	{
+    		$toret = $this->toListUsersCoach($_SESSION['userId']);
+    	}else{
+    		$toret = $this->toList();
+    	}
+
+    	return $toret;
+    }
+
 	// listing all users
 	function toList()
     {
@@ -452,9 +531,153 @@ class UserModel
 				$toret = $strings['ListErrorNotExist'];
 			}
 		}
-
 		return $toret;
+	}
 
+	function toListCoaches()
+    {
+
+		include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND tipo = 'Entrenador' ORDER BY apellidos,nombre";
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one user exists
+			if ($result->num_rows != 0)
+			{
+
+				$toret=[];
+				$i=0;
+
+				// introducing all users into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$toret[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+		return $toret;
+	}
+
+	function toListUsersCoach($coachId)
+    {
+
+		include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND entrenador_id = '$coachId' ORDER BY apellidos,nombre";
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one user exists
+			if ($result->num_rows != 0)
+			{
+
+				$toret=[];
+				$i=0;
+
+				// introducing all users into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$toret[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+		return $toret;
+	}
+
+	function getCoach()
+    {
+
+		include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND id = '$this->entrenador_id'";
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			// checking that at least one user exists
+			if ($result->num_rows != 0)
+			{
+
+				$toret=[];
+				$i=0;
+
+				// introducing all users into an array
+				while ($row = $result->fetch_array())
+                {
+
+					$toret[$i] = $row;
+					$i++;
+				}						
+
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+		return $toret;
+	}
+
+	function getCoachUser($userId)
+    {
+
+		include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND id = '$userId'";
+
+
+        // checking DB connection
+		if (!$result = $this->mysqli->query($sql))
+		{
+			$toret = $strings['connectionDBError'];
+		}else {
+			
+			while ($row0 = $result->fetch_array())
+            {
+            	$aux[0] = $row0;
+            }
+            $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND id = '" . $aux[0]['entrenador_id'] . "'";
+
+	        // checking DB connection
+			if ($result = $this->mysqli->query($sql))
+			{
+				// checking that at least one user exists
+				if ($result->num_rows != 0)
+				{
+					// introducing all users into an array
+					while ($row = $result->fetch_array())
+	                {
+						$toret[0] = $row;
+					}
+				}else {
+					$toret = $strings['ListErrorNotExist'];
+				}
+			}else {
+				$toret = $strings['ListErrorNotExist'];
+			}
+		}
+		return $toret;
 	}
 
 	// search users
@@ -463,8 +686,14 @@ class UserModel
 
         include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND ( nombre LIKE '%".$word."%' OR apellidos LIKE '%".$word."%')";
+        if($_SESSION['userType'] == $strings['coach'])
+        {
+        	$sql = "SELECT * FROM usuarios WHERE borrado = '0' AND ( nombre LIKE '%".$word."%' OR apellidos LIKE '%".$word."%') AND entrenador_id ='" . $_SESSION['userId'] . "'";
+        }else{
+        	$sql = "SELECT * FROM usuarios WHERE borrado = '0' AND ( nombre LIKE '%".$word."%' OR apellidos LIKE '%".$word."%')";
+        }
 
+        //die("die: $sql");
         // checking DB connection
         if (!$result = $this->mysqli->query($sql))
         {
@@ -481,7 +710,6 @@ class UserModel
                 // introducing all users into an array
                 while ($row = $result->fetch_array())
                 {
-
                     $toret[$i] = $row;
                     $i++;
                 }
@@ -503,17 +731,32 @@ class UserModel
         $sql = '';
 
         // sql query depends on the value of the order by
-        Switch ($value)
+        if($_SESSION['userType'] == $strings['coach'])
         {
-            case 1: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY nombre";
-                break;
-            case 2: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY nombre DESC";
-                break;
-            case 3: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY apellidos";
-                break;
-            case 4: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY apellidos DESC";
-                break;
-        }
+	        Switch ($value)
+	        {
+	            case 1: $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND entrenador_id ='" . $_SESSION['userId'] . "' ORDER BY nombre";
+	                break;
+	            case 2: $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND entrenador_id ='" . $_SESSION['userId'] . "' ORDER BY nombre DESC";
+	                break;
+	            case 3: $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND entrenador_id ='" . $_SESSION['userId'] . "' ORDER BY apellidos";
+	                break;
+	            case 4: $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND entrenador_id ='" . $_SESSION['userId'] . "' ORDER BY apellidos DESC";
+	                break;
+	        }
+	    }else{
+	    	Switch ($value)
+	        {
+	            case 1: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY nombre";
+	                break;
+	            case 2: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY nombre DESC";
+	                break;
+	            case 3: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY apellidos";
+	                break;
+	            case 4: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY apellidos DESC";
+	                break;
+	        }
+	    }
 
         // checking DB connection
         if (!$result = $this->mysqli->query($sql))
