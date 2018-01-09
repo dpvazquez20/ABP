@@ -18,6 +18,7 @@
 		$contrasenha = '';
 		$nombre = '';
 		$apellidos = '';
+		$sexo = '';
 		$dni = '';
 		$email = '';
 		$tipo = '';
@@ -53,6 +54,11 @@
 		{
 			$apellidos = $_REQUEST['apellidos'];
 			unset($_REQUEST['apellidos']);
+		}
+		if(isset($_REQUEST['sexo']))
+		{
+			$sexo = $_REQUEST['sexo'];
+			unset($_REQUEST['sexo']);
 		}
 		if(isset($_REQUEST['dni']))
 		{
@@ -97,7 +103,7 @@
             }
         }
 
-		$user = new UserModel($id,$login,$contrasenha,$nombre,$apellidos,$dni,$email,$tipo,$tipoOri,$clase,$entrenador_id,$imagen);
+		$user = new UserModel($id,$login,$contrasenha,$nombre,$apellidos,$sexo,$dni,$email,$tipo,$tipoOri,$clase,$entrenador_id,$imagen);
 
 		return $user;
 	}
