@@ -23,6 +23,7 @@
 		$tipo = '';
 		$tipoOri = '';
 		$clase = '';
+		$entrenador_id = '';
 		$imagen = '';
 
 		if(isset($_REQUEST['id']))
@@ -78,6 +79,11 @@
 			$clase = $_REQUEST['clase'];
 			unset($_REQUEST['clase']);
 		}
+		if(isset($_REQUEST['entrenador_id']))
+		{
+			$entrenador_id = $_REQUEST['entrenador_id'];
+			unset($_REQUEST['entrenador_id']);
+		}
         if(isset($_FILES['imagen']))
         {
             if ($_FILES['imagen']['size'] > 0)
@@ -91,7 +97,7 @@
             }
         }
 
-		$user = new UserModel($id,$login,$contrasenha,$nombre,$apellidos,$dni,$email,$tipo,$tipoOri,$clase,$imagen);
+		$user = new UserModel($id,$login,$contrasenha,$nombre,$apellidos,$dni,$email,$tipo,$tipoOri,$clase,$entrenador_id,$imagen);
 
 		return $user;
 	}
@@ -120,12 +126,15 @@
 					// looking for form's data
 					if (!isset($_REQUEST['dni']))
 					{ // if not, the view is called
-						new UserAdd();
+						$user = get_data_form();
+						$coachesList = $user->toListCoaches();
+						//die("die: $coachesList");
+						new UserAdd($coachesList);
 					
 					}else { // if we have form's data, we insert it
 						$user = get_data_form(); // getting data
 						$reply = $user->insert(); // trying insert
-						$data = $user->toList(); // getting users list
+						$data = $user->toListSwitch(); // getting users list
 						new UserDefault($data, $reply); // showing users list with a message
 					}
 
@@ -145,7 +154,7 @@
 					}else {
                         $user = get_data_form(); // getting data
                         $reply = $user->delete(); // trying delete
-						$data = $user->toList(); // getting users list
+						$data = $user->toListSwitch(); // getting users list
 						new UserDefault($data, $reply); // showing users list with a message
 					}
 					
@@ -159,12 +168,15 @@
 					{ // if not, the view is called
                         $user = get_data_form(); // getting data
                         $data = $user->consult(); // trying consult
-						new UserModify($data);
+                        $coachesList = $user->toListCoaches();
+                        $coachDefault = $user->getCoachUser($_REQUEST['id']);
+
+						new UserModify($data,$coachesList,$coachDefault);
 
 					}else { // if we have form's data, we modify it
 						$user = get_data_form(); // getting data
 						$reply = $user->modify(); // trying modify
-						$data = $user->toList(); // getting users list
+						$data = $user->toListSwitch(); // getting users list
 						new UserDefault($data, $reply); // showing users list with a message
 					}
 
@@ -183,7 +195,7 @@
 					}else { // if not, the view is called
 						$user = get_data_form(); // getting data
                         $reply = $user->consult(); // trying consult
-                        $data = $user->toList(); // getting users list
+                        $data = $user->toListSwitch(); // getting users list
                         new UserDefault($data, $reply); // showing users list without a message
 					}
 
@@ -201,7 +213,7 @@
 
                         if (is_string($reply))
                         {
-                            $data = $user->toList(); // getting users list
+                            $data = $user->toListSwitch(); // getting users list
                             new UserDefault($data, $reply); // showing an error message
 
                         }else {
@@ -223,7 +235,7 @@
 
                          if (is_string($reply))
                          {
-                             $data = $user->toList(); // getting users list
+                             $data = $user->toListSwitch(); // getting users list
                              new UserDefault($data, $reply); // showing an error message
 
                          }else {
@@ -236,7 +248,7 @@
 
                 default:
                 	$user = get_data_form();
-					$data = $user->toList(); // getting users list
+					$data = $user->toListSwitch(); // getting users list
 					$reply = '';
 					new UserDefault($data, $reply); // showing users list without a message
 
@@ -266,7 +278,7 @@
 
                         if (is_string($reply))
                         {
-                            $data = $user->toList(); // getting users list
+                            $data = $user->toListSwitch(); // getting users list
                             new UserDefault($data, $reply); // showing an error message
 
                         }else {
@@ -288,7 +300,7 @@
 
                         if (is_string($reply))
                         {
-                            $data = $user->toList(); // getting users list
+                            $data = $user->toListSwitch(); // getting users list
                             new UserDefault($data, $reply); // showing an error message
 
                         }else {
@@ -301,8 +313,8 @@
 
                 default:
                     $user = get_data_form();
-                    $data = $user->toList(); // getting users list
-                    $reply = '';
+                    $data = $user->toListSwitch(); // getting users list
+                    $reply = $user->toListSwitch();
                     new UserDefault($data, $reply); // showing users list without a message
 
                     break;
