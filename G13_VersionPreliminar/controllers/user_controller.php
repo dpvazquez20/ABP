@@ -310,6 +310,26 @@
 
                     break;
 
+                case $strings['Assing']:
+                    // looking for data
+                    if (isset($_REQUEST['assing']))
+                    {
+                        $user = get_data_form(); // getting data
+                        $reply = $_REQUEST['assing'];
+                        unset($_REQUEST['assing']);
+
+                        if (is_string($reply))
+                        {
+                            $data = $user->toListSwitch(); // getting users list
+                            new UserDefault($data, $reply); // showing an error message
+
+                        }else {
+                            new UserDefault($reply, ''); // showing users list without a message
+                        }
+                    }
+
+                    break;
+
 
                 default:
                     $user = get_data_form();

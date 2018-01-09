@@ -130,12 +130,12 @@
                     if (isset($_REQUEST['searchfield']))
                     {
                         $tracing = get_data_form(); // getting data
-                        $reply = $tracing->searchSportsman($_REQUEST['searchfield']); // getting reply
+                        $reply = $tracing->searchSportsman2($_REQUEST['searchfield']); // getting reply
                         unset($_REQUEST['searchfield']);
 
                         if (is_string($reply))
                         {
-                            $data = $user->toList(); // getting users list
+                            $data = $tracing->toListSportsmans(); // getting users list
                             new TracingDefault($data, $reply); // showing an error message
 
                         }else {
@@ -152,7 +152,7 @@
                      if (isset($_REQUEST['orderfield']))
                      {
                         $tracing = get_data_form();
-						$reply = $tracing->orderSportsman($_REQUEST['orderfield']); // getting reply
+						$reply = $tracing->orderSportsman2($_REQUEST['orderfield']); // getting reply
 
                         unset($_REQUEST['orderfield']);
 
