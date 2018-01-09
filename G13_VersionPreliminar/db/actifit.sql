@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 09-01-2018 a las 20:04:39
+-- Tiempo de generación: 09-01-2018 a las 23:17:05
 -- Versión del servidor: 5.7.19
 -- Versión de PHP: 5.6.31
 
@@ -520,6 +520,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `contrasenha` varchar(300) NOT NULL,
   `nombre` varchar(45) NOT NULL,
   `apellidos` varchar(45) NOT NULL,
+  `sexo` varchar(15) NOT NULL,
   `dni` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
   `borrado` tinyint(4) NOT NULL,
@@ -533,21 +534,22 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `login_UNIQUE` (`login`),
   UNIQUE KEY `dni_UNIQUE` (`dni`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT IGNORE INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellidos`, `dni`, `email`, `borrado`, `tipo`, `clase`, `entrenador_id`, `entrenador_nombre`, `imagen`) VALUES
-(1, 'admin', '$2y$15$tKzm9o7fcPtDC9jD91nBHev7FVl15cgUJFReu/e/xuUrQNZfssnYa', 'admin', 'admin', '26826819X', 'actifitmail@gmail.com', 0, 'Administrador', 'Otro', NULL, NULL, 'default.png'),
-(2, 'secretario', '$2y$15$nKNj3f1/BkxclMiJYp/1PeQ7sVkrO4J5A3vWSrPqXQ3/dAWaCbJD6', 'secretario', 'secretario', '91690140L', 'saveiga@esei.uvigo.es', 0, 'Secretario', 'Otro', NULL, NULL, 'default.png'),
-(3, 'entrenador', '$2y$15$8n35X28JIU46CXjTACBZTO6Y1radwkcEZFRyrBzSY5AqvIhzJ5wMm', 'entrenador', 'entrenador', '78879758Q', 'dpvazquez@esei.uvigo.es', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
-(4, 'deportista', '$2y$15$LKEFHg8CLu7wKfmGg605R.nJDwVkrFWMtW41KFIvfYXUX2hYUZQbW', 'deportista', 'deportista', '27245554F', 'pcperez2@esei.uvigo.es', 0, 'Deportista', 'PEF', 3, 'entrenador, entrenador', 'default.png'),
-(5, 'deportista2', '$2y$15$GAnBBHxkDagIEmM4MBClY.sLyzXF358348Jy6Uub6H8z5rq5gfn4m', 'deportistaDos', 'deportistaDos', '72946407K', 'afmontero@esei.uvigo.es', 0, 'Deportista', 'PEF', 3, 'entrenador, entrenador', 'default.png'),
-(20, 'entrenador2', '$2y$15$5TkMsABh4XEIWaNyLsKnZ.ZqVBA/Tg4KnvQkVVv5RI0RplIk3cNf6', 'entrenadorDos', 'entrenadorDos', '29567043Z', 'entrenador2@gmail.com', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
-(25, 'deportista3', '$2y$15$mJLfWdXBuWDx/KlwbRItaOGd.2Y795GmOYZHvqWPZYk8XxORhzt2W', 'deportistaTres', 'deportistaTres', '96275637Y', 'deportista3@gmail.com', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
-(27, 'deportista4', '$2y$15$2yXtUJy4JcPNt0ckygAU7ekoYtb8qtpYj63Wfr5.Jr8ORgmbez66y', 'deportistaCuatro', 'deportistaCuatro', '68215504B', 'deportista4@gmail.com', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png');
+INSERT IGNORE INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellidos`, `sexo`, `dni`, `email`, `borrado`, `tipo`, `clase`, `entrenador_id`, `entrenador_nombre`, `imagen`) VALUES
+(1, 'admin', '$2y$15$tKzm9o7fcPtDC9jD91nBHev7FVl15cgUJFReu/e/xuUrQNZfssnYa', 'admin', 'admin', '', '26826819X', 'actifitmail@gmail.com', 0, 'Administrador', 'Otro', NULL, NULL, 'default.png'),
+(2, 'secretario', '$2y$15$nKNj3f1/BkxclMiJYp/1PeQ7sVkrO4J5A3vWSrPqXQ3/dAWaCbJD6', 'secretario', 'secretario', '', '91690140L', 'saveiga@esei.uvigo.es', 0, 'Secretario', 'Otro', NULL, NULL, 'default.png'),
+(3, 'entrenador', '$2y$15$8n35X28JIU46CXjTACBZTO6Y1radwkcEZFRyrBzSY5AqvIhzJ5wMm', 'entrenador', 'entrenador', 'Hombre', '78879758Q', 'dpvazquez@esei.uvigo.es', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
+(4, 'deportista', '$2y$15$LKEFHg8CLu7wKfmGg605R.nJDwVkrFWMtW41KFIvfYXUX2hYUZQbW', 'deportista', 'deportista', 'Hombre', '27245554F', 'pcperez2@esei.uvigo.es', 0, 'Deportista', 'PEF', 3, 'entrenador, entrenador', 'default.png'),
+(5, 'deportista2', '$2y$15$GAnBBHxkDagIEmM4MBClY.sLyzXF358348Jy6Uub6H8z5rq5gfn4m', 'deportistaDos', 'deportistaDos', 'Mujer', '72946407K', 'afmontero@esei.uvigo.es', 0, 'Deportista', 'PEF', 3, 'entrenador, entrenador', 'default.png'),
+(20, 'entrenador2', '$2y$15$5TkMsABh4XEIWaNyLsKnZ.ZqVBA/Tg4KnvQkVVv5RI0RplIk3cNf6', 'entrenadorDos', 'entrenadorDos', 'Mujer', '29567043Z', 'entrenador2@gmail.com', 0, 'Entrenador', 'Otro', NULL, NULL, 'default.png'),
+(25, 'deportista3', '$2y$15$mJLfWdXBuWDx/KlwbRItaOGd.2Y795GmOYZHvqWPZYk8XxORhzt2W', 'deportistaTres', 'deportistaTres', 'Otro', '96275637Y', 'deportista3@gmail.com', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
+(27, 'deportista4', '$2y$15$2yXtUJy4JcPNt0ckygAU7ekoYtb8qtpYj63Wfr5.Jr8ORgmbez66y', 'deportistaCuatro', 'deportistaCuatro', 'Otro', '68215504B', 'deportista4@gmail.com', 0, 'Deportista', 'TDU', NULL, NULL, 'default.png'),
+(28, 'deportista5', '$2y$15$7gEdZgiEAEwIk0R61NkUqOj4FyB4PF97i6BXai.Pt37bnAE4DKrPe', 'deportistaCinco', 'deportistaCinco', 'Mujer', '59249012T', 'deportista5@gmail.com', 0, 'Deportista', 'PEF', 3, 'entrenador, entrenador', 'default.png');
 
 --
 -- Restricciones para tablas volcadas
