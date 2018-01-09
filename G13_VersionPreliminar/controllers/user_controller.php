@@ -315,6 +315,9 @@
                     $user = get_data_form();
                     $data = $user->toListSwitch(); // getting users list
                     $reply = $user->toListSwitch();
+                    if(!is_string($reply)){
+                    	$reply = '';
+                    }
                     new UserDefault($data, $reply); // showing users list without a message
 
                     break;
