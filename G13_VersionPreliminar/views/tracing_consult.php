@@ -43,11 +43,17 @@ class TracingConsult
                             <a href='tracing_controller.php?sesionId=<?php echo $this->data1[0]['sesionId']; ?>&action=<?php echo $strings['previousTable']; ?>' class="btn btn-md btn-primary" id="newButton"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span> <?php echo $strings['previous']; ?>  </a>
                             <a href='tracing_controller.php?sesionId=<?php echo $this->data1[0]['sesionId']; ?>&action=<?php echo $strings['nextTable']; ?>' class="btn btn-md btn-primary" id="newButton"> <?php echo $strings['next']; ?> <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> </a>
                         </div>
+                    <?php
+                        if($this->data1[0]['completado'] == '0')
+                        {
 
+                        
+                    ?>
                         <div class="col-md-12" id="new">
                             <a href='tracing_controller.php?sesionId=<?php echo $this->data1[0]['sesionId']; ?>&action=<?php echo $strings['startTime']; ?>' class="btn btn-md btn-warning" id="newButton"> <?php echo $strings['startTime']; ?> <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> </a>
                         </div>
                     <?php
+                        }
                     }
                     ?>
 
