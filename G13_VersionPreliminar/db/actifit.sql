@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 09-01-2018 a las 23:17:05
+-- Tiempo de generación: 10-01-2018 a las 13:03:23
 -- Versión del servidor: 5.7.19
 -- Versión de PHP: 5.6.31
 
@@ -417,10 +417,10 @@ INSERT IGNORE INTO `sesiondelineadetabla` (`id`, `completado`, `sesiones_id`, `l
 (160, 0, 263, 16),
 (161, 0, 263, 17),
 (162, 0, 263, 18),
-(163, 0, 264, 1),
+(163, 1, 264, 1),
 (164, 0, 264, 2),
-(165, 0, 264, 3),
-(166, 0, 264, 4),
+(165, 1, 264, 3),
+(166, 1, 264, 4),
 (167, 0, 264, 5),
 (168, 0, 264, 6),
 (169, 0, 265, 7),
@@ -477,7 +477,7 @@ INSERT IGNORE INTO `sesiones` (`id`, `completado`, `fecha`, `inicio`, `fin`, `co
 (261, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:06', '2018-01-09 19:10:07', NULL, 1, 1, 3, 4, 3, 260),
 (262, 1, '2018-01-09 19:07:59', '2018-01-09 19:11:04', '2018-01-09 19:11:06', NULL, 2, 2, 3, 4, 3, 261),
 (263, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:40', '2018-01-09 19:10:48', NULL, 3, 3, 3, 4, 3, 262),
-(264, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 1, 1, 3, 4, 3, 263),
+(264, 1, '2018-01-09 19:11:06', '2018-01-10 11:57:05', '2018-01-10 12:03:09', 'Comentario de la sesiÃ³n', 1, 1, 3, 4, 3, 263),
 (265, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 2, 2, 3, 4, 3, 264),
 (266, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 3, 3, 3, 4, 3, 265),
 (269, 0, '2018-01-09 19:36:25', NULL, NULL, NULL, 1, 2, 2, 27, 5, NULL),
@@ -526,7 +526,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `borrado` tinyint(4) NOT NULL,
   `tipo` varchar(45) NOT NULL,
   `clase` varchar(10) NOT NULL,
-  `entrenador_id` int(1) DEFAULT NULL,
+  `entrenador_id` int(11) DEFAULT NULL,
   `entrenador_nombre` varchar(90) DEFAULT NULL,
   `imagen` varchar(90) DEFAULT NULL,
   PRIMARY KEY (`id`),
