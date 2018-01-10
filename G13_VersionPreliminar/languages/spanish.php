@@ -300,7 +300,7 @@ $strings = array(
 
 	'days'	=>	'Actividades por día',
     'activitiesUsers'	=> 'Nº de usuarios por actividad',
-    'amountUsers'	=> 'Deportistas totales: ',
+    'amountUsers'	=> 'Deportistas totales',
     'TDUUsers'	=>	'Deportistas TDU',
     'PEFUsers'	=>	'Deportistas PEF',
     'numExercises'	=> 'Nº de ejercicios: ',
