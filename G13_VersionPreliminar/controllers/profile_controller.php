@@ -22,6 +22,7 @@
 		$clase = '';
 		$entrenador_id = '';
 		$imagen = '';
+        $sexo ='';
 
 		if(isset($_REQUEST['id']))
 		{
@@ -81,6 +82,11 @@
 			$entrenador_id = $_REQUEST['entrenador_id'];
 			unset($_REQUEST['entrenador_id']);
 		}
+        if(isset($_REQUEST['sexo']))
+        {
+            $sexo = $_REQUEST['sexo'];
+            unset($_REQUEST['sexo']);
+        }
         if(isset($_FILES['imagen']))
         {
             if ($_FILES['imagen']['size'] > 0)
@@ -94,7 +100,7 @@
             }
         }
 
-		$user = new UserModel($id,$login,$contrasenha,$nombre,$apellidos,$dni,$email,$tipo,$tipoOri,$clase,$entrenador_id,$imagen);
+		$user = new UserModel($id,$login,$contrasenha,$nombre,$apellidos,$sexo,$dni,$email,$tipo,$tipoOri,$clase,$entrenador_id,$imagen);
 
 		return $user;
 	}
