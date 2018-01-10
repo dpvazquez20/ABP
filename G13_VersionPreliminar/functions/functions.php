@@ -1562,7 +1562,7 @@ function generateSecretaryStatistics($data)
             
             <!-- Showing the amount of users -->
             <div class="col-md-4">
-                <h3 style="text-align: center">' . $strings['amountUsers'] . $data['numUsers'] . '</h3>
+                <h3 style="text-align: center">' . $strings['amountUsers'] . ": " . $data['numUsers'] . '</h3>
                     <div class="list-group">
                         <a class="list-group-item">' . $strings['TDUUsers'] . '<span class="badge">' . $data['TDUUsers'] . '</span></a>
                         <a class="list-group-item">' . $strings['PEFUsers'] . '<span class="badge">' . $data['PEFUsers'] . '</span></a>
@@ -1742,7 +1742,7 @@ function generateCoachStatistics($data)
     echo '<div class="row" style="margin-top: 1%">
             <!-- Showing amount of exercises -->
             <div class="col-md-4">
-                <h3 style="text-align: center">' . $strings['numExercises'] . $data['numExercises'] . '</h3>
+                <h3 style="text-align: center">' . $strings['numExercises'] . ": " . $data['numExercises'] . '</h3>
                     <div class="list-group">
                         <a class="list-group-item">' . $strings['numMuscular'] . '<span class="badge">' . $data['numMuscular'] . '</span></a>
                         <a class="list-group-item">' . $strings['numCardio'] . '<span class="badge">' . $data['numCardio'] . '</span></a>
