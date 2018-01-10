@@ -102,19 +102,6 @@ class ProfileDefault
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
-                                        <div class="col-md-10">
-                                            <select class="selectpicker form-control" name="tipo" id="tipo">
-                                                <!--<option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option>-->
-                                                <option value=""> <?php echo $this->data[0]['tipo']; ?> </option>
-                                                <option value="<?php echo $strings['admin']; ?>"> <?php echo $strings['admin']; ?> </option>
-                                                <option value="<?php echo $strings['secretary']; ?>"> <?php echo $strings['secretary']; ?> </option>
-                                                <option value="<?php echo $strings['coach']; ?>"> <?php echo $strings['coach']; ?> </option>
-                                                <option value="<?php echo $strings['sportsman']; ?>"> <?php echo $strings['sportsman']; ?> </option>
-                                            </select>
-                                        </div>
-                                    </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="imagen"> <?php echo $strings['imagen']; ?> </label>
