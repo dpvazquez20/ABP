@@ -73,7 +73,6 @@ $strings = array(
 	
 	//Assistance
 	'ErrorNoResults' => 'No hay inscripciones',
-	'Consult assistance' => 'Consultar asistencia',
 	
 	// Resource
 	'aforo' => 'Aforo',
@@ -105,8 +104,6 @@ $strings = array(
     'Enter end time'	=>	'Introduzca hora de fin',
     'Enter maximum number of participants'	=> 'Introduce el numero máximo de participantes',
     'Enter start time' => 'Introuzca hora de inicio',
-	'Enter start date' => 'Introduzca fecha de inicio',
-	'Enter end date' => 'Introduzca fecha de fin',
 	// Resource
 	'Enter capacity' => 'Introduzca aforo',
 
@@ -265,7 +262,17 @@ $strings = array(
 	'noSearchUserTrainer' => 'El entrenador no tiene usuarios asignados con esas características',
 	
 	'Assing' => 'Asignar',
-	'AssingSuccess' => 'Entrenamiento asignado con éxito',	
+	'AssingSuccess' => 'Entrenamiento asignado con éxito',
+	'sexo' => 'Sexo',
+	'man' => 'Hombre',
+	'woman' => 'Mujer',
+	'TracingErrorStatistics' => 'No hay datos para generar estadísticas',
+	'ActivityPerDay' => 'Actividades por días',
+	'SportsmanProgression' => 'Progresión del deportista',
+	'TimesPerTable' => 'Tiempos por tabla (minutos)',
+	'TopExercises' => 'Ejercicios más usados',
+	'Statistic' => 'Estadística',
+	'Statistics' => 'Estadísticas',
 
 	// ----------------------------------------------------------------
 	
