@@ -328,7 +328,7 @@ function showMessage ($message)
         }
         // Print an info danger message if 'success' doesn't appear in the message and if $strings['UpdateNoModify'] appear
         else {
-            if($message == $strings['UpdateNoModify'])
+            if($message == $strings['UpdateNoModify'] || $message == $strings['TracingErrorStatistics'])
             {
                 echo    '<div class="col-md-12" id="operation-message">
                         <div class="alert alert-info alert-dismissable" id="messageAlert">
@@ -1050,7 +1050,7 @@ function generateViewTracingCoach2 ($list, $page_name, $titles)
         for ($i = 0; $i < count($list); $i++)
         {
             echo        '<tr>';
-            //die();
+
             for ($j = 0; $j < count($titles); $j++)
             {
                 // Check if the attribute is an image
@@ -1532,9 +1532,9 @@ function generateSecretaryStatistics($data)
     $result = mergeList($users,$users2);
 
     // View
-    echo '<div class="row" style="margin-top: 1%">
+    echo '<div class="row" >
             <!-- Showing activities per day -->
-            <div class="col-md-4">
+            <div class="col-md-4" style="margin: auto">
                 <h3 style="text-align: center">' . $strings['days'] . '</h3>
                     <div class="list-group">
                         <a class="list-group-item">' . $strings['monday'] . '<span class="badge">' . $activities['monday'] . '</span></a>
@@ -1547,7 +1547,7 @@ function generateSecretaryStatistics($data)
             <!-- End -->';
             
     echo    '<!-- Showing users per activity -->
-            <div class="col-md-4">
+            <div class="col-md-4" style="margin: auto">
                 <h3 style="text-align: center">' . $strings['activitiesUsers'] . '</h3>
                     <div class="list-group">';
 
@@ -1561,7 +1561,7 @@ function generateSecretaryStatistics($data)
             <!-- End -->
             
             <!-- Showing the amount of users -->
-            <div class="col-md-4">
+            <div class="col-md-4" style="margin: auto">
                 <h3 style="text-align: center">' . $strings['amountUsers'] . ": " . $data['numUsers'] . '</h3>
                     <div class="list-group">
                         <a class="list-group-item">' . $strings['TDUUsers'] . '<span class="badge">' . $data['TDUUsers'] . '</span></a>
@@ -1611,8 +1611,6 @@ function getActivitiesPerDays()
 
     return $toret;
 }
-
-
 
 
 /** Function to get the amount of users per activities
@@ -1741,7 +1739,7 @@ function generateCoachStatistics($data)
     // View
     echo '<div class="row" style="margin-top: 1%">
             <!-- Showing amount of exercises -->
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <h3 style="text-align: center">' . $strings['numExercises'] . ": " . $data['numExercises'] . '</h3>
                     <div class="list-group">
                         <a class="list-group-item">' . $strings['numMuscular'] . '<span class="badge">' . $data['numMuscular'] . '</span></a>
@@ -1752,8 +1750,8 @@ function generateCoachStatistics($data)
             <!-- End -->';
 
     echo    '<!-- Showing the most used exercise -->
-            <div class="col-md-4">
-                <h3 style="text-align: center">' . $strings['mostUsedExercise'] . '</h3>
+            <div class="col-md-6">
+                <h3 style="text-align: center">' . $strings['TopExercises'] . '</h3>
                     <div class="list-group">';
 
                     foreach ($mExercises as $row)
@@ -1765,17 +1763,17 @@ function generateCoachStatistics($data)
             </div>
             <!-- End -->';
       
-    echo    '<!-- Showing the percentage of men/women -->
+    /*echo    '<!-- Showing the percentage of men/women -->
             <div class="col-md-4">
                 <h3 style="text-align: center">' . $strings['menWomen'] . '</h3>
                     <div class="list-group">
-                       <a class="list-group-item">' . $strings['men'] . '<span class="badge"> 0% </span></a>
+                       <a class="list-group-item">' . $strings['men'] . '<span class="badge">' .  . '%</span></a>
                        <a class="list-group-item">' . $strings['women'] . '<span class="badge"> 0% </span></a>
                        <a class="list-group-item">Los métodos de modelo ya están hechos, falta que descomenteis lo de generateCoach() en el modelo y pongáis estas 2 badges bien<span class="badge"> 0% </span></a>
                     </div>
             </div>
             <!-- End -->
-          </div>';
+          </div>';*/
    
 }
 
@@ -1799,11 +1797,9 @@ function getMostUsedExercise()
 
     } else {
 
-        $sql = "SELECT MAX(lineaid) AS num, nom AS nombre 
-                FROM (SELECT COUNT(lineasdetabla.ejercicio_id) AS lineaid, ejercicios.nombre AS nom
-                      FROM lineasdetabla
-                      INNER JOIN ejercicios ON lineasdetabla.ejercicio_id = ejercicios.id WHERE ejercicios.borrado = '0'
-                      GROUP BY lineasdetabla.ejercicio_id) AS aux";
+        $sql = "SELECT lineaid AS num, nom AS nombre FROM (SELECT COUNT(lineasdetabla.ejercicio_id) AS lineaid, ejercicios.nombre AS nom FROM lineasdetabla INNER JOIN ejercicios ON lineasdetabla.ejercicio_id = ejercicios.id WHERE ejercicios.borrado = '0' GROUP BY lineasdetabla.ejercicio_id) AS aux ORDER BY lineaid DESC LIMIT 5";
+
+        //die("die: $sql");
 
         $result = $mysqli->query($sql); // getting hard data
 
@@ -1883,7 +1879,7 @@ function generateViewStatisticsCoach($list, $page_name,$titles)
             // Print the buttons for each element
                         echo '<td>
                                   <div class="pull-right action-buttons">';
-                        echo         '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['See'] . '" class="btn btn-sm btn-primary">' . $strings['Statistics'] . '&nbsp<span class="glyphicon glyphicon-signal" aria-hidden="true"></span> </a>';
+                        echo         '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['Statistic'] . '" class="btn btn-sm btn-primary">' . $strings['Statistics'] . '&nbsp<span class="glyphicon glyphicon-signal" aria-hidden="true"></span> </a>';
                         echo     '</div>
                             </td>';
             echo '</tr>';
@@ -2181,6 +2177,60 @@ function generateListUsers ($list, $page_name, $titles)
                 </table>
              </div>';
     }
+}
+
+function generateStatisticsSportsman($data){
+
+     include '../languages/spanish.php';
+
+    $toret = "data.addColumn('number', '" . $strings['sesiones'] . "');";
+
+    for ($i = 1; $i < count($data[0]); $i++)
+    {
+        $toret .= "data.addColumn('number', '" . $data[0][$i] . "');";
+    }
+
+    $toret .= "
+
+    data.addRows([
+    ";
+
+    $maxCols = 0;
+
+    for ($i = 1; $i < count($data); $i++) // para cada fila
+    {
+        if(count($data[$i]) > $maxCols){
+            $maxCols = count($data[$i]);
+        }
+    }
+
+
+    for ($i = 1; $i < count($data); $i++) // para cada fila
+    {
+
+        $toret .= "[" . $i;
+
+        for ($j = 1; $j <= $maxCols; $j++) // para cada columna
+        {
+            if(isset($data[$i][$j])){
+                $toret .= ", " . $data[$i][$j];
+            }else{
+                $toret .= ", 0";
+            }             
+        }
+
+        $toret .= "]";
+
+        if($i <> (count($data)-1)){
+            $toret .= ",";
+        }
+
+    }
+
+    $toret .= "
+    ]);";
+    
+    return $toret;
 }
 
 
