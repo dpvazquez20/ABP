@@ -53,7 +53,7 @@ class LogIn
                     </div>
                     <!-- End of the operation message -->
 
-                    <!-- Form to recover your username and password -->
+                    <!-- Form to recover your username and password
                     <div class="col-md-8" id="forget-text">
                         <p> <?php echo $strings['If you have forgotten your username or password press']; ?> <a href="#" id="forget"> <?php echo $strings['Here']; ?> </a></p>
                     </div>
