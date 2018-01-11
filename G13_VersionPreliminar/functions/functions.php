@@ -25,7 +25,7 @@ function generateNavbar ($user_type)
 
     if (strcmp($user_type, 'Deportista') == 0)
     {
-        $funcionalities = array('Inscription', 'Statistics', 'Tracing');
+        $funcionalities = array('Inscription', 'Tracing');
     }
 
     if (strcmp($user_type, 'unregistered') == 0)
