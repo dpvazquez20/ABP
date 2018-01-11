@@ -21,6 +21,7 @@ class TracingList
             include '../languages/spanish.php';
             include '../functions/functions.php';
         ?>
+
         <title> <?php echo $strings['Consult user']; ?> </title>
 
         <body>
@@ -29,13 +30,9 @@ class TracingList
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Menu -->
-                        <?php generateNavbar($_SESSION['userType']); ?>
-                        <!-- End of the menu -->
+                        <?php generateNavbar($_SESSION['userType']); 
 
-                        <?php
                             $titles = array('fecha', 'inicio', 'fin', 'completado','enlace');
-
-                            //die("die" . print_r($this->data1));
                             generateViewTracingList($this->data1,$titles,$this->idUser);
 
                         ?>

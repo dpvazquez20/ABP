@@ -5,7 +5,6 @@ class UserAdd
 {
     function __construct($coaches)
     {
-        //die("die: $coaches");
         $this->coaches = $coaches;
         $this->render();
     }
@@ -71,6 +70,17 @@ class UserAdd
                                         <label class="control-label col-md-2" for="apellidos"> <?php echo $strings['apellidos']; ?>* </label>
                                         <div class="col-md-10">
                                             <input type="text" class="form-control" name="apellidos" id="apellidos" placeholder=" <?php echo $strings['Enter surnames']; ?> " onchange="validarAlfabetico(this)" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['sexo']; ?>* </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="sexo" id="sexo" required>
+                                                <option value="<?php echo $strings['man']; ?>" selected> <?php echo $strings['man']; ?> </option>
+                                                <option value="<?php echo $strings['woman']; ?>"> <?php echo $strings['woman']; ?> </option>
+                                                <option value="<?php echo $strings['other']; ?>"> <?php echo $strings['other']; ?> </option>
+                                            </select>
                                         </div>
                                     </div>
 

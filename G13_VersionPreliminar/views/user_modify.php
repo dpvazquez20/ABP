@@ -76,6 +76,25 @@ class UserModify
                                         </div>
                                     </div>
 
+                                <?php
+                                    if($this->data[0]['tipo'] == 'Deportista' || $this->data[0]['tipo'] == 'Entrenador')
+                                    {
+                                ?>
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['sexo']; ?>* </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="sexo" id="sexo" required>
+                                                <option value="" selected> <?php echo $this->data[0]['sexo']; ?> </option>
+                                                <option value="<?php echo $strings['man']; ?>"> <?php echo $strings['man']; ?> </option>
+                                                <option value="<?php echo $strings['woman']; ?>"> <?php echo $strings['woman']; ?> </option>
+                                                <option value="<?php echo $strings['other']; ?>"> <?php echo $strings['other']; ?> </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                <?php
+                                    }
+                                ?>
+
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="email"> <?php echo $strings['email']; ?> </label>
                                         <div class="col-md-10">
@@ -90,6 +109,21 @@ class UserModify
                                         </div>
                                     </div>
 
+                                    <input type="hidden" name="tipoOri" value="<?php echo $this->data[0]['tipo']; ?>">
+
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="tipo" id="tipo">
+                                                <!--<option data-hidden="true"> <?php echo $strings['Nothing selected']; ?> </option>-->
+                                                <option value=""> <?php echo $this->data[0]['tipo']; ?> </option>
+                                                <option value="<?php echo $strings['admin']; ?>"> <?php echo $strings['admin']; ?> </option>
+                                                <option value="<?php echo $strings['secretary']; ?>"> <?php echo $strings['secretary']; ?> </option>
+                                                <option value="<?php echo $strings['coach']; ?>"> <?php echo $strings['coach']; ?> </option>
+                                                <option value="<?php echo $strings['sportsman']; ?>"> <?php echo $strings['sportsman']; ?> </option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['clase']; ?> </label>

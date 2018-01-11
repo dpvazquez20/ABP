@@ -65,13 +65,13 @@ class UserDefault
                             <div class="col-md-12">
                                 <!-- List -->
                                 <?php
-                                    $titles = array('imagen', 'nombre', 'apellidos', 'dni','tipo','clase');
 
                                     if ($_SESSION['userType'] == $strings['coach'])
                                     {
+                                        $titles = array('imagen', 'apellidos', 'nombre', 'sexo','dni','clase');
                                         generateListCoach($this->data, 'training', $titles);
                                     } else {
-
+                                        $titles = array('imagen', 'apellidos', 'nombre', 'sexo', 'dni','tipo','clase');
                                         generateList ($this->data, 'user', $titles);
                                     }
                                 ?>
