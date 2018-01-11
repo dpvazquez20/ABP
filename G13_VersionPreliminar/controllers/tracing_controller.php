@@ -4,8 +4,8 @@
     include '../views/tracing_default.php';
     include '../views/tracing_list.php';
     include '../views/tracing_statistic.php';
-    include '../views/tracing_add.php';
-    include '../views/tracing_modify.php';
+    //include '../views/tracing_add.php';
+    //include '../views/tracing_modify.php';
     include '../views/tracing_consult.php';
     include '../languages/spanish.php';
     include '../views/log_in.php';
