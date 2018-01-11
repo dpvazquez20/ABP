@@ -123,7 +123,7 @@
                 default:
                     $statistic = get_data_form();
                     $data = $statistic->generateCoach(); // getting coach's statistic
-                    $list = $statistic->toList(); // getting users list
+                    $list = $statistic->toListUsersCoach($_SESSION['userId']); // getting users list
                     $reply = '';
                     new StatisticDefault($data, $reply, $list); // showing users list without a message
 

@@ -3,6 +3,7 @@
     include '../models/tracing_model.php';
     include '../views/tracing_default.php';
     include '../views/tracing_list.php';
+    include '../views/tracing_statistic.php';
     include '../views/tracing_add.php';
     include '../views/tracing_modify.php';
     include '../views/tracing_consult.php';
@@ -57,6 +58,27 @@
 
 			Switch ($action)
             {
+
+            	case $strings['Statistic']:
+
+            		if (isset($_REQUEST['id'])) // if we have form's data, we insert it
+					{
+						$tracing = get_data_form(); // getting data
+						$data1 = $tracing->getSessions($_REQUEST['id']);
+						if($data1 == $strings['NoTrainingError'] || $data1 == $strings['TracingErrorNotStarted']){
+							new TracingDefault($data1,$data1);
+						}else{
+							$data2 = $tracing->generateStaticsTracing($_REQUEST['id']);
+							new TracingStatistic($data1, $data2, $_REQUEST['id']);
+						}
+					
+					}else { // if not, the view is called
+						$tracing = get_data_form(); // getting data
+						$data = $tracing->toListSportsmans(); // trying consult
+						new TracingDefault($data,''); // showing user data 
+					}
+
+            		break;
 
             	case $strings['List']:
 
