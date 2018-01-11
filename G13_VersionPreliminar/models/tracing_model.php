@@ -1075,6 +1075,68 @@ class TracingModel
     }
 
 
+    function generateStaticsTracing($id)
+    {
+
+    	include '../languages/spanish.php';
+
+    	$sql = "
+    	SELECT tablas.nombre, tablas.id
+    	FROM sesiones
+    		INNER JOIN tablas
+    		ON tablas.id = sesiones.tablas_id AND sesiones.usuarios_id = '$id' AND sesiones.completado = '1' GROUP BY tablas.nombre
+    	";
+
+	    // checking DB connection
+	    if (!$result = $this->mysqli->query($sql))
+	    {
+	        $toret = $strings['connectionDBError'];
+	    }else {
+
+	        // checking that at least one user exists
+	        if ($result->num_rows > 0)
+	        {
+	            $toret[0][0] = 'indice';
+	            $i=1;
+
+	            // introducing all users into an array
+	            while ($row = $result->fetch_array())
+	            {
+	            	$toret[0][$i] = $row['nombre'];
+
+	            	$sql2 = "SELECT id,fecha,inicio,fin FROM sesiones WHERE usuarios_id = '$id' AND completado = '1' AND tablas_id = '" . $row['id'] . "' ORDER BY  fecha,id";
+
+	            	$result2 = $this->mysqli->query($sql2);
+
+	            	$j = 1;
+
+	            	while ($row2 = $result2->fetch_array())
+	            	{
+	            		$dateStart = new DateTime($row2['inicio']);
+	            		$dateEnd = new DateTime($row2['fin']);
+	            		$difference = $dateStart->diff($dateEnd);
+	            		$diffH = $difference->format("%H");
+	            		$diffI = $difference->format("%I");
+	            		$diffS = $difference->format("%S");
+
+	            		$diffNum = ($diffH*60) + $diffI + ($diffS/60);
+	
+	            		$toret[$j][$i] = $diffNum;
+	            		$j++;
+	            	}
+
+	                $i++;
+	            }
+	        }else {
+	            $toret = $strings['TracingErrorStatistics'];
+	        }
+	    }
+
+        return $toret;
+
+    }
+
+
 }
 
 ?>

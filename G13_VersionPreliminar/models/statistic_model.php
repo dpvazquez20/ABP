@@ -89,8 +89,9 @@ class StatisticModel
         $toret['numMuscular'] = StatisticModel::getMuscular();
         $toret['numCardio'] = StatisticModel::getCardio();
         $toret['numStretching'] = StatisticModel::getStretching();
-        //$toret['men'] = StatisticModel::getMen();
-        //$toret['women'] = 100 - $toret['men'];
+        $toret['men'] = StatisticModel::getMen();
+        $toret['women'] = StatisticModel::getWomen();
+        $toret['otro'] = StatisticModel::getOther();
 
         return $toret;
     }
@@ -100,7 +101,7 @@ class StatisticModel
     {
         include '../languages/spanish.php';
 
-        $sql= "SELECT id FROM ejercicios";
+        $sql= "SELECT id FROM ejercicios WHERE borrado = '0'";
 
         if (!$result = $this->mysqli->query($sql))
         {
@@ -117,7 +118,7 @@ class StatisticModel
     {
         include '../languages/spanish.php';
 
-        $sql= "SELECT id FROM ejercicios WHERE tipo = 'Muscular'";
+        $sql= "SELECT id FROM ejercicios WHERE tipo = 'Muscular' AND borrado = '0'";
 
         if (!$result = $this->mysqli->query($sql))
         {
@@ -134,7 +135,7 @@ class StatisticModel
     {
         include '../languages/spanish.php';
 
-        $sql= "SELECT id FROM ejercicios WHERE tipo = 'Cardiovascular'";
+        $sql= "SELECT id FROM ejercicios WHERE tipo = 'Cardiovascular' AND borrado = '0'";
 
         if (!$result = $this->mysqli->query($sql))
         {
@@ -151,7 +152,7 @@ class StatisticModel
     {
         include '../languages/spanish.php';
 
-        $sql= "SELECT id FROM ejercicios WHERE tipo = 'Estiramiento'";
+        $sql= "SELECT id FROM ejercicios WHERE tipo = 'Estiramiento' AND borrado = '0'";
 
         if (!$result = $this->mysqli->query($sql))
         {
@@ -168,7 +169,61 @@ class StatisticModel
     {
         include '../languages/spanish.php';
 
-        $sql= "SELECT id FROM usuarios WHERE tipo = 'Deportista' AND sexo = 'Hombre'";
+        $sql= "SELECT id FROM usuarios WHERE tipo = 'Deportista' AND sexo = 'Hombre' AND borrado = '0'";
+
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['ConnectionDBError'];
+        }else {
+            $num = $result->num_rows;
+        }
+
+        $sql= "SELECT id FROM usuarios WHERE tipo = 'Deportista'";
+
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['ConnectionDBError'];
+        }else {
+            $tot = $result->num_rows;
+        }
+
+        $toret = ($num / $tot) * 100;
+
+        return $toret;
+    }
+
+    function getWomen()
+    {
+        include '../languages/spanish.php';
+
+        $sql= "SELECT id FROM usuarios WHERE tipo = 'Deportista' AND sexo = 'Mujer' AND borrado = '0'";
+
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['ConnectionDBError'];
+        }else {
+            $num = $result->num_rows;
+        }
+
+        $sql= "SELECT id FROM usuarios WHERE tipo = 'Deportista'";
+
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['ConnectionDBError'];
+        }else {
+            $tot = $result->num_rows;
+        }
+
+        $toret = ($num / $tot) * 100;
+
+        return $toret;
+    }
+
+    function getOther()
+    {
+        include '../languages/spanish.php';
+
+        $sql= "SELECT id FROM usuarios WHERE tipo = 'Deportista' AND sexo = 'Otro' AND borrado = '0'";
 
         if (!$result = $this->mysqli->query($sql))
         {
@@ -196,7 +251,7 @@ class StatisticModel
     {
 		include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY nombre";
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND ORDER BY nombre";
 
         // checking DB connection
 		if (!$result = $this->mysqli->query($sql))
@@ -227,6 +282,41 @@ class StatisticModel
 		return $toret;
 
 	}
+
+    function toListUsersCoach($coachId)
+    {
+
+        include '../languages/spanish.php';
+
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND tipo = 'deportista' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) ORDER BY apellidos,nombre";
+
+        // checking DB connection
+        if (!$result = $this->mysqli->query($sql))
+        {
+            $toret = $strings['connectionDBError'];
+        }else {
+            
+            // checking that at least one user exists
+            if ($result->num_rows != 0)
+            {
+
+                $toret=[];
+                $i=0;
+
+                // introducing all users into an array
+                while ($row = $result->fetch_array())
+                {
+
+                    $toret[$i] = $row;
+                    $i++;
+                }                       
+
+            }else {
+                $toret = $strings['ListErrorNotExist'];
+            }
+        }
+        return $toret;
+    }
 
 	// search users
     function search($word)
