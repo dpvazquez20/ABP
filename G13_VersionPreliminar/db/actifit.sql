@@ -3,13 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 10-01-2018 a las 13:03:23
+-- Tiempo de generación: 11-01-2018 a las 03:37:58
 -- Versión del servidor: 5.7.19
 -- Versión de PHP: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -45,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `actividades` (
   `fechaFin` date NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre_UNIQUE` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `actividades`
@@ -54,7 +52,9 @@ CREATE TABLE IF NOT EXISTS `actividades` (
 INSERT IGNORE INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `horaInicio`, `horaFin`, `tipo`, `numMaxParticipantes`, `borrado`, `coach_id`, `fechaInicio`, `fechaFin`) VALUES
 (40, 'Zumba', 'Se trata de una fusiÃ³n de ritmos aerÃ³bicos o coreografÃ­as sencillas con distintos gÃ©neros, inspirados en la mÃºsica latina y con una mezcla de mÃºsica internacional.', 'Martes', '17:00:00', '19:00:00', 'Grupal', 5, 0, 3, '2018-01-08', '2018-01-25'),
 (41, 'SoftBoxing', 'Clase de cardio utilizando movimientos propios del boxeo y otras artesmarciales que obligan a ejercitar todos los grupos musculares. ', 'Jueves', '20:00:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-16', '2018-01-26'),
-(42, 'Spinning', 'El spinning es una variante de los deportes de fitness (o de gimnasio) que consiste en pedalear sobre una bicicleta estÃ¡tica al ritmo de la mÃºsica y siguiendo los ejercicios que nos marca el monitor. TambiÃ©n se le llama indoor cycling.', 'MiÃ©rcoles', '19:30:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-09', '2018-01-26');
+(42, 'Spinning', 'El spinning es una variante de los deportes de fitness (o de gimnasio) que consiste en pedalear sobre una bicicleta estÃ¡tica al ritmo de la mÃºsica y siguiendo los ejercicios que nos marca el monitor. TambiÃ©n se le llama indoor cycling.', 'MiÃ©rcoles', '19:30:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-09', '2018-01-26'),
+(43, 'Actividad viernes', '', 'Viernes', '00:00:00', '00:01:00', 'Individual', 1, 0, 3, '2018-01-12', '2018-01-12'),
+(44, 'Actividad lunes', '', 'Lunes', '00:00:00', '00:01:00', 'Individual', 1, 0, 3, '2018-01-15', '2018-01-15');
 
 -- --------------------------------------------------------
 
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `inscripciones` (
   `usuario_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_inscripcion_usuario1_idx` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `inscripciones`
@@ -219,7 +219,8 @@ INSERT IGNORE INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALU
 (11, '2018-01-02', 1, 4),
 (12, '2018-01-02', 0, 5),
 (13, '2018-01-02', 0, 5),
-(14, '2018-01-09', 0, 4);
+(14, '2018-01-09', 1, 4),
+(15, '2018-01-11', 0, 4);
 
 -- --------------------------------------------------------
 
@@ -243,7 +244,8 @@ INSERT IGNORE INTO `inscripciones_has_actividades` (`inscripciones_id`, `activid
 (13, 40),
 (12, 41),
 (14, 41),
-(11, 42);
+(11, 42),
+(15, 44);
 
 -- --------------------------------------------------------
 
@@ -344,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   PRIMARY KEY (`id`),
   KEY `fk_reservas_actividades1_idx` (`actividades_id`),
   KEY `fk_recursos_id` (`recurso_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18989 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18992 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `reservas`
@@ -358,7 +360,9 @@ INSERT IGNORE INTO `reservas` (`id`, `fecha`, `borrado`, `actividades_id`, `recu
 (18985, '2018-01-25', 0, 41, 3),
 (18986, '2018-01-10', 0, 42, 4),
 (18987, '2018-01-17', 0, 42, 4),
-(18988, '2018-01-24', 0, 42, 4);
+(18988, '2018-01-24', 0, 42, 4),
+(18989, '2018-01-12', 0, 43, 1),
+(18990, '2018-01-15', 0, 44, 6);
 
 -- --------------------------------------------------------
 
@@ -471,17 +475,17 @@ CREATE TABLE IF NOT EXISTS `sesiones` (
 --
 
 INSERT IGNORE INTO `sesiones` (`id`, `completado`, `fecha`, `inicio`, `fin`, `comentario`, `tablas_id`, `orden_sesion`, `orden_sesion_max`, `usuarios_id`, `entrenamientos_id`, `anterior_id`) VALUES
-(258, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:41', '2018-01-09 19:07:43', NULL, 1, 1, 3, 4, 3, NULL),
-(259, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:58', '2018-01-09 19:07:59', NULL, 2, 2, 3, 4, 3, 258),
-(260, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:08', '2018-01-09 19:07:14', NULL, 3, 3, 3, 4, 3, 259),
-(261, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:06', '2018-01-09 19:10:07', NULL, 1, 1, 3, 4, 3, 260),
-(262, 1, '2018-01-09 19:07:59', '2018-01-09 19:11:04', '2018-01-09 19:11:06', NULL, 2, 2, 3, 4, 3, 261),
-(263, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:40', '2018-01-09 19:10:48', NULL, 3, 3, 3, 4, 3, 262),
-(264, 1, '2018-01-09 19:11:06', '2018-01-10 11:57:05', '2018-01-10 12:03:09', 'Comentario de la sesiÃ³n', 1, 1, 3, 4, 3, 263),
+(258, 1, '2018-01-09 19:03:01', '2018-01-09 19:03:41', '2018-01-09 19:37:43', NULL, 1, 1, 3, 4, 3, NULL),
+(259, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:58', '2018-01-09 19:45:59', NULL, 2, 2, 3, 4, 3, 258),
+(260, 1, '2018-01-09 19:03:01', '2018-01-09 19:07:08', '2018-01-09 19:55:14', NULL, 3, 3, 3, 4, 3, 259),
+(261, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:06', '2018-01-09 19:59:07', NULL, 1, 1, 3, 4, 3, 260),
+(262, 1, '2018-01-09 19:07:59', '2018-01-09 19:11:04', '2018-01-09 20:11:06', NULL, 2, 2, 3, 4, 3, 261),
+(263, 1, '2018-01-09 19:07:59', '2018-01-09 19:10:40', '2018-01-09 20:22:48', NULL, 3, 3, 3, 4, 3, 262),
+(264, 1, '2018-01-09 19:11:06', '2018-01-10 11:57:05', '2018-01-10 12:23:09', 'Comentario de la sesiÃ³n', 1, 1, 3, 4, 3, 263),
 (265, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 2, 2, 3, 4, 3, 264),
 (266, 0, '2018-01-09 19:11:06', NULL, NULL, NULL, 3, 3, 3, 4, 3, 265),
 (269, 0, '2018-01-09 19:36:25', NULL, NULL, NULL, 1, 2, 2, 27, 5, NULL),
-(270, 1, '2018-01-09 19:36:25', '2018-01-09 19:36:47', '2018-01-09 19:36:44', 'Escriba aquÃ­ sus comentarios', 6, 1, 2, 27, 5, 269);
+(270, 0, '2018-01-09 19:36:25', NULL, NULL, NULL, 6, 1, 2, 27, 5, 269);
 
 -- --------------------------------------------------------
 
@@ -608,7 +612,6 @@ ALTER TABLE `sesiondelineadetabla`
 --
 ALTER TABLE `sesiones`
   ADD CONSTRAINT `fk_sesiones_tablas1` FOREIGN KEY (`tablas_id`) REFERENCES `tablas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
