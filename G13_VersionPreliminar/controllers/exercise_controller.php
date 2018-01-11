@@ -26,12 +26,12 @@
 		}
 		if(isset($_REQUEST['nombre']))
 		{
-			$nombre = $_REQUEST['nombre'];
+			$nombre = html_entity_decode($_REQUEST['nombre'],ENT_QUOTES | ENT_HTML401, "UTF-8");
 			unset($_REQUEST['nombre']);
 		}
 		if(isset($_REQUEST['descripcion']))
 		{
-			$descripcion = $_REQUEST['descripcion'];
+			$descripcion = html_entity_decode($_REQUEST['descripcion'], ENT_QUOTES | ENT_HTML401, "UTF-8");
 			unset($_REQUEST['descripcion']);
 		}
 		if(isset($_FILES['imagen']))
