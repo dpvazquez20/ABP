@@ -38,7 +38,7 @@ class EventModify
 
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <form class="form-horizontal" action='../controllers/event_controller.php?id=<?php echo $this->data[0]['id']; ?>' method='post'>
+                                <form enctype="multipart/form-data" class="form-horizontal" action='../controllers/event_controller.php?id=<?php echo $this->data[0]['id']; ?>' method='post'>
                                     <div class="form-group">
                                         <label class="control-label col-md-2" for="nombre"> <?php echo $strings['nombre']; ?>* </label>
                                         <div class="col-md-10">
@@ -50,6 +50,13 @@ class EventModify
                                         <label class="control-label col-md-2" for="descripcion"> <?php echo $strings['descripcion']; ?> </label>
                                         <div class="col-md-10">
                                             <textarea class="form-control" name="descripcion" id="descripcion" placeholder=" <?php echo $this->data[0]['descripcion']; ?> "></textarea>
+                                        </div>
+                                    </div>
+									
+									<div class="form-group">
+                                        <label class="control-label col-md-2" for="imagen"> <?php echo $strings['imagen']; ?> </label>
+                                        <div class="col-md-10">
+                                            <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*" placeholder=" <?php echo $strings['Nothing selected']; ?> ">
                                         </div>
                                     </div>
 									
@@ -66,9 +73,16 @@ class EventModify
                                     </div>
 									
 	                                <div class="form-group">
-                                        <label class="control-label col-md-2" for="fecha"> <?php echo $strings['fecha']; ?>* </label>
+                                        <label class="control-label col-md-2" for="fechaInicio"> <?php echo $strings['fechaInicio']; ?>* </label>
                                         <div class="col-md-10">
-                                            <input type="date" class="form-control" id="fecha" name="fecha" required>
+                                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" onchange="checkActivityDates(this)" required>
+                                        </div>
+                                    </div>
+									
+									<div class="form-group">
+                                        <label class="control-label col-md-2" for="fechaFin"> <?php echo $strings['fechaFin']; ?>* </label>
+                                        <div class="col-md-10">
+                                            <input type="date" class="form-control" id="fechaFin" name="fechaFin" onchange="checkActivityDates(this)" required>
                                         </div>
                                     </div>
 

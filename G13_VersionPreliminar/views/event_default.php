@@ -56,7 +56,7 @@ class EventDefault
                             <div class="col-md-12">
                                 <!-- List -->
                                 <?php
-                                    $titles = array('nombre','fecha');
+                                    $titles = array('imagen','nombre','fechaInicio','fechaFin');
                                     generateList ($this->data, 'event', $titles);
                                 ?>
                                 <!-- End of the list -->

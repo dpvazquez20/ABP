@@ -33,7 +33,7 @@ class EventConsult
 
                         <!-- Event view -->
                         <?php
-                            $titles = array('nombre','descripcion','fecha','horaInicio','horaFin');
+                            $titles = array('nombre','descripcion','imagen','fechaInicio','fechaFin','horaInicio','horaFin');
                             generateView($this->data, 'event', $titles);
                         ?>
                         <!-- End of the view -->
