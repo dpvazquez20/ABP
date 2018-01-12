@@ -78,12 +78,12 @@
                     if (isset($_REQUEST['searchfield']))
                     {
                         $statistic = get_data_form(); // getting data
-                        $reply = $statistic->search($_REQUEST['searchfield']); // getting reply
+                        $reply = $statistic->search($_REQUEST['searchfield'], $_SESSION['userId']); // getting reply
                         unset($_REQUEST['searchfield']);
 
                         if (is_string($reply))
                         {
-                            $list = $statistic->toList(); // getting users list
+                            $list = $statistic->toList($_SESSION['userId']); // getting users list
                             $data = $statistic->generateCoach(); // getting coach's statistics
                             new StatisticDefault($data, $reply, $list); // showing an error message with the coach's statistics
 
@@ -102,13 +102,13 @@
                     if (isset($_REQUEST['orderfield']))
                     {
                         $statistic = get_data_form(); // getting data
-                        $reply = $statistic->order($_REQUEST['orderfield']); // getting reply
+                        $reply = $statistic->order($_REQUEST['orderfield'], $_SESSION['userId']); // getting reply
                         unset($_REQUEST['orderfield']);
 
                         if (is_string($reply))
                         {
                             $data = $statistic->generateCoach(); // getting the coach's statistics
-                            $list = $statistic->toList(); // getting users list
+                            $list = $statistic->toList($_SESSION['userId']); // getting users list
                             new StatisticDefault($data, $reply, $list); // showing an error message with the coach's statistics
 
                         }else {
