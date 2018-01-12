@@ -275,10 +275,10 @@ class TrainingModel
 						$modify = true;
 					}
 					
-					if($this->sesiones <> '')
+					if($this->tipo <> '')
 					{
-						$sql = $sql . "sesiones ='" . $this->sesiones . "'";
-						if($lastModify <> "sesiones")
+						$sql = $sql . "tipo ='" . $this->tipo . "'";
+						if($lastModify <> "tipo")
 						{
 							$sql = $sql . ",";
 						}

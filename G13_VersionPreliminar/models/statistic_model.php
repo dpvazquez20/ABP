@@ -247,11 +247,11 @@ class StatisticModel
     }
 
 	// listing all users
-	function toList()
+	function toList($coachId)
     {
 		include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND ORDER BY nombre";
+        $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) AND ORDER BY nombre ";
 
         // checking DB connection
 		if (!$result = $this->mysqli->query($sql))
@@ -319,12 +319,12 @@ class StatisticModel
     }
 
 	// search users
-    function search($word)
+    function search($word, $coachId)
     {
 
         include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND ( nombre LIKE '%".$word."%' OR apellidos LIKE '%".$word."%')";
+        $sql = "SELECT * FROM usuarios WHERE borrado = '0' AND tipo = 'Deportista' AND ( nombre LIKE '%".$word."%' OR apellidos LIKE '%".$word."%') AND (entrenador_id = '$coachId' OR entrenador_id IS NULL)";
 
         // checking DB connection
         if (!$result = $this->mysqli->query($sql))
@@ -357,7 +357,7 @@ class StatisticModel
     }
 
     // order the element list
-    function order($value)
+    function order($value, $coachId)
     {
 
         include '../languages/spanish.php';
@@ -366,13 +366,13 @@ class StatisticModel
         // sql query depends on the value of the order by
         Switch ($value)
         {
-            case 1: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY nombre";
+            case 1: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) ORDER BY nombre";
                 break;
-            case 2: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY nombre DESC";
+            case 2: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) ORDER BY nombre DESC";
                 break;
-            case 3: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY apellidos";
+            case 3: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) ORDER BY apellidos";
                 break;
-            case 4: $sql = "SELECT * FROM usuarios WHERE borrado = '0' ORDER BY apellidos DESC";
+            case 4: $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) ORDER BY apellidos DESC";
                 break;
         }
 
