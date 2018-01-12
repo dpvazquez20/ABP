@@ -4,12 +4,14 @@ include '../functions/connectDB.php';
 
 class EventModel
 {
-	function __construct($id, $nombre, $descripcion, $fecha, $horaInicio, $horaFin)
+	function __construct($id, $nombre, $descripcion, $imagen, $fechaInicio, $fechaFin, $horaInicio, $horaFin)
     {
 		$this->id = $id;
 		$this->nombre = $nombre;
 		$this->descripcion = $descripcion;
-		$this->fecha = $fecha;
+		$this->imagen = $imagen;
+		$this->fechaInicio = $fechaInicio;
+		$this->fechaFin = $fechaFin;
 		$this->horaInicio = $horaInicio;
 		$this->horaFin = $horaFin;
 
@@ -35,9 +37,17 @@ class EventModel
 		{
 			$toret = "descripcion";
 		}
-		if($this->fecha <> '')
+		if($this->imagen <> '')
 		{
-			$toret = "fecha";
+			$toret = "imagen";
+		}
+		if($this->fechaInicio <> '')
+		{
+			$toret = "fechaInicio";
+		}
+		if($this->fechaFin <> '')
+		{
+			$toret = "fechaFin";
 		}
 		if($this->horaInicio <> '')
 		{
@@ -73,8 +83,8 @@ class EventModel
                 if ($result->num_rows == 0)
                 {
 
-                    $sql = "INSERT INTO eventos (nombre,descripcion,fecha,horaInicio,horaFin,borrado) 
-							VALUES('" . $this->nombre . "','" . $this->descripcion . "','" . $this->fecha . "','" . $this->horaInicio . "','" . $this->horaFin . "','0')";
+                    $sql = "INSERT INTO eventos (nombre,descripcion,imagen,fechaInicio,fechaFin,horaInicio,horaFin,borrado) 
+							VALUES('" . $this->nombre . "','" . $this->descripcion . "','" . $this->imagen . "','" . $this->fechaInicio . "','". $this->fechaFin . "','" . $this->horaInicio . "','" . $this->horaFin . "','0')";
 
                     // inserting new resource
                     if ($result = $this->mysqli->query($sql))
@@ -196,10 +206,21 @@ class EventModel
 						$modify = true;
 					}
 					
-					if($this->fecha <> '')
+					if($this->fechaInicio <> '')
 					{
-						$sql = $sql . "fecha ='" . $this->fecha . "'";
-						if($lastModify <> "fecha")
+						$sql = $sql . "fechaInicio ='" . $this->fechaInicio . "'";
+						if($lastModify <> "fechaInicio")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+					
+					if($this->fechaFin <> '')
+					{
+						$sql = $sql . "fechaFin ='" . $this->fechaFin . "'";
+						if($lastModify <> "fechaFin")
 						{
 							$sql = $sql . ",";
 						}
@@ -211,6 +232,17 @@ class EventModel
 					{
 						$sql = $sql . "descripcion ='" . $this->descripcion . "'";
 						if($lastModify <> "descripcion")
+						{
+							$sql = $sql . ",";
+						}
+						$sql = $sql . " ";
+						$modify = true;
+					}
+					
+					if($this->imagen <> '')
+					{
+						$sql = $sql . "imagen ='" . $this->imagen . "'";
+						if($lastModify <> "imagen")
 						{
 							$sql = $sql . ",";
 						}
@@ -313,7 +345,7 @@ class EventModel
 
 		include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha";
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fechaInicio";
 
         // checking DB connection
 		if (!$result = $this->mysqli->query($sql))
@@ -352,7 +384,7 @@ class EventModel
 		include '../languages/spanish.php';
 		
 		// show only the 3 newest events
-        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha LIMIT 3";
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fechaInicio LIMIT 3";
 
         // checking DB connection
 		if (!$result = $this->mysqli->query($sql))
@@ -432,9 +464,9 @@ class EventModel
         // sql query depends on the value of the order by
         Switch ($value)
         {
-            case 1: $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha";
+            case 1: $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fechaInicio";
                 break;
-            case 2: $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha DESC";
+            case 2: $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fechaInicio DESC";
                 break;
         }
 
