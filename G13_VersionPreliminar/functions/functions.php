@@ -152,9 +152,17 @@ function generateList ($list, $page_name, $titles)
     {
         $directory = '../images/profiles/';
 
-    } else {
-        $directory = '../images/exercises/';
-    }
+    } else{
+		
+		if($page_name == 'event')
+		{
+			$directory = '../images/events/';
+			
+		} else {
+			$directory = '../images/exercises/';
+			
+		}
+	}
 
     // Print the table if data aren't a string
     if (!is_string($list))
@@ -238,9 +246,17 @@ function generateView ($list, $page_name, $titles)
     {
         $directory = '../images/profiles/';
 
-    } else {
-        $directory = '../images/exercises/';
-    }
+    } else{
+		
+		if($page_name == 'event')
+		{
+			$directory = '../images/events/';
+			
+		} else {
+			$directory = '../images/exercises/';
+			
+		}
+	}
 
     // Print the table if the data aren't a string
     if (!is_string($list))
@@ -1907,7 +1923,7 @@ function generateEvents ()
 	$cnn->mysqli = connect();
 	
 	// show only the 3 newest events
-        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fecha DESC LIMIT 3";
+        $sql = "SELECT * FROM eventos WHERE borrado = '0' ORDER BY fechaInicio DESC LIMIT 3";
 
         // checking DB connection
 		if (!$result = $cnn->mysqli->query($sql))
@@ -1945,14 +1961,41 @@ function generateEvents ()
 
 		for ($i = 0; $i < count($list); $i++)
 		{
+			
+			$datoInicio = $list[$i]['fechaInicio'];
+			$fechInicio = new DateTime($datoInicio);
+			$toechoInicio = $fechInicio->format('d-m-Y');
+			
+			$datoFin = $list[$i]['fechaFin'];
+			$fechFin = new DateTime($datoFin);
+			$toechoFin = $fechFin->format('d-m-Y');
   
 			echo '<div id="jumbo1" class="jumbotron">
-                <div class="media-body">
+				<div class="media">';
+						if ($list[$i]['imagen'] <> '')
+						{
+							echo '<img src="../images/events/' . $list[$i]['imagen'] . '" class="media-object" style="width:300px">
+							<br>';
+
+						} else {
+							echo '<img src="../images/events/default.png" class="media-object" style="width:100px">';
+						}
+					  
+					echo '
+					<div class="media-body">
 					<h2 class="media-heading">' . $list[$i]['nombre'] . '</h3>
-					<p>' . $list[$i]['descripcion'] . '</p>
-					<p> <b>Día: </b>' . $list[$i]['fecha'] . '</p>
+					<p>' . $list[$i]['descripcion'] . '</p>';
+					
+					if ($list[$i]['fechaInicio'] == $list[$i]['fechaFin']){					
+						echo	'<p> <b>Día: </b>' . $toechoInicio . '</p>';
+					}else{
+						echo	'<p> <b>Del día: </b>' . $toechoInicio .  ' <b>al día:</b> ' . $toechoFin . '</p>';
+					}
+					
+					echo
       
-					<p> <b>Horario:</b> De ' . $list[$i]['horaInicio'] . ' a ' . $list[$i]['horaFin'] . '</p>
+					'<p> <b>Horario:</b> De ' . $list[$i]['horaInicio'] . ' a ' . $list[$i]['horaFin'] . '</p>
+				</div>
 				</div>
 			</div>  
 		<hr>';
