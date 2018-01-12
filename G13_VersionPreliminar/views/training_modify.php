@@ -46,6 +46,17 @@ class TrainingModify
                                             <input type="text" class="form-control" name="nombre" id="nombre" placeholder=" <?php echo $this->data[0]['nombre']; ?> " maxlength="60">
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
+                                        <div class="col-md-10">
+                                            <select class="selectpicker form-control" name="tipo" id="tipo" required>
+                                                <option value="" selected> <?php echo $this->data[0]['tipo']; ?> </option>
+                                                <option value="<?php echo $strings['normal']; ?>"> <?php echo $strings['normal']; ?> </option>
+                                                <option value="<?php echo $strings['personal']; ?>"> <?php echo $strings['personal']; ?> </option>
+                                            </select>
+                                        </div>
+                                    </div>
 									
                                     <div class="form-group">
                                         <div class="col-md-offset-2 col-md-8" id="addEditButtons">

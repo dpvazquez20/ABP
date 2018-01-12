@@ -88,11 +88,12 @@ class ProfileDefault
                                         </div>
                                     </div>
 
-									<div class="form-group">
-                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['sexo']; ?> </label>
+                                    <div class="form-group">
+                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['sexo']; ?>* </label>
                                         <div class="col-md-10">
                                             <select class="selectpicker form-control" name="sexo" id="sexo" required>
-                                                <option value="<?php echo $strings['man']; ?>" selected> <?php echo $strings['man']; ?> </option>
+                                                <option value="" selected> <?php echo $this->data[0]['sexo']; ?> </option>
+                                                <option value="<?php echo $strings['man']; ?>"> <?php echo $strings['man']; ?> </option>
                                                 <option value="<?php echo $strings['woman']; ?>"> <?php echo $strings['woman']; ?> </option>
                                                 <option value="<?php echo $strings['other']; ?>"> <?php echo $strings['other']; ?> </option>
                                             </select>

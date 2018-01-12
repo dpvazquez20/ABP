@@ -77,11 +77,11 @@ class UserModify
                                     </div>
 
                                 <?php
-                                    if($this->data[0]['tipo'] == 'Deportista' || $this->data[0]['tipo'] == 'Entrenador')
-                                    {
+                                    //if($this->data[0]['tipo'] == 'Deportista' || $this->data[0]['tipo'] == 'Entrenador')
+                                    //{
                                 ?>
                                     <div class="form-group">
-                                        <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['sexo']; ?>* </label>
+                                        <label for="sexo" class="col-md-2 control-label"> <?php echo $strings['sexo']; ?> </label>
                                         <div class="col-md-10">
                                             <select class="selectpicker form-control" name="sexo" id="sexo" required>
                                                 <option value="" selected> <?php echo $this->data[0]['sexo']; ?> </option>
@@ -92,7 +92,7 @@ class UserModify
                                         </div>
                                     </div>
                                 <?php
-                                    }
+                                    //}
                                 ?>
 
                                     <div class="form-group">
