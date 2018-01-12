@@ -16,7 +16,9 @@
 		$id = '';
 		$nombre = '';
 		$descripcion = '';
-		$fecha = '';		
+		$imagen = '';
+		$fechaInicio = '';
+		$fechaFin = '';		
 		$horaInicio = '';
 		$horaFin = '';
 
@@ -35,10 +37,27 @@
 			$descripcion = $_REQUEST['descripcion'];
 			unset($_REQUEST['descripcion']);
 		}
-		if(isset($_REQUEST['fecha']))
+		if(isset($_FILES['imagen']))
 		{
-			$fecha = $_REQUEST['fecha'];
-			unset($_REQUEST['fecha']);
+		    if ($_FILES['imagen']['size'] > 0)
+            {
+                $directory = '../images/events/';
+                $uploaded_file = $directory . basename($_FILES['imagen']['name']);
+                copy($_FILES['imagen']['tmp_name'], $uploaded_file);
+
+                $imagen = basename($_FILES['imagen']['name']);
+                unset($_FILES['imagen']);
+            }
+		}
+		if(isset($_REQUEST['fechaInicio']))
+		{
+			$fechaInicio = $_REQUEST['fechaInicio'];
+			unset($_REQUEST['fechaInicio']);
+		}
+		if(isset($_REQUEST['fechaFin']))
+		{
+			$fechaFin = $_REQUEST['fechaFin'];
+			unset($_REQUEST['fechaFin']);
 		}
 		if(isset($_REQUEST['horaInicio']))
         {
@@ -51,7 +70,7 @@
             unset($_REQUEST['horaFin']);
         }		
 
-		$event = new EventModel($id,$nombre,$descripcion,$fecha,$horaInicio,$horaFin);
+		$event = new EventModel($id,$nombre,$descripcion,$imagen,$fechaInicio,$fechaFin,$horaInicio,$horaFin);
 
 		return $event;
 	}
