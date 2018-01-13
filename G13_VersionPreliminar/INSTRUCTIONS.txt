@@ -21,6 +21,5 @@ Steps to follow in Linux systems:
 	3. Import the DB (directory "db") in a database manager (user: admin, 
 	   password: admin)
 	4. If you aren't going to use this user, you have to go to the file 
-	  "connectDB.php"
-	   and change the user and password 
-	5. Enter in the browser: IP_address/G13_VersionPreliminar
+	  "connectDB.php" and change the user and password 
+	5. Enter in the browser: IP_address/G13_VersionFinal
