@@ -551,7 +551,70 @@ function generateList2 ($list, $page_name, $titles, $idTabla)
     }                     
 }
 
+/** Function to automatically generate a list of elements
+ *  Example => generateList($lista_usuarios, 'user', $titles, $idTabla);
+ */
+function generateListInfo ($list, $page_name, $titles, $idTabla)
+{
+    include '../languages/spanish.php';
 
+    $name = strtolower($page_name); 
+
+    if (!is_string($list))
+    {
+        // Table
+        echo '<div class="table-responsive" style="margin-top:18%;">
+                <table class="table table-hover">';
+
+                    // Attribute's titles
+                    echo '<thead>
+                            <tr>';
+
+                    foreach ($titles as $title)
+                    {
+                        echo '<th>' . $strings[$title] . '</th>';
+                    }
+
+                    echo     '</tr>
+                        </thead>';
+
+                    // Attribute's values
+                    echo '<tbody>';
+
+                    for ($i = 0; $i < count($list); $i++)
+                    {
+                        echo '<tr>';
+                        
+                        for ($j = 0; $j < count($titles); $j++)
+                        {
+                            // Check if the attribute is an image
+                            if ($titles[$j] == 'imagen')
+                            {
+                                echo '<td> <img src="../images/exercises/' . $list[$i]["$titles[$j]"] . '" alt="' . $list[$i]["$titles[$j]"] . '" height="150" width="150"> </td>';
+
+                            } else {
+                                if ($titles[$j] == 'descanso')
+                                {
+                                     echo '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+
+                                } else {
+                                    echo '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+                                }
+                            }
+                            //echo '<td>' . $list[$i]["$titles[$j]"] . '</td>';
+                        }
+                        
+                        // Print the buttons for each element
+                        echo '</tr>';
+                        echo '</tr>';
+                    }
+
+                    echo '</tbody>
+
+                </table>
+             </div>';
+    }                     
+}
 
 
 /**
@@ -1299,7 +1362,7 @@ function generateListTrainingTables ($list, $page_name, $titles, $training)
             echo '<td>
                                 <div class="pull-right action-buttons">';
 
-            echo        '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['See'] . '" class="btn btn-sm btn-info"> <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> </a>';
+            echo        '<a href="' . $name . '_controller.php?id=' . $list[$i]['id'] . '&action=' . $strings['Info'] . '" class="btn btn-sm btn-info"> <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> </a>';
             echo        '&nbsp';
 			echo        '<a href="training_controller.php?id_entrenamiento=' . $training[0]['id'] .'&id=' . $list[$i]['id'] . '&orden_sesion=' . $list[$i]['orden_sesion'] . '&action=' . $strings['DeleteTable'] . '" class="btn btn-sm btn-danger"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </a>';
             
