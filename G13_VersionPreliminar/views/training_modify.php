@@ -50,7 +50,7 @@ class TrainingModify
                                     <div class="form-group">
                                         <label for="tipo" class="col-md-2 control-label"> <?php echo $strings['tipo']; ?> </label>
                                         <div class="col-md-10">
-                                            <select class="selectpicker form-control" name="tipo" id="tipo" required>
+                                            <select class="selectpicker form-control" name="tipo" id="tipo">
                                                 <option value="" selected> <?php echo $this->data[0]['tipo']; ?> </option>
                                                 <option value="<?php echo $strings['normal']; ?>"> <?php echo $strings['normal']; ?> </option>
                                                 <option value="<?php echo $strings['personal']; ?>"> <?php echo $strings['personal']; ?> </option>
