@@ -2,7 +2,7 @@
 
     include '../models/statistic_model.php';
     include '../views/statistic_default.php';
-    include '../views/statistic_consult.php';
+    //include '../views/statistic_consult.php';
     include '../languages/spanish.php';
     include '../views/log_in.php';
     session_start();
@@ -52,6 +52,7 @@
 
             Switch ($action)
             {
+
                 // selected see user's details
                 case $strings['See']:
 
@@ -132,9 +133,11 @@
 
         } elseif ($_SESSION['userType'] == $strings['sportsman']) { //------------INCOMPLETE------------
 
-            $statistic = get_data_form(); // getting data
+            /*$statistic = get_data_form(); // getting data
             $data = $statistic->generateUser(); // getting user's statistics
-            new StatisticConsult($data); // showing statistics
+            new StatisticConsult($data); // showing statistics*/
+            $url = "Location: ../controllers/tracing_controller?action=" . $strings['Statistic'] . "&id=" . $_SESSION['userId'];
+            header($url);
 
 
         } else {

@@ -213,6 +213,25 @@
 				Switch ($action)
 	            {
 
+	            	case $strings['Statistic']:
+
+            		if (isset($_REQUEST['id'])) // if we have form's data, we insert it
+					{
+						$tracing = get_data_form(); // getting data
+						$data1 = $tracing->getSessions($_REQUEST['id']);
+						if($data1 == $strings['NoTrainingError'] || $data1 == $strings['TracingErrorNotStarted']){
+							new TracingDefault($data1,$data1);
+						}else{
+							$data2 = $tracing->generateStaticsTracing($_REQUEST['id']);
+							new TracingStatistic($data1, $data2, $_REQUEST['id']);
+						}
+					
+					}else { // if not, the view is called
+						header("Location: ../views/home.php");
+					}
+
+            		break;
+
 	            	case $strings['completeLine']:
 
 	            		if (isset($_REQUEST['lineaSesionesId'])) // if we have form's data, we insert it

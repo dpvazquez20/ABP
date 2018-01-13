@@ -165,12 +165,18 @@
 					if (isset($_REQUEST['id']))
 					{ // if not, the view is called
 						if(isset($_REQUEST['nombre'])){
-							$table = get_data_form(); // getting data
+							/*$table = get_data_form(); // getting data
 							$reply = $table->modify(); // trying consult
 							$table = get_data_form(); // getting data
 							$data = $table->consult(); // trying consult
 							$lines = $table->getLines();
-							new TableConsult($data,$lines,$reply,$_REQUEST['id']); // showing table data
+							new TableConsult($data,$lines,$reply,$_REQUEST['id']); // showing table data*/
+
+							$table = get_data_form(); // getting data
+	                        $reply = $table->modify();
+							$data = $table->toList(); // getting tables list
+							new TableDefault($data, $reply); // showing tables list with a message
+
 						}else{
 							$table = get_data_form(); // getting data
                        		$data = $table->consult(); // trying consult
