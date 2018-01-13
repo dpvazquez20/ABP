@@ -300,6 +300,7 @@ $strings = array(
 	'Modify training' => 'Modificar entrenamiento',
 	'InsertSuccessMax' => 'Entrenamiento añadido con éxito',
 	'NoAssingError' => 'No se le puede asignar entrenamiento a este usuario',
+	'Info' => 'Informacion',
 	
 	// ----------------------------------------------------------------
 
