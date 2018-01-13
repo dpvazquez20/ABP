@@ -251,7 +251,7 @@ class StatisticModel
     {
 		include '../languages/spanish.php';
 
-        $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) AND ORDER BY nombre ";
+        $sql = "SELECT * FROM usuarios WHERE tipo = 'Deportista' AND borrado = '0' AND (entrenador_id = '$coachId' OR entrenador_id IS NULL) ORDER BY nombre ";
 
         // checking DB connection
 		if (!$result = $this->mysqli->query($sql))
