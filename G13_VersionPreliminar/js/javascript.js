@@ -111,7 +111,7 @@ function end_elem(idTabla)
 // Function for ending the adding of tables
 function end_elem2(entrenamiento_id)
 {
-    var redirect = '../controllers/training_controller.php?id=' + entrenamiento_id + '&action=Ver';
+    var redirect = '../controllers/training_controller.php?id=' + entrenamiento_id;
     
     // Using alertify
     alertify.confirm('!ADVERTENCIA!', '¿Está seguro de que desea terminar?',
