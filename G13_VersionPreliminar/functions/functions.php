@@ -25,7 +25,7 @@ function generateNavbar ($user_type)
 
     if (strcmp($user_type, 'Deportista') == 0)
     {
-        $funcionalities = array('Inscription', 'Tracing');
+        $funcionalities = array('Inscription', 'Statistics', 'Tracing');
     }
 
     if (strcmp($user_type, 'unregistered') == 0)
@@ -1916,6 +1916,14 @@ function generateViewStatisticsCoach($list, $page_name,$titles)
     {
         // Table
         echo '<div class="table-responsive" style="display: none" id="viewSporstmen">
+
+                <div class="row" id="order_search">';
+
+                    $listOrder = array('Name A-Z', 'Name Z-A', 'Surnames A-Z', 'Surnames Z-A');
+                    generateOrderAndSearch($listOrder, 'statistics');
+
+        echo   '</div>
+
                 <table class="table table-hover">';
 
         // Attribute's titles
