@@ -1,12 +1,13 @@
----------------------------------------- ESPA�OL ----------------------------------------
+---------------------------------------- ESPAÑOL ----------------------------------------
 Pasos a seguir en sistemas Linux:
 
-	1. Ejecutar "install.sh" como root
-	2. Importar BD (carpeta "db") en gestor de base de datos (usuario: admin, 
-	   contrase�a: admin)
-	3. Si no va a usar este usuario, ir al fichero "connectDB.php" y cambiar el
-	   usuario y contrase�a
-	4. Introducir en el navegador: direccion_IP/G13_VersionPreliminar
+	1. Ejecutar “install.sh” como root
+	2. Crear base de datos “actifit” en PhpMyAdmin
+	3. Importar BD (carpeta “db”) en gestor de base de datos (usuario: admin, contraseña: admin)
+	4. Si no va a usar este usuario, ir al fichero “connectDB.php”; y cambiar el usuario y contraseña.
+	5. Introducir en el navegador: direccion_IP/G13_VersionFinal
+	6. Para acceder a la aplicación introducir uno de los usuarios y contraseña que hay en fichero “readme.txt”.
+
 
 
 
@@ -16,9 +17,10 @@ Pasos a seguir en sistemas Linux:
 Steps to follow in Linux systems:
 
 	1. Run "install.sh" as root
-	2. Import the DB (directory "db") in a database manager (user: admin, 
+	2. Create a database named as "actifit" in PhpMyAdmin
+	3. Import the DB (directory "db") in a database manager (user: admin, 
 	   password: admin)
-	3. If you aren't going to use this user, you have to go to the file 
+	4. If you aren't going to use this user, you have to go to the file 
 	  "connectDB.php"
 	   and change the user and password 
-	4. Enter in the browser: IP_address/G13_VersionPreliminar
+	5. Enter in the browser: IP_address/G13_VersionPreliminar
