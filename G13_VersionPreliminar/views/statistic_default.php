@@ -61,86 +61,138 @@ class StatisticDefault
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/themes/bootstrap.min.css"/>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-        <?php echo
-        "var data = google.visualization.arrayToDataTable([
-        //['" . $strings['amountUsers'] . ": " . $this->data['numUsers'] . "', '" . $strings['User'] . "'],
-        ['', ''],
-        ['" . $strings['tdu'] . "', " . $this->data['TDUUsers'] . "],
-        ['" . $strings['pef'] . "', " . $this->data['PEFUsers'] . "]
-        ]);
-
-
-        var options = {
-          title: '" . $strings['amountUsers'] . ": " . $this->data['numUsers'] ."',
-          titleTextStyle: {
-                      fontSize: 20},
-          slices: {
-            0: { color: 'gold' },
-            1: { color: 'silver' }
-          },
-          legend: {
-                position: 'bottom'
-          }
-        };"
-        ; ?>
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-      }
-    </script>
-
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-        <?php
-
-        $users = getUsersPerActivity();
-        $users2 = getUsersPerActivity2();
-        $result = mergeList($users,$users2);
-
-        echo "var data = google.visualization.arrayToDataTable([
-        ['', ''],";
-        foreach ($result as $row)
+      <?php
+        if ($_SESSION['userType'] == $strings['secretary'])
         {
-            echo "['" . $row['nombre'] . "', " . $row['num'] . "],";
-            //echo '<a class="list-group-item">' . $row['nombre'] . '<span class="badge">' . $row['num'] . '</span></a>';
-        }
-        /*echo "['" . $strings['numMuscular'] . "', " . 3 . "],
-        ['" . $strings['numCardio'] . "', " . 3 . "],
-        ['" . $strings['numStretching'] . "', " . 3 . "]
-        */
+      ?>
+        <script type="text/javascript">
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+
+          function drawChart() {
+
+            <?php echo
+            "var data = google.visualization.arrayToDataTable([
+            //['" . $strings['amountUsers'] . ": " . $this->data['numUsers'] . "', '" . $strings['User'] . "'],
+            ['', ''],
+            ['" . $strings['tdu'] . "', " . $this->data['TDUUsers'] . "],
+            ['" . $strings['pef'] . "', " . $this->data['PEFUsers'] . "]
+            ]);
 
 
-        echo "]);
-        var options = {
-          title: '" . $strings['numExercises'] . ": " . 9 . "',
-          titleTextStyle: {
-                      fontSize: 20},
-          pieHole: 0.4,
-          legend: {
-                position: 'bottom'
+            var options = {
+              title: '" . $strings['amountUsers'] . ": " . $this->data['numUsers'] ."',
+              titleTextStyle: {
+                          fontSize: 20},
+              slices: {
+                0: { color: 'gold' },
+                1: { color: 'silver' }
+              },
+              legend: {
+                    position: 'bottom'
+              }
+            };"
+            ; ?>
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
           }
-        };"
-        ; ?>
+        </script>
 
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        <script type="text/javascript">
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
 
-        chart.draw(data, options);
-      }
-    </script>
+          function drawChart() {
+
+            <?php
+
+            $users = getUsersPerActivity();
+            $users2 = getUsersPerActivity2();
+            $result = mergeList($users,$users2);
+
+            echo "var data = google.visualization.arrayToDataTable([
+            ['', ''],";
+            foreach ($result as $row)
+            {
+                echo "['" . $row['nombre'] . "', " . $row['num'] . "],";
+                //echo '<a class="list-group-item">' . $row['nombre'] . '<span class="badge">' . $row['num'] . '</span></a>';
+            }
+            /*echo "['" . $strings['numMuscular'] . "', " . 3 . "],
+            ['" . $strings['numCardio'] . "', " . 3 . "],
+            ['" . $strings['numStretching'] . "', " . 3 . "]
+            */
+
+
+            echo "]);
+            var options = {
+              title: '" . $strings['numExercises'] . ": " . 9 . "',
+              titleTextStyle: {
+                          fontSize: 20},
+              pieHole: 0.4,
+              legend: {
+                    position: 'bottom'
+              }
+            };"
+            ; ?>
+
+            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+
+            chart.draw(data, options);
+          }
+        </script>
     
+        <script type="text/javascript">
+          google.charts.load("current", {packages:['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
 
-    <script type="text/javascript">
+              var data = google.visualization.arrayToDataTable([
+              <?php
+                  $activities = getActivitiesPerDays();
+
+              echo '["", "", { role: "style" } ],
+                  ["' . $strings['monday'] .'", ' . $activities['monday'] . ', "color: #CC5B14"],
+                  ["' . $strings['tuesday'] .'", ' . $activities['tuesday'] . ', "color: #99603D"],
+                  ["' . $strings['wednesday'] .'", ' . $activities['wednesday'] . ', "color: #FF1700"],
+                  ["' . $strings['thursday'] .'", ' . $activities['thursday'] . ', "color: #40FF62"],
+                  ["' . $strings['friday'] .'", ' . $activities['friday'] . ', "color: #1ACC00"],
+                  
+                  ]);';
+                  /*["' . $strings['saturday'] .'", ' . $activities['saturday'] . ', "color: #828282"],
+                  ["' . $strings['sunday'] .'", ' . $activities['sunday'] . ', "color: #828282"]*/
+
+            
+
+            echo 'var view = new google.visualization.DataView(data);
+            view.setColumns([0, 1,
+                             { calc: "stringify",
+                               sourceColumn: 1,
+                               type: "string",
+                               role: "annotation" },
+                             2]);';
+
+            echo 'var options = {
+              title: "' . $strings['ActivityPerDay'] .  '",
+              titleTextStyle: {fontSize: 20},
+              bar: {groupWidth: "95%"},
+              legend: { position: "none" },
+            };';
+
+            ?>
+
+          var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+          chart.draw(view, options);
+          }
+        </script>
+
+      <?php
+      }else{
+      if ($_SESSION['userType'] == $strings['coach'])
+      {
+      ?>
+      <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -172,51 +224,6 @@ class StatisticDefault
         chart.draw(data, options);
       }
     </script>
-
-      <script type="text/javascript">
-        google.charts.load("current", {packages:['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-
-            var data = google.visualization.arrayToDataTable([
-            <?php
-                $activities = getActivitiesPerDays();
-
-            echo '["", "", { role: "style" } ],
-                ["' . $strings['monday'] .'", ' . $activities['monday'] . ', "color: #CC5B14"],
-                ["' . $strings['tuesday'] .'", ' . $activities['tuesday'] . ', "color: #99603D"],
-                ["' . $strings['wednesday'] .'", ' . $activities['wednesday'] . ', "color: #FF1700"],
-                ["' . $strings['thursday'] .'", ' . $activities['thursday'] . ', "color: #40FF62"],
-                ["' . $strings['friday'] .'", ' . $activities['friday'] . ', "color: #1ACC00"],
-                
-                ]);';
-                /*["' . $strings['saturday'] .'", ' . $activities['saturday'] . ', "color: #828282"],
-                ["' . $strings['sunday'] .'", ' . $activities['sunday'] . ', "color: #828282"]*/
-
-          
-
-          echo 'var view = new google.visualization.DataView(data);
-          view.setColumns([0, 1,
-                           { calc: "stringify",
-                             sourceColumn: 1,
-                             type: "string",
-                             role: "annotation" },
-                           2]);';
-
-          echo 'var options = {
-            title: "' . $strings['ActivityPerDay'] .  '",
-            titleTextStyle: {
-                      fontSize: 20},
-            bar: {groupWidth: "95%"},
-            legend: { position: "none" },
-          };';
-
-          ?>
-
-          var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-          chart.draw(view, options);
-      }
-      </script>
 
       <script type="text/javascript">
         google.charts.load("current", {packages:['corechart']});
@@ -257,6 +264,10 @@ class StatisticDefault
           chart.draw(view, options);
       }
       </script>
+      <?php
+      }
+      }
+      ?>
     
 </head>
 
@@ -271,20 +282,6 @@ class StatisticDefault
                         <?php generateNavbar($_SESSION['userType']); ?>
                         <!-- End of the menu -->
 
-                        <!-- Order and search squares -->
-                        <?php
-                            if ($_SESSION['userType'] == $strings['coach'])
-                            {
-                        ?>
-                                <div class="row" id="order_search">
-                                    <?php
-                                        $listOrder = array('Name A-Z', 'Name Z-A', 'Surnames A-Z', 'Surnames Z-A');
-                                        generateOrderAndSearch($listOrder, 'statistics');
-                                    ?>
-                                </div>
-                        <?php
-                            }
-                        ?>
                         <!-- End of the squares -->
                         <div class="col-md-12" height="100%">
                             

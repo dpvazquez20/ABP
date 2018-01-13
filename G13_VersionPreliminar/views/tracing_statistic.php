@@ -92,19 +92,22 @@ class TracingStatistic
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Menu -->
-                        <?php generateNavbar($_SESSION['userType']); ?>
+                        <?php 
+                            generateNavbar($_SESSION['userType']);
+                            if($_SESSION['userType'] == $strings['coach'])
+                            {
+                        ?>
 
-                        <div class="col-md-12" style="margin-bottom: 3%" id="new">
-                            <a href='statistics_controller.php' class="btn btn-md btn-warning" id="newButton"> <?php echo $strings['Back']; ?></a>
-                        </div>
-
+                                <div class="col-md-12" style="margin-bottom: 3%" id="new">
+                                    <a href='statistics_controller.php' class="btn btn-md btn-warning" id="newButton"> <?php echo $strings['Back']; ?></a>
+                                </div>
+                                <br><br><br><br><br>
                         <?php
+                            }
                         if(!is_string($this->data2)){
 
                         ?>
-                        <!-- End of the menu -->
-
-                        <br><br><br><br><br>
+                        <!-- End of the menu -->   
 
                         <div id="linechart_material" style="width: 100%; height: 55%"></div>
                         
