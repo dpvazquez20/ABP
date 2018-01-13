@@ -2,6 +2,7 @@
 
     include '../models/table_model.php';
     include '../views/table_default.php';
+	include '../views/table_info.php';
     include '../views/table_add.php';
     include '../views/table_modify.php';
     include '../views/table_consult.php';
@@ -202,6 +203,38 @@
 								$reply = $_REQUEST['message'];
 							}
 							new TableConsult($data,$lines,$reply,$_REQUEST['id']); // showing table data
+						}else{
+							$table = get_data_form();
+							$data = $table->toList(); // getting tables list
+							$reply = '';
+							new TableDefault($data, $reply); // showing tables list without a message
+						}   
+					
+					}else { // if not, the view is called
+						$table = get_data_form(); // getting data
+                        $reply = $table->consult(); // trying consult
+                        $data = $table->toList(); // getting tables list
+                        new TableDefault($data, $reply); // showing tables list without a message
+					}
+
+					break;
+					
+					// selected see table's details
+				case $strings['Info']:
+
+					// looking for form's data
+					if (isset($_REQUEST['id'])) // if we have form's data, we insert it
+					{
+						if($_REQUEST['id'] <> 'undefined')
+						{
+							$table = get_data_form(); // getting data
+							$data = $table->consult(); // trying consult
+							$lines = $table->getLines();
+							$reply = '';
+							if(isset($_REQUEST['message'])){
+								$reply = $_REQUEST['message'];
+							}
+							new TableInfo($data,$lines,$reply,$_REQUEST['id']); // showing table data
 						}else{
 							$table = get_data_form();
 							$data = $table->toList(); // getting tables list
