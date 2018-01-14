@@ -17,6 +17,84 @@ INSERT IGNORE INTO `usuarios` (`id`, `login`, `contrasenha`, `nombre`, `apellido
 
 
 
+INSERT IGNORE INTO `actividades` (`id`, `nombre`, `descripcion`, `frecuencia`, `horaInicio`, `horaFin`, `tipo`, `numMaxParticipantes`, `borrado`, `coach_id`, `fechaInicio`, `fechaFin`) VALUES
+(1, 'Zumba', 'Se trata de una fusiÃ³n de ritmos aerÃ³bicos o coreografÃ­as sencillas con distintos gÃ©neros, inspirados en la mÃºsica latina y con una mezcla de mÃºsica internacional.', 'Martes', '17:00:00', '19:00:00', 'Grupal', 10, 0, 3, '2018-01-08', '2018-01-25'),
+(2, 'SoftBoxing', 'Clase de cardio utilizando movimientos propios del boxeo y otras artesmarciales que obligan a ejercitar todos los grupos musculares. ', 'Jueves', '20:00:00', '21:00:00', 'Grupal', 15, 0, 3, '2018-01-16', '2018-01-26'),
+(3, 'Spinning', 'El spinning es una variante de los deportes de fitness (o de gimnasio) que consiste en pedalear sobre una bicicleta estÃ¡tica al ritmo de la mÃºsica y siguiendo los ejercicios que nos marca el monitor. TambiÃ©n se le llama indoor cycling.', 'MiÃ©rcoles', '19:30:00', '21:00:00', 'Grupal', 8, 0, 3, '2018-01-09', '2018-01-26'),
+(4, 'Baloncesto', 'Entrenamiento de baloncesto para principantes', 'MiÃ©rcoles', '17:00:00', '19:00:00', 'Grupal', 20, 0, 4, '2018-02-01', '2018-02-28'),
+(5, 'Batuka', 'Forma de aerobic que se practica con mÃºsica latina', 'Jueves', '10:30:00', '11:30:00', 'Grupal', 15, 0, 3, '2018-01-15', '2018-01-26'),
+(6, 'Fitness', 'Actividad fÃ­sica con movimientos repetidos que se planifica y sigue regularmente. ', 'Lunes', '12:00:00', '14:00:00', 'Grupal', 10, 0, 3, '2018-02-01', '2018-02-28');
+
+
+
+INSERT IGNORE INTO `recursos` (`id`, `nombre`, `aforo`, `descripcion`, `borrado`) VALUES
+(1, 'Sala A1', '10', 'Sala primer piso ', 0),
+(2, 'Sala A2', '10', 'Sala primer piso ', 0),
+(3, 'Sala A3', '20', 'Sala primer piso ', 0),
+(4, 'Sala B1', '30', 'Sala segundo piso ', 0),
+(5, 'Sala B2', '15', 'Sala segundo piso', 0),
+(6, 'Sala B3', '25', 'Sala segundo piso', 0),
+(7, 'Sala B4', '10', 'Sala segundo piso', 0),
+(8, 'Pista Baloncesto', '25', 'Pista baloncesto no incluye gradas', 0),
+(9, 'Pista Volleyball', '25', 'Pista volleyball no incluye gradas', 0),
+(10, 'Pista tennis 1', '4', 'Pista de tenis 1vs1 o 2vs2', 0),
+(11, 'Pista tennis 2', '4', 'Pista de tenis 1vs1 o 2vs2', 0),
+(12, 'Gradas pistas 1', '150', 'Gradas pistas grandes', 0),
+(13, 'Gradas pistas 2', '80', 'Gradas pistas pequeñas', 0);
+
+
+
+INSERT IGNORE INTO `reservas` (`id`, `fecha`, `borrado`, `actividades_id`, `recurso_id`) VALUES
+(1, '2018-01-09', 0, 1, 1),
+(2, '2018-01-16', 0, 1, 1),
+(3, '2018-01-23', 0, 1, 1),
+(4, '2018-01-18', 0, 2, 3),
+(5, '2018-01-25', 0, 2, 3),
+(6, '2018-01-10', 0, 3, 4),
+(7, '2018-01-17', 0, 3, 4),
+(8, '2018-01-24', 0, 3, 4),
+(9, '2018-02-07', 0, 4, 8),
+(10, '2018-02-14', 0, 4, 8),
+(11, '2018-02-21', 0, 4, 8),
+(12, '2018-02-28', 0, 4, 8),
+(13, '2018-01-18', 0, 5, 4),
+(14, '2018-01-25', 0, 5, 4),
+(15, '2018-02-05', 0, 6, 2),
+(16, '2018-02-12', 0, 6, 2),
+(17, '2018-02-19', 0, 6, 2),
+(18, '2018-02-26', 0, 6, 2);
+
+
+
+INSERT IGNORE INTO `inscripciones` (`id`, `fecha`, `borrado`, `usuario_id`) VALUES
+(1, '2018-01-03', 0, 7),
+(2, '2018-01-03', 0, 7),
+(3, '2018-01-03', 0, 11),
+(4, '2018-01-03', 0, 11),
+(5, '2018-01-03', 0, 11),
+(6, '2018-01-03', 0, 13),
+(7, '2018-01-03', 0, 13),
+(8, '2018-01-03', 0, 8),
+(9, '2018-01-03', 0, 8),
+(10, '2018-01-03', 0, 6),
+(11, '2018-01-03', 0, 6),
+(12, '2018-01-03', 0, 14);
+
+
+INSERT IGNORE INTO `inscripciones_has_actividades` (`inscripciones_id`, `actividades_id`) VALUES
+(5, 2),
+(7, 2),
+(12, 2),
+(2, 3),
+(8, 3),
+(10, 3),
+(1, 5),
+(3, 5),
+(6, 5),
+(4, 6),
+(9, 6),
+(11, 6);
+
 
 INSERT IGNORE INTO `ejercicios` (`id`, `nombre`, `descripcion`, `imagen`, `tipo`, `borrado`) VALUES
 (1, 'Cinta', 'Correr en la cinta', 'cinta.jpg', 'Cardiovascular', 0),
