@@ -40,7 +40,7 @@ class EventModify
                             <div class="col-md-8 col-md-offset-2">
                                 <form enctype="multipart/form-data" class="form-horizontal" action='../controllers/event_controller.php?id=<?php echo $this->data[0]['id']; ?>' method='post'>
                                     <div class="form-group">
-                                        <label class="control-label col-md-2" for="nombre"> <?php echo $strings['nombre']; ?>* </label>
+                                        <label class="control-label col-md-2" for="nombre"> <?php echo $strings['nombre']; ?> </label>
                                         <div class="col-md-10">
                                             <input type="text" class="form-control" name="nombre" id="nombre" placeholder=" <?php echo $this->data[0]['nombre']; ?> " maxlength="60">
                                         </div>
@@ -63,26 +63,26 @@ class EventModify
 									<div class="form-group">
                                         <label class="control-label col-md-2" for="horaInicio"> <?php echo $strings['horaInicio']; ?>* </label>
                                         <div class="col-md-2">
-                                            <input type="time" class="form-control" name="horaInicio" id="horaInicio" placeholder=" <?php echo $this->data[0]['horaInicio']; ?> " onchange="checkActivityTimes(this)" required>
+                                            <input type="time" class="form-control" name="horaInicio" id="horaInicio" placeholder=" <?php echo $this->data[0]['horaInicio']; ?> " onchange="checkActivityTimes(this)">
                                         </div>
 
                                         <label class="control-label col-md-2" for="horaFin"> <?php echo $strings['horaFin']; ?>* </label>
                                         <div class="col-md-2">
-                                            <input type="time" class="form-control" name="horaFin" id="horaFin" placeholder=" <?php echo $this->data[0]['horaFin']; ?> " onchange="checkActivityTimes(this)" required>
+                                            <input type="time" class="form-control" name="horaFin" id="horaFin" placeholder=" <?php echo $this->data[0]['horaFin']; ?> " onchange="checkActivityTimes(this)">
                                         </div>
                                     </div>
 									
 	                                <div class="form-group">
                                         <label class="control-label col-md-2" for="fechaInicio"> <?php echo $strings['fechaInicio']; ?>* </label>
                                         <div class="col-md-10">
-                                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" onchange="checkActivityDates(this)" required>
+                                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" onchange="checkActivityDates(this)">
                                         </div>
                                     </div>
 									
 									<div class="form-group">
                                         <label class="control-label col-md-2" for="fechaFin"> <?php echo $strings['fechaFin']; ?>* </label>
                                         <div class="col-md-10">
-                                            <input type="date" class="form-control" id="fechaFin" name="fechaFin" onchange="checkActivityDates(this)" required>
+                                            <input type="date" class="form-control" id="fechaFin" name="fechaFin" onchange="checkActivityDates(this)">
                                         </div>
                                     </div>
 
