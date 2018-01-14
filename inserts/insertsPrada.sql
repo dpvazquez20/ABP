@@ -173,3 +173,14 @@ INSERT IGNORE INTO `entrenamientos_has_usuarios` (`entrenamiento_id`, `usuario_i
 (3, 13),
 (2, 14);
 
+
+
+
+
+INSERT IGNORE INTO `eventos` (`id`, `nombre`, `descripcion`, `imagen`, `fechaInicio`, `fechaFin`, `horaInicio`, `horaFin`, `borrado`) VALUES
+(1, 'Zumba', 'TendrÃ¡ lugar una clase de demostraciÃ³n de Zumba para todas las edades. Los niÃ±os deberÃ¡n ir acompaÃ±ados de un adulto o llevar una autorizaciÃ³n. Aquellos que se inscriban en actividades de Zumba del gimnasio tras esta clase tendrÃ¡n un descuento del 30% los 3 primeros meses.', 'zumba.jpg', '2018-01-26', '2018-01-27', '00:00:00', '00:00:00', 0),
+(2, 'InauguraciÃ³n', 'Evento inaugural del gimnasio donde se harÃ¡ una presentaciÃ³n de sus instalaciones asÃ­ como de la aplicaciÃ³n de la que hace uso. Se harÃ¡ un recorrido por el gimnasio mostrando las distintas salas y maquinas ademas de contar con la participaciÃ³n de entrenadores especializados. HabrÃ¡ churrasco.', 'inauguracion.jpg', '2018-01-22', '2018-01-23', '00:00:00', '00:00:00', 0),
+(3, 'Torneo FÃºtbol 7', 'Se organizara un pequeÃ±o torneo de FÃºtbol 7 de hasta 16 equipos. Los interesados en apuntarse deberÃ¡n acudir al gimnasio durante la semana previa al torneo para inscribirse. No hay lÃ­mite de edad pero los menores de 16 aÃ±os deberÃ¡n presentar una autorizaciÃ³n firmada de sus padres o tutores legales.', 'futbol7.jpg', '2018-01-29', '2018-01-31', '00:00:00', '00:00:00', 0),
+(4, 'Carrera popular', 'Media maratÃ³n. Los interesados en apuntarse deberan acudir al gimnasio durante la semana previa a la carrera para inscribirse. No hay lÃ­mite de edad pero los menores de 16 aÃ±os deberan presentar una autorizacion firmada de sus padres o tutores legales.', 'carrera.png', '2018-02-27', '2018-02-27', '10:00:00', '13:00:00', 0);
+
+
