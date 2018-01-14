@@ -136,7 +136,7 @@
             /*$statistic = get_data_form(); // getting data
             $data = $statistic->generateUser(); // getting user's statistics
             new StatisticConsult($data); // showing statistics*/
-            $url = "Location: ../controllers/tracing_controller?action=" . $strings['Statistic'] . "&id=" . $_SESSION['userId'];
+            $url = "Location: ../controllers/tracing_controller.php?action=" . $strings['Statistic'] . "&id=" . $_SESSION['userId'];
             header($url);
 
 
