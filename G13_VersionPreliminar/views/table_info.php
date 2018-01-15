@@ -45,16 +45,9 @@ class TableInfo
                             <!-- Table view -->
                             <?php
                             $titles = array('nombre','tipo');
-                            generateView($this->data, 'table', $titles);
+                            generateViewTableInfo($this->data, 'table', $titles);
                             ?>
                             <!-- End of the view -->
-
-                            <!-- Insert button -->
-                            <div class="col-md-12" id="new">
-                                <a href='table_line_controller.php?idTabla=<?php getIdTabla($this->data); ?>&action=<?php echo $strings['Insert']; ?>' class="btn btn-md btn-warning" id="newButton"> <?php echo $strings['Add exercise']; ?> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> </a>
-                            </div>
-                            <!-- End of the insert button -->
-
                             <!-- List -->
                             <?php
                             $titles = array('imagen', 'ejercicio', 'series', 'repeticiones', 'duracion', 'descanso');
