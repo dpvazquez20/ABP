@@ -320,7 +320,83 @@ function generateView ($list, $page_name, $titles)
     }
 }
 
+function generateViewTableInfo ($list, $page_name, $titles)
+{
+    include '../languages/spanish.php';
 
+    $name = strtolower($page_name);
+
+    // Select the images directory
+    if ($page_name == 'user')
+    {
+        $directory = '../images/profiles/';
+
+    } else{
+		
+		if($page_name == 'event')
+		{
+			$directory = '../images/events/';
+			
+		} else {
+			$directory = '../images/exercises/';
+			
+		}
+	}
+
+    // Print the table if the data aren't a string
+    if (!is_string($list))
+    {
+        // Title
+        echo    '<br>';
+        echo    '<h2 id="headname">' . $strings['Consult '. $name] . '</h2>';
+
+        // Table
+        echo    '<div class="table-responsive">
+                    <table class="table table-hover">';
+
+        // Attribute's titles
+        echo            '<thead>
+                             <tr>';
+
+                        foreach ($titles as $title)
+                        {
+                            echo '<th>' . $strings[$title] . '</th>';
+                        }
+
+        echo                '</tr>
+                         </thead>';
+
+        // Attribute's values
+        echo            '<tbody>
+                            </tr>';
+
+                        for ($j = 0; $j < count($titles); $j++)
+                        {
+                            // Check if the attribute is an image
+                            if ($titles[$j] == 'imagen')
+                            {
+                                if ($list[0]["$titles[$j]"] <> '')
+                                {
+                                    echo '<td> <img src="' . $directory . $list[0]["$titles[$j]"] . '" alt="' . $list[0]["$titles[$j]"] . '" height="150" width="150"> </td>';
+
+                                } else {
+                                    echo '<td> <img src="' . $directory . 'default.png" alt="default.png" height="150" width="150"> </td>';
+                                }
+
+                            } else {
+                                echo '<td>' . $list[0]["$titles[$j]"] . '</td>';
+                            }
+
+                        }
+
+        echo                '</tr>
+                        </tbody>
+
+                    </table>
+                </div>';
+
+    }
+}
 
 
 /** Function for showing a message when you complete an operation
